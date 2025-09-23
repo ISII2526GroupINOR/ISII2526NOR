@@ -56,10 +56,10 @@ namespace AppForSEII2526.API.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(1024)", maxLength: 1024, nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    HealthIssues = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    HealthIssues = table.Column<string>(type: "nvarchar(max)", maxLength: 4096, nullable: true),
                     TotalPrice = table.Column<decimal>(type: "decimal(5,2)", precision: 5, scale: 2, nullable: false),
                     Weeks = table.Column<int>(type: "int", nullable: false)
                 },
