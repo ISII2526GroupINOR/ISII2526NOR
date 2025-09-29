@@ -174,6 +174,25 @@ namespace AppForSEII2526.API.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "PurchaseItem",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PurchaseId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PurchaseItem", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PurchaseItem_Purchases_PurchaseId",
+                        column: x => x.PurchaseId,
+                        principalTable: "Purchases",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -214,6 +233,11 @@ namespace AppForSEII2526.API.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PurchaseItem_PurchaseId",
+                table: "PurchaseItem",
+                column: "PurchaseId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Purchases_Id",
                 table: "Purchases",
                 column: "Id",
@@ -239,13 +263,16 @@ namespace AppForSEII2526.API.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Purchases");
+                name: "PurchaseItem");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Purchases");
         }
     }
 }
