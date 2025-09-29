@@ -8,5 +8,6 @@
         [Precision(5,2)]
         public decimal? RestockPrice { get; set; }
         public Restock Restock { get; set; }
+        public Item Item { get; set; }
     }
 }
