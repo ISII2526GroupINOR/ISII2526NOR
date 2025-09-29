@@ -9,7 +9,7 @@ namespace AppForSEII2526.API.Models
         public int Id { get; set; } // Primary key
 
         [Required]
-        [StringLength(100, ErrorMessage = "Class name cannot have more than 100 characters.")]
+        [StringLength(256, ErrorMessage = "Class name cannot have more than 256 characters.")]
         [RegularExpression(@"^[A-Za-z0-9\s]+$", ErrorMessage = "Class name can only contain alphanumeric characters and spaces.")]
         public required string Name { get; set; }
 
@@ -20,5 +20,8 @@ namespace AppForSEII2526.API.Models
 
         [Precision(5, 2)]
         public decimal Price { get; set; }
+
+        // Navigation properties - Relationships
+        public IList<PlanItem> PlanItems { get; set; }
     }
 }
