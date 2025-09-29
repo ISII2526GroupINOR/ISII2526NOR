@@ -33,5 +33,9 @@ namespace AppForSEII2526.API.Models
         [Range(1, 52, ErrorMessage = "Weeks must be between 1 and 52 (1 year).")]
         public int Weeks { get; set; } // Not null
 
+
+        // RELATIONSHIPS
+        public IList<PlanItem> PlanItems { get; set; } 
+
     }
 }
