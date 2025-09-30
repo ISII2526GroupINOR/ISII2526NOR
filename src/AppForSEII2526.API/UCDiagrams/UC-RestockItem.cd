@@ -22,9 +22,9 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="AppForSEII2526.API.Models.Item">
-    <Position X="1" Y="0.75" Width="2" />
+    <Position X="1" Y="0.75" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AAACAAAACAQgAAAAAABAAAQAAAAAABAAEAAAAAAAAAA=</HashCode>
+      <HashCode>AAACAAAACARgAAAAAABAAAQAAAAAABAAEAAAAAAAAAA=</HashCode>
       <FileName>Models\Item.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>

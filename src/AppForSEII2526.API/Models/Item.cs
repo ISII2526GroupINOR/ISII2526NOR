@@ -8,6 +8,7 @@
         [RegularExpression(@"^[a-zA-Z0-9\s\-]+$", ErrorMessage = "Item name can only contain letters, numbers, spaces, and hyphens.")]
         public string Name { get; set; }
         [StringLength(1024, ErrorMessage = "Item description cannot be longer than 1024 characters.")]
+        public IList<PurchaseItem> PurchaseItems { get; set; }
         public string Description { get; set; }
         [Required]
         [Precision(5,2)]
