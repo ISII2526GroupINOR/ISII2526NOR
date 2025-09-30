@@ -10,6 +10,9 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     public DbSet<Plan> Plans { get; set; }
     public DbSet<PlanItem> PlanItems { get; set; }
-
     public DbSet<Class> Classes { get; set; }
+
+    public DbSet<Purchase> Purchases { get; set; }
+    public DbSet<PurchaseItem> PurchaseItems { get; set; }
+
 }
