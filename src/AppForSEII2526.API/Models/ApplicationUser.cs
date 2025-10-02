@@ -13,4 +13,8 @@ public class ApplicationUser : IdentityUser {
     public string? Surname { get; set; }
 
     public IList<Plan>? Plans { get; set; }
+
+
+    // Navigation properties for related entities
+    public IList<PaymentMethod>? PaymentMethods { get; set; }
 }
