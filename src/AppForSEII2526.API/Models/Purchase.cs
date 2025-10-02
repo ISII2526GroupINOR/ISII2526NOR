@@ -17,6 +17,8 @@
 
         public IList<PurchaseItem> PurchaseItems { get; set; }
 
+        public PaymentMethod paymentMethod { get; set; }
+
 
 
     }
