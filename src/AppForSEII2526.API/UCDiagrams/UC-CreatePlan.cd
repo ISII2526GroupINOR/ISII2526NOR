@@ -24,12 +24,20 @@
   <Class Name="AppForSEII2526.API.Models.Class">
     <Position X="10" Y="0.75" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AAACgAAAAQAAAAAAAAAAAAQCAAAAAAABAAAAAAAAAAA=</HashCode>
+      <HashCode>AAACgAAAAQAAAAAAAAAAAAQCAAAAAAABAAIAAAAAAAA=</HashCode>
       <FileName>Models\Class.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
       <Property Name="PlanItems" />
+      <Property Name="TypeItems" />
     </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="AppForSEII2526.API.Models.TypeItem">
+    <Position X="10.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\TypeItem.cs</FileName>
+    </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>
