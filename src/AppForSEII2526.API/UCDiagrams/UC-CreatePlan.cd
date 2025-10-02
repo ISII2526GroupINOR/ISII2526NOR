@@ -39,5 +39,12 @@
       <FileName>Models\TypeItem.cs</FileName>
     </TypeIdentifier>
   </Class>
+  <Class Name="AppForSEII2526.API.Models.ApplicationUser">
+    <Position X="3.25" Y="4.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAIAAAAAAAAAAQABAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ApplicationUser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>
