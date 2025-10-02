@@ -21,5 +21,6 @@
         [Precision(5,2)]
         public decimal? RestockPrice { get; set; }
         public IList<RestockItem> RestockItems { get; set; }
+        public Brand Brand { get; set; }
     }
 }

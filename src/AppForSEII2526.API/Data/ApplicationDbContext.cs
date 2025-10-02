@@ -18,6 +18,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     public DbSet<Item> Items { get; set; }
 
+    public DbSet<Brand> Brands { get; set; }
+
     public DbSet<PaymentMethod> PaymentMethods { get; set; }
 
     public DbSet<Bizum> Bizums { get; set; }
