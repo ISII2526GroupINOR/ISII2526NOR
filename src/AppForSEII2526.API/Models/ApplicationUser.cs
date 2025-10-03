@@ -17,4 +17,5 @@ public class ApplicationUser : IdentityUser {
 
     // Navigation properties for related entities
     public IList<PaymentMethod>? PaymentMethods { get; set; }
+    public IList<Restock> Restocks { get; set; }
 }

@@ -22,5 +22,6 @@
         public decimal? RestockPrice { get; set; }
         public IList<RestockItem> RestockItems { get; set; }
         public Brand Brand { get; set; }
+        public TypeItem TypeItem { get; set; }
     }
 }
