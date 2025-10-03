@@ -5,17 +5,19 @@
     {
         public int Id { get; set; }
         [RegularExpression(@"^[A-Z][a-zA-z ]*$")]
-        public string City { get; set; }
+        public string? City { get; set; }
         [RegularExpression(@"^[A-Z][a-zA-z ]*$")]
-        public string Country { get; set; }
+        public string? Country { get; set; }
         public DateTime Date { get; set; }
-        public string Description { get; set; }
+        public string? Description { get; set; }
         [RegularExpression(@"^[A-Z][a-zA-z ]*$")]
-        public string Street { get; set; }
+        public string? Street { get; set; }
         [Precision(5,2)]
         public decimal TotalPrice { get; set; }
 
-        public IList<PurchaseItem> PurchaseItems { get; set; }
+        public IList<PurchaseItem>? PurchaseItems { get; set; }
+
+        public PaymentMethod? paymentMethod { get; set; }
 
 
 

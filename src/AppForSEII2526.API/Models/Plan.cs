@@ -37,5 +37,7 @@ namespace AppForSEII2526.API.Models
         // RELATIONSHIPS
         public IList<PlanItem> PlanItems { get; set; } 
 
+        public PaymentMethod? PaymentMethod { get; set; } // Optional relationship
+
     }
 }

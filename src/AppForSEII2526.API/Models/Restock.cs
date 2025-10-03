@@ -15,7 +15,8 @@
         public DateTime RestockDate { get; set; }
         [DataType(System.ComponentModel.DataAnnotations.DataType.Currency)]
         [Precision(5,2)]
-        public decimal TotalPrice { get; set; }
+        public decimal? TotalPrice { get; set; }
         public IList<RestockItem> RestockItems { get; set; }
+        public ApplicationUser RestockResponsible { get; set; }
     }
 }
