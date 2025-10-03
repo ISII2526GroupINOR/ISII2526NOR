@@ -3,9 +3,12 @@
   <Class Name="AppForSEII2526.API.Models.Plan">
     <Position X="0.5" Y="0.5" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AAACgAAAAAAgAAAAAAAAAAQAAAAAQAACAgAAAAAAAAE=</HashCode>
+      <HashCode>AAADgAAAAAAgAAAAAAAAAAQAAAAAQAACAgAAAAAAAAE=</HashCode>
       <FileName>Models\Plan.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="PaymentMethod" />
+    </ShowAsAssociation>
     <ShowAsCollectionAssociation>
       <Property Name="PlanItems" />
     </ShowAsCollectionAssociation>
@@ -33,16 +36,16 @@
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="AppForSEII2526.API.Models.TypeItem">
-    <Position X="13.75" Y="5" Width="1.5" />
+    <Position X="14.75" Y="0.75" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAACAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAACAAAAAAAACAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\TypeItem.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="AppForSEII2526.API.Models.ApplicationUser">
     <Position X="7.5" Y="4.5" Width="3.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAACAAAAIAAAAAAAAAAQABAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAACQAAAIAAAAAAAAAAQABAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\ApplicationUser.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
@@ -58,6 +61,27 @@
     <ShowAsAssociation>
       <Property Name="User" />
     </ShowAsAssociation>
+  </Class>
+  <Class Name="AppForSEII2526.API.Models.Bizum">
+    <Position X="0.5" Y="7.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Bizum.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AppForSEII2526.API.Models.CreditCard">
+    <Position X="3.5" Y="7.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\CreditCard.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AppForSEII2526.API.Models.PayPal">
+    <Position X="6.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\PayPal.cs</FileName>
+    </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>
