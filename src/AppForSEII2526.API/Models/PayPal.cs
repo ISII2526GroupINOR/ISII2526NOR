@@ -2,6 +2,7 @@
 {
     public class PayPal: PaymentMethod
     {
-        public string? Email { get; set; }
+        [Required]
+        public required string Email { get; set; }
     }
 }
