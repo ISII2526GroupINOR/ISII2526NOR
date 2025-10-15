@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AppForSEII2526.API.DTOs.ItemDTOs;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace AppForSEII2526.API.Controllers
 {
@@ -31,5 +33,17 @@ namespace AppForSEII2526.API.Controllers
         //    decimal result = op1/op2;
         //    return Ok(result);
         //}
+        [HttpGet]
+        [Route("[action]")]
+        [ProducesResponseType(typeof(IList<ItemForRestockingDTO>), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult> GetItemsForRestocking(string? itemName) {
+            IList<ItemForRestockingDTO> itemsDTOS = await _context.Items
+                .Include(i=>i.Brand) //not neccesary becuase it´s done automaticaly
+                .Where(i=>i.Name.Contains(itemName) || itemName == null)
+                .OrderBy(i=>i.Name)
+                .Select(i=>new ItemForRestockingDTO(i.Id, i.Name, i.Brand.Name))
+                .ToListAsync();
+            return Ok(itemsDTOS);
+        }
     }
 }
