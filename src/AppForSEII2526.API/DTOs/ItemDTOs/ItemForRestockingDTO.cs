@@ -14,6 +14,11 @@
             QuantityForRestock = quantityForRestock;
         }
 
+        public ItemForRestockingDTO(int id, string name, string brand, decimal? restockPrice, int quantityForRestock, int quantityAvailableForPurchase) : this(id, name, brand, restockPrice, quantityForRestock)
+        {
+            QuantityAvailableForPurchase = quantityAvailableForPurchase;
+        }
+
         public int Id { get; set; }
         [Required]
         [StringLength(128, ErrorMessage = "Item name cannot be longer than 128 characters.")]
@@ -25,6 +30,8 @@
         public decimal? RestockPrice { get; set; }
         [Required]
         public int QuantityForRestock { get; set; }
+        [Required]
+        public int QuantityAvailableForPurchase { get; set; }
 
         public override bool Equals(object? obj)
         {
@@ -33,7 +40,8 @@
                    Name == dTO.Name &&
                    Brand == dTO.Brand &&
                    RestockPrice == dTO.RestockPrice &&
-                   QuantityForRestock == dTO.QuantityForRestock;
+                   QuantityForRestock == dTO.QuantityForRestock &&
+                   QuantityAvailableForPurchase == dTO.QuantityAvailableForPurchase;
         }
     }
 }

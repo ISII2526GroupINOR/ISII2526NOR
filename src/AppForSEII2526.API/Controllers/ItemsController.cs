@@ -40,10 +40,11 @@ namespace AppForSEII2526.API.Controllers
             IList<ItemForRestockingDTO> itemsDTOS = await _context.Items
                 .Include(i=>i.Brand) //not neccesary becuase it´s done automaticaly
                 .Where(i=>(i.Name.Contains(itemName) || itemName == null)
-                    && (i.QuantityForRestock >= min || min == null)
-                    && (i.QuantityForRestock <= max || max == null))
+                    && (i.QuantityAvailableForPurchase < i.QuantityForRestock)
+                    && (i.QuantityAvailableForPurchase >= min || min == null)
+                    && (i.QuantityAvailableForPurchase <= max || max == null))
                 .OrderBy(i=>i.Name)
-                .Select(i=>new ItemForRestockingDTO(i.Id, i.Name, i.Brand.Name, i.RestockPrice, i.QuantityForRestock))
+                .Select(i=>new ItemForRestockingDTO(i.Id, i.Name, i.Brand.Name, i.RestockPrice, i.QuantityForRestock, i.QuantityAvailableForPurchase))
                 .ToListAsync();
             return Ok(itemsDTOS);
         }
