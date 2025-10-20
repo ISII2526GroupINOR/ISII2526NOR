@@ -25,5 +25,15 @@
         public decimal? RestockPrice { get; set; }
         [Required]
         public int QuantityForRestock { get; set; }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is ItemForRestockingDTO dTO &&
+                   Id == dTO.Id &&
+                   Name == dTO.Name &&
+                   Brand == dTO.Brand &&
+                   RestockPrice == dTO.RestockPrice &&
+                   QuantityForRestock == dTO.QuantityForRestock;
+        }
     }
 }
