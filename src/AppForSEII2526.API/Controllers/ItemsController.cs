@@ -36,12 +36,14 @@ namespace AppForSEII2526.API.Controllers
         [HttpGet]
         [Route("[action]")]
         [ProducesResponseType(typeof(IList<ItemForRestockingDTO>), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult> GetItemsForRestocking(string? itemName) {
+        public async Task<ActionResult> GetItemsForRestocking(string? itemName, int? min, int? max) {
             IList<ItemForRestockingDTO> itemsDTOS = await _context.Items
                 .Include(i=>i.Brand) //not neccesary becuase it´s done automaticaly
-                .Where(i=>i.Name.Contains(itemName) || itemName == null)
+                .Where(i=>(i.Name.Contains(itemName) || itemName == null)
+                    && (i.QuantityForRestock >= min || min == null)
+                    && (i.QuantityForRestock <= max || max == null))
                 .OrderBy(i=>i.Name)
-                .Select(i=>new ItemForRestockingDTO(i.Id, i.Name, i.Brand.Name))
+                .Select(i=>new ItemForRestockingDTO(i.Id, i.Name, i.Brand.Name, i.RestockPrice, i.QuantityForRestock))
                 .ToListAsync();
             return Ok(itemsDTOS);
         }
