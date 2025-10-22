@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using AppForSEII2526.API.DTOs.RestockDTOs;
+using AppForSEII2526.API.DTOs.ItemDTOs;
 
 namespace AppForSEII2526.API.Controllers
 {
@@ -22,7 +24,27 @@ namespace AppForSEII2526.API.Controllers
         [ProducesResponseType((int) HttpStatusCode.NotFound)]
         public async Task<ActionResult> GetRestock(int id)
         {
-
+            if(_context.Restocks == null)
+            {
+                _logger.LogError("Error: Restock table does not exist");
+                return NotFound();
+            }
+            var restock = await _context.Restocks.
+                Where(r => r.Id == id)
+                    .Include(r => r.RestockItems)
+                        .ThenInclude(ri => ri.Item)
+                            .ThenInclude(item => item.Brand)
+                .Select(r => new RestockDetailDTO(r.Id, r.Title, r.DeliveryAddress, r.Description,
+                r.ExpectedDate, r.TotalPrice, r.RestockItems
+                    .Select(ri => new ItemForRestockingDTO(ri.Item.Id, ri.Item.Name, ri.Item.Brand.Name, 
+                    ri.Item.RestockPrice, ri.Item.QuantityForRestock)).ToList<ItemForRestockingDTO>())
+                ).FirstOrDefaultAsync();
+            if(restock == null)
+            {
+                _logger.LogError($"Error: Restock with id {id} does not exist");
+                return NotFound();
+            }
+            return Ok(restock);
         }
     }
 }
