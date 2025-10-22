@@ -87,7 +87,9 @@ namespace AppForSEII2526.API.Controllers
                 .Select(c => new ClassForPlanDTO(
                     c.Id,
                     c.Name,
-                    c.TypeItems.Select(ti => ti.Name).ToList() // Include List of TypeItem.Name instead of full TypeItem database objects
+                    c.Price,
+                    c.TypeItems.Select(ti => ti.Name).ToList(), // Include List of TypeItem.Name instead of full TypeItem database objects
+                    c.Date
                     )
                 )
                 .ToListAsync();
