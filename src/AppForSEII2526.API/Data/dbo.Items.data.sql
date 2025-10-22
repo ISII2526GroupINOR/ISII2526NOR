@@ -7,8 +7,8 @@ SET IDENTITY_INSERT [dbo].[Brands] OFF
 
 SET IDENTITY_INSERT [dbo].[TypeItems] ON
 INSERT INTO [dbo].[TypeItems] ([Id], [Name], [ClassId]) VALUES (1, N'Dumbbell', NULL)
-INSERT INTO [dbo].[TypeItems] ([Id], [Name], [ClassId]) VALUES (2, N'Band', NULL)
-INSERT INTO [dbo].[TypeItems] ([Id], [Name], [ClassId]) VALUES (3, N'Machine', NULL)
+INSERT INTO [dbo].[TypeItems] ([Id], [Name], [ClassId]) VALUES (2, N'Band', 4)
+INSERT INTO [dbo].[TypeItems] ([Id], [Name], [ClassId]) VALUES (3, N'Machine', 3)
 SET IDENTITY_INSERT [dbo].[TypeItems] OFF
 
 SET IDENTITY_INSERT [dbo].[Items] ON
