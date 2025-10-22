@@ -84,7 +84,12 @@ namespace AppForSEII2526.API.Controllers
                     && c.PlanItems.Count < c.Capacity // Only classes with available capacity
                     && validDates.Contains(DateOnly.FromDateTime(c.Date.Date)) // Only classes within the valid dates set, calculated earlier
                 )
-                .Select(c => new ClassForPlanDTO(c.Id, c.Name, c.TypeItems))
+                .Select(c => new ClassForPlanDTO(
+                    c.Id,
+                    c.Name,
+                    c.TypeItems.Select(ti => ti.Name).ToList() // Include List of TypeItem.Name instead of full TypeItem database objects
+                    )
+                )
                 .ToListAsync();
 
             return Ok(classes);

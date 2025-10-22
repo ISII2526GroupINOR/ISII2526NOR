@@ -3,11 +3,11 @@ namespace AppForSEII2526.API.DTOs.ClassDTOs
 {
     public class ClassForPlanDTO
     {
-        public ClassForPlanDTO(int id, string name, IList<TypeItem> types)
+        public ClassForPlanDTO(int id, string name, IList<string> itemTypes)
         {
             Id = id;
             Name = name;
-            TypeItems = types;
+            TypeItems = itemTypes;
         }
 
         public int Id { get; set; }
@@ -17,6 +17,6 @@ namespace AppForSEII2526.API.DTOs.ClassDTOs
         [RegularExpression(@"^[A-Za-z0-9\s]+$", ErrorMessage = "Class name can only contain alphanumeric characters and spaces.")]
         public string Name { get; set; }
 
-        public IList<TypeItem> TypeItems { get; set; }
+        public IList<string> TypeItems { get; set; }
     }
 }
