@@ -29,7 +29,7 @@ namespace AppForSEII2526.API.Controllers
                 _logger.LogError("Error: Restock table does not exist");
                 return NotFound();
             }
-            var restock = await _context.Restocks.
+            RestockDetailDTO? restock = await _context.Restocks.
                 Where(r => r.Id == id)
                     .Include(r => r.RestockItems)
                         .ThenInclude(ri => ri.Item)

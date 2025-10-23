@@ -1,8 +1,10 @@
-﻿namespace AppForSEII2526.API.DTOs.RestockDTOs
+﻿using AppForSEII2526.API.DTOs.ItemDTOs;
+
+namespace AppForSEII2526.API.DTOs.RestockDTOs
 {
     public class RestockDetailDTO
     {
-        public RestockDetailDTO(int id, string title, string deliveryAddress, string? description, DateTime expectedDate, decimal? totalPrice, IList<RestockItem> restockItems)
+        public RestockDetailDTO(int id, string title, string deliveryAddress, string? description, DateTime expectedDate, decimal? totalPrice, IList<ItemForRestockingDTO> restockItems)
         {
             Id = id;
             Title = title;
@@ -24,6 +26,6 @@
         [DataType(System.ComponentModel.DataAnnotations.DataType.Currency)]
         [Precision(5, 2)]
         public decimal? TotalPrice { get; set; }
-        public IList<RestockItem> RestockItems { get; set; }
+        public IList<ItemForRestockingDTO> RestockItems { get; set; }
     }
 }
