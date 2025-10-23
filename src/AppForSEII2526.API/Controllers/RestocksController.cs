@@ -37,12 +37,22 @@ namespace AppForSEII2526.API.Controllers
                 .Select(r => new RestockDetailDTO(r.Id, r.Title, r.DeliveryAddress, r.Description,
                 r.ExpectedDate, r.TotalPrice, r.RestockItems
                     .Select(ri => new ItemForRestockingDTO(ri.Item.Id, ri.Item.Name, ri.Item.Brand.Name, 
-                    ri.Item.RestockPrice, ri.Item.QuantityForRestock)).ToList<ItemForRestockingDTO>())
+                    ri.Item.RestockPrice*ri.Quantity, ri.Item.QuantityForRestock)).ToList<ItemForRestockingDTO>())
                 ).FirstOrDefaultAsync();
-            if(restock == null)
+            if (restock == null)
             {
                 _logger.LogError($"Error: Restock with id {id} does not exist");
                 return NotFound();
+            }
+            restock.TotalPrice = 0;
+            foreach (var item in restock.RestockItems)
+            {
+                if (item.RestockPrice is not null) restock.TotalPrice += item.RestockPrice;
+                else
+                {
+                    restock.TotalPrice = null;
+                    break;
+                }
             }
             return Ok(restock);
         }
