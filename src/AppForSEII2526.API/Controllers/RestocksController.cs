@@ -37,7 +37,7 @@ namespace AppForSEII2526.API.Controllers
                 .Select(r => new RestockDetailDTO(r.Id, r.Title, r.DeliveryAddress, r.Description,
                 r.ExpectedDate, r.TotalPrice, r.RestockItems
                     .Select(ri => new ItemForRestockingDTO(ri.Item.Id, ri.Item.Name, ri.Item.Brand.Name, 
-                    ri.Item.RestockPrice*ri.Quantity, ri.Item.QuantityForRestock)).ToList<ItemForRestockingDTO>())
+                    ri.RestockPrice, ri.Item.QuantityForRestock)).ToList<ItemForRestockingDTO>())
                 ).FirstOrDefaultAsync();
             if (restock == null)
             {
