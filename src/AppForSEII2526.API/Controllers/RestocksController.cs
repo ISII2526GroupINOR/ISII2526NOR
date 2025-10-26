@@ -44,16 +44,6 @@ namespace AppForSEII2526.API.Controllers
                 _logger.LogError($"Error: Restock with id {id} does not exist");
                 return NotFound();
             }
-            restock.TotalPrice = 0;
-            foreach (var item in restock.RestockItems)
-            {
-                if (item.RestockPrice is not null) restock.TotalPrice += item.RestockPrice;
-                else
-                {
-                    restock.TotalPrice = null;
-                    break;
-                }
-            }
             return Ok(restock);
         }
     }
