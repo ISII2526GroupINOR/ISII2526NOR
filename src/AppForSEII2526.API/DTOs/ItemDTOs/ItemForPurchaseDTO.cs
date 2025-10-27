@@ -1,4 +1,5 @@
-﻿namespace AppForSEII2526.API.DTOs.ItemDTOs
+﻿
+namespace AppForSEII2526.API.DTOs.ItemDTOs
 {
     public class ItemForPurchaseDTO
     {
@@ -33,7 +34,14 @@
 
         public override bool Equals(object? obj)
         {
-            return base.Equals(obj);
+            return obj is ItemForPurchaseDTO dTO &&
+                   Id == dTO.Id &&
+                   Name == dTO.Name &&
+                   EqualityComparer<TypeItem>.Default.Equals(TypeItem, dTO.TypeItem) &&
+                   EqualityComparer<Brand>.Default.Equals(Brand, dTO.Brand) &&
+                   Description == dTO.Description &&
+                   QuantityAvailableForPurchase == dTO.QuantityAvailableForPurchase &&
+                   PurchasePrice == dTO.PurchasePrice;
         }
     }
 }
