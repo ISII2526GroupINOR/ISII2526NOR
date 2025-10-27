@@ -37,7 +37,7 @@ namespace AppForSEII2526.API.Controllers
         [HttpGet]
         [Route("[action]")] // api/Classes/GetClassesForPlan
         [ProducesResponseType(typeof(IList<ClassForPlanDTO>), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
         public async Task<ActionResult> GetAvailableClassesForPlan(string? className, DateOnly? date)
         {
             // Intermediate operations
