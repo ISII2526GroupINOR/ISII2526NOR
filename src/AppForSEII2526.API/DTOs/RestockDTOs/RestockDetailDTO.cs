@@ -27,5 +27,17 @@ namespace AppForSEII2526.API.DTOs.RestockDTOs
         [Precision(5, 2)]
         public decimal? TotalPrice { get; set; }
         public IList<ItemForRestockingDTO> RestockItems { get; set; }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is RestockDetailDTO dTO &&
+                   Id == dTO.Id &&
+                   Title == dTO.Title &&
+                   DeliveryAddress == dTO.DeliveryAddress &&
+                   Description == dTO.Description &&
+                   ExpectedDate == dTO.ExpectedDate &&
+                   TotalPrice == dTO.TotalPrice &&
+                   EqualityComparer<IList<ItemForRestockingDTO>>.Default.Equals(RestockItems, dTO.RestockItems);
+        }
     }
 }
