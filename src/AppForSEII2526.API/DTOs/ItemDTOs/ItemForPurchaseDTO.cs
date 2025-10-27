@@ -9,7 +9,7 @@ namespace AppForSEII2526.API.DTOs.ItemDTOs
         [RegularExpression(@"^[a-zA-Z0-9\s\-]+$", ErrorMessage = "Item name can only contain letters, numbers, spaces, and hyphens.")]
         public string Name { get; set; }
 
-        public ItemForPurchaseDTO(int id, string name, TypeItem typeItem, Brand brand, string description, int quantityAvailableForPurchase, decimal purchasePrice)
+        public ItemForPurchaseDTO(int id, string name, string typeItem, string brand, string description, int quantityAvailableForPurchase, decimal purchasePrice)
         {
             Id = id;
             Name = name;
@@ -20,9 +20,9 @@ namespace AppForSEII2526.API.DTOs.ItemDTOs
             PurchasePrice = purchasePrice;
         }
 
-        public TypeItem TypeItem { get; set; }
+        public string TypeItem { get; set; }
 
-        public Brand Brand { get; set; }
+        public string Brand { get; set; }
         public string Description { get; set; }
 
         [Required]
@@ -37,8 +37,8 @@ namespace AppForSEII2526.API.DTOs.ItemDTOs
             return obj is ItemForPurchaseDTO dTO &&
                    Id == dTO.Id &&
                    Name == dTO.Name &&
-                   EqualityComparer<TypeItem>.Default.Equals(TypeItem, dTO.TypeItem) &&
-                   EqualityComparer<Brand>.Default.Equals(Brand, dTO.Brand) &&
+                   TypeItem == dTO.TypeItem &&
+                   Brand == dTO.Brand &&
                    Description == dTO.Description &&
                    QuantityAvailableForPurchase == dTO.QuantityAvailableForPurchase &&
                    PurchasePrice == dTO.PurchasePrice;

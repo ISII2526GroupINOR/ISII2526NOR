@@ -52,7 +52,7 @@ namespace AppForSEII2526.API.Controllers
                 .OrderBy(i => i.Name)
                     .ThenBy(i => i.PurchasePrice)
                 .Select(i => new ItemForPurchaseDTO(
-                    i.Id, i.Name, i.TypeItem, i.Brand, i.Description,
+                    i.Id, i.Name, i.TypeItem.Name, i.Brand.Name, i.Description,
                     i.QuantityAvailableForPurchase, i.PurchasePrice
 
                     ))
