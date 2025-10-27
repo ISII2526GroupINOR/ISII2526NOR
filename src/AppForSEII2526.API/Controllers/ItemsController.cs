@@ -42,16 +42,16 @@ namespace AppForSEII2526.API.Controllers
                 .Include(i => i.TypeItem)
                 .Include(i => i.PurchaseItems)
                     .ThenInclude(pi => pi.Purchase)
-                .Where(i => 
+                .Where(i =>
                     (i.Name.Contains(itemName) || itemName == null) &&
                     (i.Description.Contains(description) || description == null) &&
-                    (i.TypeItem.Name.Equals(typeItem) || typeItem == null ) &&
+                    (i.TypeItem.Name.Equals(typeItem) || typeItem == null) &&
                     (i.Brand.Name.Equals(brand) || brand == null) &&
                     (i.QuantityAvailableForPurchase > 0)
                 )
                 .OrderBy(i => i.Name)
                     .ThenBy(i => i.PurchasePrice)
-                .Select(i=>new ItemForPurchaseDTO(
+                .Select(i => new ItemForPurchaseDTO(
                     i.Id, i.Name, i.TypeItem, i.Brand, i.Description,
                     i.QuantityAvailableForPurchase, i.PurchasePrice
 
@@ -81,4 +81,5 @@ namespace AppForSEII2526.API.Controllers
                 .ToListAsync();
             return Ok(itemsDTOS);
         }
+    }
 }
