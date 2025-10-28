@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using AppForSEII2526.API.DTOs.ItemDTOs;
 using AppForSEII2526.API.DTOs.RestockDTOs;
-using AppForSEII2526.API.DTOs.ItemDTOs;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace AppForSEII2526.API.Controllers
 {
@@ -67,7 +68,18 @@ namespace AppForSEII2526.API.Controllers
             if(ModelState.Count > 0)
                 return BadRequest(new ValidationProblemDetails(ModelState));
 
+            var itemNames = restockForCreateDTO.RestockItems.Select(ri => ri.Item.Name).ToList<string>();
 
+            var items = _context.Items.Include(i => i.RestockItems)
+                .Where(i => itemNames.Contains(i.Name))
+                .Select(i => new
+                {
+                    i.Id,
+                    i.Name,
+                    i.Brand,
+                    i.QuantityForRestock,
+                    i.RestockPrice
+                }).ToList();
         }
     }
 }
