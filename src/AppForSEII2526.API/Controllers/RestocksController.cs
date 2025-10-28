@@ -54,15 +54,19 @@ namespace AppForSEII2526.API.Controllers
         [ProducesResponseType(typeof(string), (int) HttpStatusCode.Conflict)]
         public async Task<ActionResult> CreateRestock(RestockForCreateDTO restockForCreateDTO)
         {
-            if(restockForCreateDTO.Title == null)
-                ModelState.AddModelError("RestockTitleFrom", "Error, a title must be specified.");
-
-            if (restockForCreateDTO.DeliveryAddress == null)
-                ModelState.AddModelError("RestockDeliveryAddressFrom", "Error, an address to deliver must be specified.");
-
-
             if (restockForCreateDTO.ExpectedDate != null && restockForCreateDTO.ExpectedDate <= DateTime.Now)
-                ModelState.AddModelError("RestockDateFrom", "Error, the expected date must start later than today.");
+                ModelState.AddModelError("RestockDateFrom", "Error! The expected date must start later than today.");
+
+            if (restockForCreateDTO.RestockItems.Count == 0)
+                ModelState.AddModelError("RestockItem", "Error! At least one item must be selected for restock.");
+
+            var user = _context.ApplicationUsers.FirstOrDefault(au => au.UserName == restockForCreateDTO.RestockResponsible.UserName);
+            if (user == null)
+                ModelState.AddModelError("RestockApplicationUser", "Error! User name is not registered");
+
+            if(ModelState.Count > 0)
+                return BadRequest(new ValidationProblemDetails(ModelState));
+
 
         }
     }
