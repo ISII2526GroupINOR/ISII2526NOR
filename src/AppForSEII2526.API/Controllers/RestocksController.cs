@@ -46,5 +46,24 @@ namespace AppForSEII2526.API.Controllers
             }
             return Ok(restock);
         }
+
+        [HttpPost]
+        [Route("[action]")]
+        [ProducesResponseType(typeof(RestockDetailDTO), (int) HttpStatusCode.Created)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), (int) HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(string), (int) HttpStatusCode.Conflict)]
+        public async Task<ActionResult> CreateRestock(RestockForCreateDTO restockForCreateDTO)
+        {
+            if(restockForCreateDTO.Title == null)
+                ModelState.AddModelError("RestockTitleFrom", "Error, a title must be specified.");
+
+            if (restockForCreateDTO.DeliveryAddress == null)
+                ModelState.AddModelError("RestockDeliveryAddressFrom", "Error, an address to deliver must be specified.");
+
+
+            if (restockForCreateDTO.ExpectedDate != null && restockForCreateDTO.ExpectedDate <= DateTime.Now)
+                ModelState.AddModelError("RestockDateFrom", "Error, the expected date must start later than today.");
+
+        }
     }
 }
