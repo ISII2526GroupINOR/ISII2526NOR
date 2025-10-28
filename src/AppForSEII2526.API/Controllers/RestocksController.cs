@@ -80,6 +80,13 @@ namespace AppForSEII2526.API.Controllers
                     i.QuantityForRestock,
                     i.RestockPrice
                 }).ToList();
+
+            Restock restock = new Restock(restockForCreateDTO.Title, restockForCreateDTO.DeliveryAddress, 
+                restockForCreateDTO.Description, restockForCreateDTO.ExpectedDate, restockForCreateDTO.RestockDate,
+                restockForCreateDTO.TotalPrice, new List<RestockItem>(), restockForCreateDTO.RestockResponsible);
+
+            restock.TotalPrice = 0;
+
         }
     }
 }
