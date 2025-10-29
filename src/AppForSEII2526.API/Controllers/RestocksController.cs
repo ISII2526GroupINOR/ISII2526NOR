@@ -78,7 +78,8 @@ namespace AppForSEII2526.API.Controllers
                     i.Name,
                     i.Brand,
                     i.QuantityForRestock,
-                    i.RestockPrice
+                    i.RestockPrice,
+                    i.QuantityAvailableForPurchase
                 }).ToList();
 
             Restock restock = new Restock(restockForCreateDTO.Title, restockForCreateDTO.DeliveryAddress, 
@@ -87,6 +88,22 @@ namespace AppForSEII2526.API.Controllers
 
             restock.TotalPrice = 0;
 
+            foreach (var ritem in restockForCreateDTO.RestockItems)
+            {
+                var item = items.FirstOrDefault(i => i.Id == ritem.ItemId);
+                if (ritem.Quantity + item.QuantityAvailableForPurchase > item.QuantityForRestock)
+                    ModelState.AddModelError("RestockItem", $"Error! The total quantity for purchase plus the" +
+                        $" quantity to restock of item {item.Name} must be bigger than the quantity for restock.");
+                if (ritem.RestockPrice != null && restock.TotalPrice != null)
+                {
+                    ritem.RestockPrice = item.RestockPrice * ritem.Quantity;
+                    restock.TotalPrice += ritem.RestockPrice;
+                }
+                else
+                {
+                    restock.TotalPrice = null;
+                }
+            }
         }
     }
 }
