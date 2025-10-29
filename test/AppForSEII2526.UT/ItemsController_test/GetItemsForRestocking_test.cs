@@ -43,8 +43,8 @@ namespace AppForSEII2526.UT.ItemsController_test
         {
             var expectedItems = new List<ItemForRestockingDTO>()
             {
-                new ItemForRestockingDTO("Dumbbell", "Description", 20, 8, 10, 25, new Brand("Brand1"), new TypeItem("Dumbbell")),
-
+                new ItemForRestockingDTO(1, "Dumbbell", "Brand1", "Description", 20, 25, 10, 8),
+                new ItemForRestockingDTO(2, "Press Machine", "Brand2", "Description2", 300, 200, 10, 9)
             };
             var controller = new ItemsController(_context, null);
 
@@ -53,5 +53,6 @@ namespace AppForSEII2526.UT.ItemsController_test
             var okResult = Assert.IsType<OkObjectResult>(result);
             var itemsDTOsActual = Assert.IsType<List<ItemForRestockingDTO>>(okResult.Value);
             Assert.Equal(expectedItems, itemsDTOsActual);
+        }
     }
 }
