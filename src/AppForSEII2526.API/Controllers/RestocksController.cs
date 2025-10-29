@@ -120,6 +120,12 @@ namespace AppForSEII2526.API.Controllers
                 ModelState.AddModelError("Restock", "There was a problem while saving your restock, please, try again later");
                 return Conflict("Error" + ex.Message);
             }
+
+            var restockDetail = new RestockDetailDTO(restock.Id, restock.Title, restock.DeliveryAddress, 
+                restock.Description, restock.ExpectedDate, restock.TotalPrice, 
+                restockForCreateDTO.RestockItems);
+
+            return CreatedAtAction("GetRestock", new {id = restock.Id}, restockDetail);
         }
     }
 }
