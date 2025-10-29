@@ -21,7 +21,7 @@ namespace AppForSEII2526.API.DTOs.PlanDTOs
 
         [StringLength(128, ErrorMessage = "Plan name cannot be longer than 128 characters.")]
         [RegularExpression(@"^[a-zA-Z0-9\s\-]+$", ErrorMessage = "Plan name can only contain letters, numbers, spaces, and hyphens.")]
-        public required string Name { get; set; }
+        public string Name { get; set; }
 
         [StringLength(1024, ErrorMessage = "Plan description cannot be longer than 1024 characters.")]
         public string? Description { get; set; }
