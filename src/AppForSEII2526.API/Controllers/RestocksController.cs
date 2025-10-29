@@ -104,6 +104,22 @@ namespace AppForSEII2526.API.Controllers
                     restock.TotalPrice = null;
                 }
             }
+
+            if (ModelState.ErrorCount > 0)
+            {
+                return BadRequest(new ValidationProblemDetails(ModelState));
+            }
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                ModelState.AddModelError("Restock", "There was a problem while saving your restock, please, try again later");
+                return Conflict("Error" + ex.Message);
+            }
         }
     }
 }
