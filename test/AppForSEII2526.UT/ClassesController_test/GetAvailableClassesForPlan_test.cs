@@ -8,7 +8,7 @@ using AppForSEII2526.API.Controllers;
 
 namespace AppForSEII2526.UT.ClassesController_test
 {
-    internal class GetAvailableClassesForPlan_test : AppForMovies4SqliteUT
+    internal class GetAvailableClassesForPlan_test : AppForSEII25264SqliteUT
     {
 
     }
