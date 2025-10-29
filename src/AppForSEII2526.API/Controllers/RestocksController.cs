@@ -68,7 +68,8 @@ namespace AppForSEII2526.API.Controllers
             if(ModelState.Count > 0)
                 return BadRequest(new ValidationProblemDetails(ModelState));
 
-            var itemNames = restockForCreateDTO.RestockItems.Select(ri => ri.Item.Name).ToList<string>();
+            //contains the names of items to be restocked in the order
+            var itemNames = restockForCreateDTO.RestockItems.Select(ri => ri.Name).ToList<string>();
 
             var items = _context.Items.Include(i => i.RestockItems)
                 .Where(i => itemNames.Contains(i.Name))
@@ -90,7 +91,7 @@ namespace AppForSEII2526.API.Controllers
 
             foreach (var ritem in restockForCreateDTO.RestockItems)
             {
-                var item = items.FirstOrDefault(i => i.Id == ritem.ItemId);
+                var item = items.FirstOrDefault(i => i.Id == ritem.Id);
                 if (ritem.Quantity + item.QuantityAvailableForPurchase > item.QuantityForRestock)
                     ModelState.AddModelError("RestockItem", $"Error! The total quantity for purchase plus the" +
                         $" quantity to restock of item {item.Name} must be bigger than the quantity for restock.");
