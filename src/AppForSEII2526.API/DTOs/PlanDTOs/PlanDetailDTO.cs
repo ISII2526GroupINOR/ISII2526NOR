@@ -41,9 +41,9 @@ namespace AppForSEII2526.API.DTOs.PlanDTOs
         [Range(1, 52, ErrorMessage = "Weeks must be between 1 and 52 (1 year).")]
         public int Weeks { get; set; } // Not null
 
-        ApplicationUserForPlanDetailDTO? User { get; set; }
+        public ApplicationUserForPlanDetailDTO? User { get; set; }
 
-        IList<ClassForPlanDTO> Classes { get; set; }
+        public IList<ClassForPlanDTO> Classes { get; set; }
 
         public override bool Equals(object? obj)
         {
