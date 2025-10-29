@@ -6,6 +6,20 @@ namespace AppForSEII2526.API.Models
 
     public class Class
     {
+        public Class()
+        {
+            // Ignore warning about uninitialized non-nullable properties.
+        }
+
+        public Class(string name, DateTime date, int capacity, decimal price)
+        {
+            // Ignore warning about uninitialized non-nullable properties.
+            Name = name;
+            Date = date;
+            Capacity = capacity;
+            Price = price;
+        }
+
         public int Id { get; set; } // Primary key
 
         [Required]

@@ -2,6 +2,11 @@
 {
     public class TypeItem
     {
+        public TypeItem()
+        {
+            // Ignore warning about uninitialized non-nullable properties.
+        }
+
         public int Id { get; set; } // Primary key
 
         [Required]
