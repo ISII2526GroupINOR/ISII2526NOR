@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AppForSEII2526.API.Controllers;
 using AppForSEII2526.API.Models;
 using AppForSEII2526.API.DTOs.ItemDTOs;
+using System.Security.Cryptography.Xml;
 
 namespace AppForSEII2526.UT.ItemsController_test
 {
@@ -36,5 +37,21 @@ namespace AppForSEII2526.UT.ItemsController_test
             _context.AddRange(items);
             _context.SaveChanges();
         }
+
+        [Fact]
+        public async Task GetItemsForRestocking_null_name_null_min_null_max()
+        {
+            var expectedItems = new List<ItemForRestockingDTO>()
+            {
+                new ItemForRestockingDTO("Dumbbell", "Description", 20, 8, 10, 25, new Brand("Brand1"), new TypeItem("Dumbbell")),
+
+            };
+            var controller = new ItemsController(_context, null);
+
+            var result = await controller.GetItemsForRestocking(null, null, null);
+
+            var okResult = Assert.IsType<OkObjectResult>(result);
+            var itemsDTOsActual = Assert.IsType<List<ItemForRestockingDTO>>(okResult.Value);
+            Assert.Equal(expectedItems, itemsDTOsActual);
     }
 }
