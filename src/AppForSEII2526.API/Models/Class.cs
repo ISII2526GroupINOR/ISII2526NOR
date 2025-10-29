@@ -25,7 +25,7 @@ namespace AppForSEII2526.API.Models
         [Required]
         [StringLength(256, ErrorMessage = "Class name cannot have more than 256 characters.")]
         [RegularExpression(@"^[A-Za-z0-9\s]+$", ErrorMessage = "Class name can only contain alphanumeric characters and spaces.")]
-        public required string Name { get; set; }
+        public string Name { get; set; }
 
         [DataType(DataType.DateTime)]
         public DateTime Date { get; set; }
