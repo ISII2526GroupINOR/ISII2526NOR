@@ -20,6 +20,13 @@ namespace AppForSEII2526.API.Models
             Price = price;
         }
 
+        // Created for GetAvailableClassesForPlan_test
+        public Class(string name, DateTime date, int capacity, decimal price, IList<TypeItem> typeItems) : this(name, date, capacity, price)
+        {
+            TypeItems = typeItems;
+        }
+
+
         public int Id { get; set; } // Primary key
 
         [Required]
