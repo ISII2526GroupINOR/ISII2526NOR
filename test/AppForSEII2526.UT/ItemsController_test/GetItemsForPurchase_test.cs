@@ -12,6 +12,7 @@ namespace AppForSEII2526.UT.ItemsController_test
     internal class GetItemsForPurchase_test : AppForSEII25264SqliteUT
     {
         public GetItemsForPurchase_test() {
+            //fix these values
             var brands = new List<Brand>()
             {
                 new Brand("El Corte Ingles"),
@@ -40,7 +41,24 @@ namespace AppForSEII2526.UT.ItemsController_test
 
         public async Task GetItemsForPurchaseNULL4NameBrand_test()
         {
-            List<ItemsForPurchaseDTO>
+            List<ItemForPurchaseDTO> expectedItems = new List<ItemForPurchaseDTO>()
+            {
+                new ItemForPurchaseDTO(1, "5kg Dumbbell", "Dumbell", "El Corte Ingles", "A dumbbell", 10, 2),
+                new ItemForPurchaseDTO(2, "10kg Dumbbell", "Dumbell", "El Corte Ingles", "A dumbbell", 10, 3),
+                //fix these items
+            };
+
+            var mock = new Mock<ILogger<ItemsController>>();
+            ILogger<ItemsController> logger = mock.Object;
+            ItemsController controller = new ItemsController(_context, logger);
+
+            var result = await controller.GetItemsForPurchase(null, null, null, null);
+
+
+            var okresult = Assert.IsType<OkObjectResult>(result);
+            var itemsactualresult = Assert.IsType<List<ItemForPurchaseDTO>>(okresult.Value);
+
+            Assert.Equal(expectedItems, itemsactualresult);
         }
     }
 }
