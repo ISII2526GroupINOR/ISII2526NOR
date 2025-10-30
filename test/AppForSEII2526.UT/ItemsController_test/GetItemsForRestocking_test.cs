@@ -39,6 +39,7 @@ namespace AppForSEII2526.UT.ItemsController_test
         }
 
         [Fact]
+        [Trait ("LevelTesting", "Unit Testing")]
         public async Task GetItemsForRestocking_null_name_null_min_null_max()
         {
             var expectedItems = new List<ItemForRestockingDTO>()
