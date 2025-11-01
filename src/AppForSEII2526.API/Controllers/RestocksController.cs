@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace AppForSEII2526.API.Controllers
-{
+{ 
     [Route("api/[controller]")]
     [ApiController]
     public class RestocksController : ControllerBase
@@ -61,7 +61,7 @@ namespace AppForSEII2526.API.Controllers
             if (restockForCreateDTO.RestockItems.Count == 0)
                 ModelState.AddModelError("RestockItem", "Error! At least one item must be selected for restock.");
 
-            var user = _context.ApplicationUsers.FirstOrDefault(au => au.UserName == restockForCreateDTO.RestockResponsible.UserName);
+            var user = _context.ApplicationUsers.FirstOrDefault(au => au.UserName == restockForCreateDTO.RestockResponsible);
             if (user == null)
                 ModelState.AddModelError("RestockApplicationUser", "Error! User name is not registered");
 
@@ -85,7 +85,7 @@ namespace AppForSEII2526.API.Controllers
 
             Restock restock = new Restock(restockForCreateDTO.Title, restockForCreateDTO.DeliveryAddress, 
                 restockForCreateDTO.Description, restockForCreateDTO.ExpectedDate, restockForCreateDTO.RestockDate,
-                restockForCreateDTO.TotalPrice, new List<RestockItem>(), restockForCreateDTO.RestockResponsible);
+                restockForCreateDTO.TotalPrice, new List<RestockItem>(), user!);
 
             restock.TotalPrice = 0;
             //To store new DTOs to be stored in the RestockDetailDTO that will be showned once the restock is created
@@ -108,7 +108,8 @@ namespace AppForSEII2526.API.Controllers
                     {
                         restock.TotalPrice = null;
                     }
-                    restock.RestockItems.Add(new RestockItem(ritem.QuantityForRestock, ritem.RestockPrice, restock, ritem.Item));
+                    var itemToRestock = await _context.Items.FindAsync(ritem.Id);
+                    restock.RestockItems.Add(new RestockItem(ritem.QuantityForRestock, ritem.RestockPrice, restock, itemToRestock));
                     ItemRestockDTO.Add(new ItemForRestockingDTO(ritem.Id, ritem.Name, ritem.Brand, ritem.RestockPrice, ritem.RestockQuantity));
                 }
             }

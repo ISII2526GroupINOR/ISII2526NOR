@@ -29,7 +29,7 @@ namespace AppForSEII2526.API.DTOs.ItemDTOs
         [Required]
         public int QuantityAvailableForPurchase { get; set; }
         public int RestockQuantity { get; set; } //Quantity that the admin has specified to be restocked
-        public int Item { get; set; }
+        public int Item { get; set; } //Id of the item referenced
 
         public override bool Equals(object? obj)
         {
