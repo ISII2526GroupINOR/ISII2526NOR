@@ -1,7 +1,9 @@
 ﻿using AppForSEII2526.API.DTOs.ItemDTOs;
 using AppForSEII2526.API.DTOs.RestockDTOs;
+using Humanizer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 
 namespace AppForSEII2526.API.Controllers
@@ -93,13 +95,24 @@ namespace AppForSEII2526.API.Controllers
 
             foreach (var ritem in restockForCreateDTO.RestockItems)
             {
+                if (ritem == null)
+                {
+                    ModelState.AddModelError("RestockItem", "The item to restock cannot be null.");
+                    continue;
+                }
                 var item = items.FirstOrDefault(i => i.Id == ritem.Id);
-                if (ritem == null || ritem.RestockQuantity + item.QuantityAvailableForPurchase > item.QuantityForRestock)
-                    ModelState.AddModelError("RestockItem", $"Error! The total quantity for purchase plus the" +
-                        $" quantity to restock of item {item.Name} must be bigger than the quantity for restock.");
+                if (item == null)
+                {
+                    ModelState.AddModelError("Item", "The specified item cannot be found.");
+                    continue;
+                }
+                var quantity = ritem.RestockQuantity + item.QuantityAvailableForPurchase;
+                if (quantity < item.QuantityForRestock)
+                    ModelState.AddModelError("RestockItem", $"Error! The total quantity for purchase {item.QuantityAvailableForPurchase} plus the" +
+                        $" quantity to restock {ritem.RestockQuantity} of item {item.Name} must be bigger than the quantity for restock {item.QuantityForRestock}.");
                 else
                 {
-                    if (ritem.RestockPrice != null && restock.TotalPrice != null) //If one item had price null, ignore the following
+                    if (item.RestockPrice != null && restock.TotalPrice != null) //If one item had price null, ignore the following
                     {
                         ritem.RestockPrice = item.RestockPrice * ritem.RestockQuantity;
                         restock.TotalPrice += ritem.RestockPrice;
