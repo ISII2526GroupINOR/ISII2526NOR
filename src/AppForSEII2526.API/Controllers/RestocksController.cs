@@ -88,6 +88,8 @@ namespace AppForSEII2526.API.Controllers
                 restockForCreateDTO.TotalPrice, new List<RestockItem>(), restockForCreateDTO.RestockResponsible);
 
             restock.TotalPrice = 0;
+            //To store new DTOs to be stored in the RestockDetailDTO that will be showned once the restock is created
+            IList<ItemForRestockingDTO> ItemRestockDTO = new List<ItemForRestockingDTO>();
 
             foreach (var ritem in restockForCreateDTO.RestockItems)
             {
@@ -97,7 +99,7 @@ namespace AppForSEII2526.API.Controllers
                         $" quantity to restock of item {item.Name} must be bigger than the quantity for restock.");
                 else
                 {
-                    if (ritem.RestockPrice != null && restock.TotalPrice != null)
+                    if (ritem.RestockPrice != null && restock.TotalPrice != null) //If one item had price null, ignore the following
                     {
                         ritem.RestockPrice = item.RestockPrice * ritem.RestockQuantity;
                         restock.TotalPrice += ritem.RestockPrice;
@@ -107,6 +109,7 @@ namespace AppForSEII2526.API.Controllers
                         restock.TotalPrice = null;
                     }
                     restock.RestockItems.Add(new RestockItem(ritem.QuantityForRestock, ritem.RestockPrice, restock, ritem.Item));
+                    ItemRestockDTO.Add(new ItemForRestockingDTO(ritem.Id, ritem.Name, ritem.Brand, ritem.RestockPrice, ritem.RestockQuantity));
                 }
             }
 
@@ -114,6 +117,8 @@ namespace AppForSEII2526.API.Controllers
             {
                 return BadRequest(new ValidationProblemDetails(ModelState));
             }
+
+            _context.Add(restock);
 
             try
             {
@@ -128,7 +133,7 @@ namespace AppForSEII2526.API.Controllers
 
             var restockDetail = new RestockDetailDTO(restock.Id, restock.Title, restock.DeliveryAddress, 
                 restock.Description, restock.ExpectedDate, restock.TotalPrice, 
-                restockForCreateDTO.RestockItems);
+                ItemRestockDTO);
 
             return CreatedAtAction("GetRestock", new {id = restock.Id}, restockDetail);
         }
