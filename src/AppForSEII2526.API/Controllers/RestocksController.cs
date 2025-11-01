@@ -57,7 +57,7 @@ namespace AppForSEII2526.API.Controllers
         [ProducesResponseType(typeof(string), (int) HttpStatusCode.Conflict)]
         public async Task<ActionResult> CreateRestock(RestockForCreateDTO restockForCreateDTO)
         {
-            if (restockForCreateDTO.ExpectedDate != null && restockForCreateDTO.ExpectedDate <= DateTime.Now)
+            if (restockForCreateDTO.ExpectedDate <= DateTime.Now)
                 ModelState.AddModelError("RestockDateFrom", "Error! The expected date must start later than today.");
 
             if (restockForCreateDTO.RestockItems.Count == 0)
