@@ -123,7 +123,7 @@ namespace AppForSEII2526.API.Controllers
                     }
                     var itemToRestock = await _context.Items.FindAsync(ritem.Id);
                     restock.RestockItems.Add(new RestockItem(ritem.RestockQuantity, ritem.RestockPrice, restock, itemToRestock));
-                    ItemRestockDTO.Add(new ItemForRestockingDTO(ritem.Id, ritem.Name, ritem.Brand, ritem.RestockPrice, ritem.RestockQuantity));
+                    ItemRestockDTO.Add(new ItemForRestockingDTO(ritem.Id, item.Name, item.Brand.Name, ritem.RestockPrice, ritem.RestockQuantity, item.QuantityAvailableForPurchase));
                 }
             }
 
