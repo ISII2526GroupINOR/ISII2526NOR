@@ -3,7 +3,7 @@ namespace AppForSEII2526.API.DTOs.ItemDTOs
 {
     public class ItemForCreateRestockDTO
     {
-        public ItemForCreateRestockDTO(int id, string name, string brand, decimal? restockPrice, int quantityForRestock, int quantityAvailableForPurchase, int restockQuantity, Item item)
+        public ItemForCreateRestockDTO(int id, string name, string brand, decimal? restockPrice, int quantityForRestock, int quantityAvailableForPurchase, int restockQuantity, int item)
         {
             Id = id;
             Name = name;
@@ -29,7 +29,7 @@ namespace AppForSEII2526.API.DTOs.ItemDTOs
         [Required]
         public int QuantityAvailableForPurchase { get; set; }
         public int RestockQuantity { get; set; } //Quantity that the admin has specified to be restocked
-        public Item Item { get; set; }
+        public int Item { get; set; }
 
         public override bool Equals(object? obj)
         {
@@ -41,7 +41,7 @@ namespace AppForSEII2526.API.DTOs.ItemDTOs
                    QuantityForRestock == dTO.QuantityForRestock &&
                    QuantityAvailableForPurchase == dTO.QuantityAvailableForPurchase &&
                    RestockQuantity == dTO.RestockQuantity &&
-                   EqualityComparer<Item>.Default.Equals(Item, dTO.Item);
+                   Item == dTO.Item;
         }
     }
 }
