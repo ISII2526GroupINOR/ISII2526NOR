@@ -114,16 +114,15 @@ namespace AppForSEII2526.API.Controllers
                 {
                     if (item.RestockPrice != null && restock.TotalPrice != null) //If one item had price null, ignore the following
                     {
-                        ritem.RestockPrice = item.RestockPrice * ritem.RestockQuantity;
-                        restock.TotalPrice += ritem.RestockPrice;
+                        restock.TotalPrice += item.RestockPrice * ritem.RestockQuantity;
                     }
                     else
                     {
                         restock.TotalPrice = null;
                     }
                     var itemToRestock = await _context.Items.FindAsync(ritem.Id);
-                    restock.RestockItems.Add(new RestockItem(ritem.RestockQuantity, ritem.RestockPrice, restock, itemToRestock));
-                    ItemRestockDTO.Add(new ItemForRestockingDTO(ritem.Id, item.Name, item.Brand.Name, ritem.RestockPrice, ritem.RestockQuantity, item.QuantityAvailableForPurchase));
+                    restock.RestockItems.Add(new RestockItem(ritem.RestockQuantity, item.RestockPrice * ritem.RestockQuantity, restock, itemToRestock));
+                    ItemRestockDTO.Add(new ItemForRestockingDTO(ritem.Id, item.Name, item.Brand.Name, item.RestockPrice * ritem.RestockQuantity, item.QuantityForRestock, item.QuantityAvailableForPurchase));
                 }
             }
 
