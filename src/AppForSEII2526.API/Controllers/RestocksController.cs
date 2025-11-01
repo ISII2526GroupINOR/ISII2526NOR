@@ -69,10 +69,10 @@ namespace AppForSEII2526.API.Controllers
                 return BadRequest(new ValidationProblemDetails(ModelState));
 
             //contains the names of items to be restocked in the order
-            var itemNames = restockForCreateDTO.RestockItems.Select(ri => ri.Name).ToList<string>();
+            var itemNames = restockForCreateDTO.RestockItems.Select(ri => ri.Id).ToList<int>();
 
             var items = _context.Items.Include(i => i.RestockItems)
-                .Where(i => itemNames.Contains(i.Name))
+                .Where(i => itemNames.Contains(i.Id))
                 .Select(i => new
                 {
                     i.Id,
