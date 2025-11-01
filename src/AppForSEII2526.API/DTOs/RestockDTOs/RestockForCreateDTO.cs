@@ -9,14 +9,13 @@ namespace AppForSEII2526.API.DTOs.RestockDTOs
         {
         }
 
-        public RestockForCreateDTO(string title, string deliveryAddress, string? description, DateTime expectedDate, DateTime restockDate, decimal? totalPrice, IList<ItemForCreateRestockDTO> restockItems, string restockResponsible)
+        public RestockForCreateDTO(string title, string deliveryAddress, string? description, DateTime expectedDate, DateTime restockDate, IList<ItemForCreateRestockDTO> restockItems, string restockResponsible)
         {
             Title = title;
             DeliveryAddress = deliveryAddress;
             Description = description;
             ExpectedDate = expectedDate;
             RestockDate = restockDate;
-            TotalPrice = totalPrice;
             RestockItems = restockItems;
             RestockResponsible = restockResponsible;
         }
@@ -29,9 +28,7 @@ namespace AppForSEII2526.API.DTOs.RestockDTOs
         public DateTime ExpectedDate { get; set; }
         [DataType(System.ComponentModel.DataAnnotations.DataType.Date)]
         public DateTime RestockDate { get; set; }
-        [DataType(System.ComponentModel.DataAnnotations.DataType.Currency)]
-        [Precision(5, 2)]
-        public decimal? TotalPrice { get; set; }
+
         public IList<ItemForCreateRestockDTO> RestockItems { get; set; }
         public string RestockResponsible { get; set; }
 
@@ -43,7 +40,6 @@ namespace AppForSEII2526.API.DTOs.RestockDTOs
                    Description == dTO.Description &&
                    ExpectedDate == dTO.ExpectedDate &&
                    RestockDate == dTO.RestockDate &&
-                   TotalPrice == dTO.TotalPrice &&
                    EqualityComparer<IList<ItemForCreateRestockDTO>>.Default.Equals(RestockItems, dTO.RestockItems) &&
                    RestockResponsible == dTO.RestockResponsible;
         }

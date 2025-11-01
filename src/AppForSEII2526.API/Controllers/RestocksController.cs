@@ -87,9 +87,8 @@ namespace AppForSEII2526.API.Controllers
 
             Restock restock = new Restock(restockForCreateDTO.Title, restockForCreateDTO.DeliveryAddress, 
                 restockForCreateDTO.Description, restockForCreateDTO.ExpectedDate, restockForCreateDTO.RestockDate,
-                restockForCreateDTO.TotalPrice, new List<RestockItem>(), user!);
+                0, new List<RestockItem>(), user!);
 
-            restock.TotalPrice = 0;
             //To store new DTOs to be stored in the RestockDetailDTO that will be showned once the restock is created
             IList<ItemForRestockingDTO> ItemRestockDTO = new List<ItemForRestockingDTO>();
 
@@ -122,7 +121,7 @@ namespace AppForSEII2526.API.Controllers
                     }
                     var itemToRestock = await _context.Items.FindAsync(ritem.Id);
                     restock.RestockItems.Add(new RestockItem(ritem.RestockQuantity, item.RestockPrice * ritem.RestockQuantity, restock, itemToRestock));
-                    ItemRestockDTO.Add(new ItemForRestockingDTO(ritem.Id, item.Name, item.Brand.Name, item.RestockPrice * ritem.RestockQuantity, item.QuantityForRestock, item.QuantityAvailableForPurchase));
+                    ItemRestockDTO.Add(new ItemForRestockingDTO(ritem.Id, item.Name, item.Brand.Name, item.RestockPrice * ritem.RestockQuantity, ritem.RestockQuantity, item.QuantityAvailableForPurchase));
                 }
             }
 
