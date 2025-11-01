@@ -9,7 +9,7 @@ namespace AppForSEII2526.API.DTOs.RestockDTOs
         {
         }
 
-        public RestockForCreateDTO(string title, string deliveryAddress, string? description, DateTime expectedDate, DateTime restockDate, decimal? totalPrice, IList<ItemForRestockingDTO> restockItems, ApplicationUser restockResponsible)
+        public RestockForCreateDTO(string title, string deliveryAddress, string? description, DateTime expectedDate, DateTime restockDate, decimal? totalPrice, IList<ItemForCreateRestockDTO> restockItems, ApplicationUser restockResponsible)
         {
             Title = title;
             DeliveryAddress = deliveryAddress;
@@ -32,7 +32,7 @@ namespace AppForSEII2526.API.DTOs.RestockDTOs
         [DataType(System.ComponentModel.DataAnnotations.DataType.Currency)]
         [Precision(5, 2)]
         public decimal? TotalPrice { get; set; }
-        public IList<ItemForRestockingDTO> RestockItems { get; set; }
+        public IList<ItemForCreateRestockDTO> RestockItems { get; set; }
         public ApplicationUser RestockResponsible { get; set; }
 
         public override bool Equals(object? obj)
@@ -44,7 +44,7 @@ namespace AppForSEII2526.API.DTOs.RestockDTOs
                    ExpectedDate == dTO.ExpectedDate &&
                    RestockDate == dTO.RestockDate &&
                    TotalPrice == dTO.TotalPrice &&
-                   EqualityComparer<IList<ItemForRestockingDTO>>.Default.Equals(RestockItems, dTO.RestockItems) &&
+                   EqualityComparer<IList<ItemForCreateRestockDTO>>.Default.Equals(RestockItems, dTO.RestockItems) &&
                    EqualityComparer<ApplicationUser>.Default.Equals(RestockResponsible, dTO.RestockResponsible);
         }
     }

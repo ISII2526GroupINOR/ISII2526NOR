@@ -92,12 +92,12 @@ namespace AppForSEII2526.API.Controllers
             foreach (var ritem in restockForCreateDTO.RestockItems)
             {
                 var item = items.FirstOrDefault(i => i.Id == ritem.Id);
-                if (ritem.Quantity + item.QuantityAvailableForPurchase > item.QuantityForRestock)
+                if (ritem.RestockQuantity + item.QuantityAvailableForPurchase > item.QuantityForRestock)
                     ModelState.AddModelError("RestockItem", $"Error! The total quantity for purchase plus the" +
                         $" quantity to restock of item {item.Name} must be bigger than the quantity for restock.");
                 if (ritem.RestockPrice != null && restock.TotalPrice != null)
                 {
-                    ritem.RestockPrice = item.RestockPrice * ritem.Quantity;
+                    ritem.RestockPrice = item.RestockPrice * ritem.RestockQuantity;
                     restock.TotalPrice += ritem.RestockPrice;
                 }
                 else
