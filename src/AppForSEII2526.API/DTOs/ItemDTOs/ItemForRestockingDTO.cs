@@ -1,20 +1,21 @@
 ﻿namespace AppForSEII2526.API.DTOs.ItemDTOs
 {
     public class ItemForRestockingDTO {
-        public ItemForRestockingDTO(int id, string name, string brandName)
+        public ItemForRestockingDTO(int id, string name, string brandName, string description)
         {
             Id = id;
             Name = name;
             Brand = brandName;
+            Description = description;
         }
 
-        public ItemForRestockingDTO(int id, string name, string brand, decimal? restockPrice, int quantityForRestock) : this(id, name, brand)
+        public ItemForRestockingDTO(int id, string name, string brand, string description, decimal? restockPrice, int quantityForRestock) : this(id, name, brand, description)
         {
             RestockPrice = restockPrice;
             QuantityForRestock = quantityForRestock;
         }
 
-        public ItemForRestockingDTO(int id, string name, string brand, decimal? restockPrice, int quantityForRestock, int quantityAvailableForPurchase) : this(id, name, brand, restockPrice, quantityForRestock)
+        public ItemForRestockingDTO(int id, string name, string brand, string description, decimal? restockPrice, int quantityForRestock, int quantityAvailableForPurchase) : this(id, name, brand, description, restockPrice, quantityForRestock)
         {
             QuantityAvailableForPurchase = quantityAvailableForPurchase;
         }
@@ -35,9 +36,6 @@
         public string Name { get; set; }
         public string Brand { get; set; }
         public string Description { get; set; }
-        [Required]
-        [Precision(5, 2)]
-        public decimal PurchasePrice { get; set; }
         [Required]
         [Precision(5, 2)]
         public decimal? RestockPrice { get; set; }
