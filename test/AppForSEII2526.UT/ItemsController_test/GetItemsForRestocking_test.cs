@@ -27,9 +27,11 @@ namespace AppForSEII2526.UT.ItemsController_test
 
             var items = new List<Item>()
             {
-                new Item("Dumbbell", "Description", 20, 8, 10, 25, brands[0], typeItems[0]),
-                new Item("Press machine", "Description2", 300, 9, 10, 200, brands[1], typeItems[1]),
-                new Item("Kettlbell", "Description3", 15, 14, 6, 10, brands[0], typeItems[0]),
+                //public Item(string name, string description, decimal purchasePrice, int quantityAvailableForPurchase, int quantityForRestock, decimal? restockPrice, Brand brand, TypeItem typeItem)
+                //as PurchasePrice attribute is not neccessary nor returned by the method, is initialized to 0
+                new Item("Dumbbell", "Description", 0, 8, 10, 25, brands[0], typeItems[0]),
+                new Item("Press machine", "Description2", 0, 9, 10, 200, brands[1], typeItems[1]),
+                new Item("Kettlbell", "Description3", 0, 14, 6, 10, brands[0], typeItems[0]),
             };
 
             _context.AddRange(brands);
@@ -44,8 +46,9 @@ namespace AppForSEII2526.UT.ItemsController_test
         {
             var expectedItems = new List<ItemForRestockingDTO>()
             {
-                new ItemForRestockingDTO(1, "Dumbbell", "Brand1", "Description", 20, 25, 10, 8),
-                new ItemForRestockingDTO(2, "Press Machine", "Brand2", "Description2", 300, 200, 10, 9)
+                //public ItemForRestockingDTO(int id, string name, string brand, string description, decimal purchasePrice, decimal? restockPrice, int quantityForRestock, int quantityAvailableForPurchase) : this(id, name, brand, description)
+                new ItemForRestockingDTO(1, "Dumbbell", "Brand1", "Description", 0, 25, 10, 8),
+                new ItemForRestockingDTO(2, "Press Machine", "Brand2", "Description2", 0, 200, 10, 9)
             };
             var controller = new ItemsController(_context, null);
 

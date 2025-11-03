@@ -20,9 +20,8 @@
             QuantityAvailableForPurchase = quantityAvailableForPurchase;
         }
 
-        public ItemForRestockingDTO(int id, string name, string brand, string description, decimal purchasePrice, decimal? restockPrice, int quantityForRestock, int quantityAvailableForPurchase) : this(id, name, brand)
+        public ItemForRestockingDTO(int id, string name, string brand, string description, decimal purchasePrice, decimal? restockPrice, int quantityForRestock, int quantityAvailableForPurchase) : this(id, name, brand, description)
         {
-            Description = description;
             PurchasePrice = purchasePrice;
             RestockPrice = restockPrice;
             QuantityForRestock = quantityForRestock;
@@ -36,6 +35,9 @@
         public string Name { get; set; }
         public string Brand { get; set; }
         public string Description { get; set; }
+        [Required]
+        [Precision(5, 2)]
+        public decimal PurchasePrice { get; set; }
         [Required]
         [Precision(5, 2)]
         public decimal? RestockPrice { get; set; }
