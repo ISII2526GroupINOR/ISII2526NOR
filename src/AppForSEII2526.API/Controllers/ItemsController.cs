@@ -76,7 +76,7 @@ namespace AppForSEII2526.API.Controllers
                     && (i.QuantityAvailableForPurchase <= max || max == null)
                 )
                 .OrderBy(i => i.Name)
-                .Select(i => new ItemForRestockingDTO(i.Id, i.Name, i.Brand.Name, i.RestockPrice,
+                .Select(i => new ItemForRestockingDTO(i.Id, i.Name, i.Brand.Name, i.Description, i.RestockPrice,
                     i.QuantityForRestock, i.QuantityAvailableForPurchase))
                 .ToListAsync();
             return Ok(itemsDTOS);
