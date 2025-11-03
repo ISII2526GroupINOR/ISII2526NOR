@@ -52,6 +52,8 @@
                    Id == dTO.Id &&
                    Name == dTO.Name &&
                    Brand == dTO.Brand &&
+                   Description == dTO.Description &&
+                   PurchasePrice == dTO.PurchasePrice &&
                    RestockPrice == dTO.RestockPrice &&
                    QuantityForRestock == dTO.QuantityForRestock &&
                    QuantityAvailableForPurchase == dTO.QuantityAvailableForPurchase;

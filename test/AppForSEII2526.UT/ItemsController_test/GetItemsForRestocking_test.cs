@@ -48,7 +48,7 @@ namespace AppForSEII2526.UT.ItemsController_test
             {
                 //public ItemForRestockingDTO(int id, string name, string brand, string description, decimal purchasePrice, decimal? restockPrice, int quantityForRestock, int quantityAvailableForPurchase) : this(id, name, brand, description)
                 new ItemForRestockingDTO(1, "Dumbbell", "Brand1", "Description", 0, 25, 10, 8),
-                new ItemForRestockingDTO(2, "Press Machine", "Brand2", "Description2", 0, 200, 10, 9)
+                new ItemForRestockingDTO(2, "Press machine", "Brand2", "Description2", 0, 200, 10, 9)
             };
             var controller = new ItemsController(_context, null);
 
