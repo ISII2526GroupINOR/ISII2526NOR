@@ -78,5 +78,24 @@ namespace AppForSEII2526.UT.ItemsController_test
             var itemsDTOsActual = Assert.IsType<List<ItemForRestockingDTO>>(okResult.Value);
             Assert.Equal(expectedItems, itemsDTOsActual);
         }
+
+        [Fact]
+        [Trait("LevelTesting", "Unit Testing")]
+        public async Task GetItemsForRestocking_filter_only_max()
+        {
+            var expectedItems = new List<ItemForRestockingDTO>()
+            {
+                //public ItemForRestockingDTO(int id, string name, string brand, string description, decimal purchasePrice, decimal? restockPrice, int quantityForRestock, int quantityAvailableForPurchase) : this(id, name, brand, description)
+                new ItemForRestockingDTO(1, "Dumbbell", "Brand1", "Description", 0, 25, 10, 8),
+            };
+
+            var controller = new ItemsController(_context, null);
+
+            var result = await controller.GetItemsForRestocking(null, null, 8);
+
+            var okResult = Assert.IsType<OkObjectResult>(result);
+            var itemsDTOsActual = Assert.IsType<List<ItemForRestockingDTO>>(okResult.Value);
+            Assert.Equal(expectedItems, itemsDTOsActual);
+        }
     }
 }
