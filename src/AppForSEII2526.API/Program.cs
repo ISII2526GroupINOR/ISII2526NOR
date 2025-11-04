@@ -1,7 +1,9 @@
+using AppForSEII2526.API.Logging;
 using Microsoft.Data.Sqlite;
 using System.Data.Common;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Logging.AddRabbitMQ(builder.Configuration.GetSection("RabbitMQ"));
 
 // Add services to the container.
 
