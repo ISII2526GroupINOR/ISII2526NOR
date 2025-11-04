@@ -31,6 +31,10 @@ namespace AppForSEII2526.UT.RestocksController_test
                 0, new List<RestockItem>(), user);
             restock.RestockItems.Add(new RestockItem(2, new Restock(), items[0]));
             restock.RestockItems.Add(new RestockItem(3, new Restock(), items[1]));
+
+            _context.Users.Add(user);
+            _context.Add(restock);
+            _context.SaveChanges();
         }
 
         [Fact]
