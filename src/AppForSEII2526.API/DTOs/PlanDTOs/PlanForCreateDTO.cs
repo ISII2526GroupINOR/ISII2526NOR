@@ -14,23 +14,19 @@ namespace AppForSEII2526.API.DTOs.PlanDTOs
         [StringLength(1024, ErrorMessage = "Plan description cannot be longer than 1024 characters.")]
         public string? Description { get; set; }
 
-        [DataType(DataType.DateTime)]
-        public DateTime CreatedDate { get; set; }
-
         [StringLength(4096, ErrorMessage = "Health issues cannot be longer than 4096 characters.")]
         [Display(Name = "Health Issues")]
         public string? HealthIssues { get; set; }
 
-        [Precision(5, 2)]
-        [DataType(DataType.Currency)]
-        [Display(Name = "Total Price")]
-        public decimal TotalPrice { get; set; } // Not null
-
+        [Required]
         [Range(1, 52, ErrorMessage = "Weeks must be between 1 and 52 (1 year).")]
-        public int Weeks { get; set; } // Not null
+        public int Weeks { get; set; } // Mandatory
 
         [Required] // This frees the controller from null-checking
         public IList<ClassForCreatePlanDTO> classes { get; set; }
+
+        [Required]
+        public int PaymentMethodId { get; set; }
 
         // TODO: Missing PaymentMethod information
     }
