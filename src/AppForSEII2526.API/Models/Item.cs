@@ -6,9 +6,8 @@
         {
         }
 
-        public Item(int id, string name, string description, decimal purchasePrice, int quantityAvailableForPurchase, int quantityForRestock, decimal? restockPrice, Brand brand, TypeItem typeItem)
+        public Item(string name, string description, decimal purchasePrice, int quantityAvailableForPurchase, int quantityForRestock, decimal? restockPrice, Brand brand, TypeItem typeItem)
         {
-            Id = id;
             Name = name;
             Description = description;
             PurchasePrice = purchasePrice;

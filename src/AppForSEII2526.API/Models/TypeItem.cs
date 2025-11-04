@@ -2,9 +2,8 @@
 {
     public class TypeItem
     {
-        public TypeItem(int id, string name)
+        public TypeItem(string name)
         {
-            Id = id;
             Name = name;
         }
 
