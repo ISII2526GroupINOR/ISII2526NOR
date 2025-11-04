@@ -27,7 +27,7 @@ namespace AppForSEII2526.UT.RestocksController_test
 
             var user = new ApplicationUser("Jaime", "Domingo");
 
-            var restock = new Restock("A restock", "An address", "A description", DateTime.Now, DateTime.Now,
+            var restock = new Restock("A restock", "An address", "A description", new DateTime(), new DateTime(),
                 0, new List<RestockItem>(), user);
             restock.RestockItems.Add(new RestockItem(2, new Restock(), items[0]));
             restock.RestockItems.Add(new RestockItem(3, new Restock(), items[1]));
@@ -60,7 +60,7 @@ namespace AppForSEII2526.UT.RestocksController_test
 
             var controller = new RestocksController(_context, logger);
 
-            var expected = new RestockDetailDTO(1, "A restock", "An address", "A description", DateTime.Now,
+            var expected = new RestockDetailDTO(1, "A restock", "An address", "A description", new DateTime(),
                 0, new List<ItemForRestockingDTO>() { 
                     new ItemForRestockingDTO(1, "Dumbbell", "Precor", "Regular dumbbell"),
                     new ItemForRestockingDTO(2, "Kettlebell", "Precor", "Cicular dumbbell")});
@@ -69,7 +69,7 @@ namespace AppForSEII2526.UT.RestocksController_test
 
             var okResult = Assert.IsType<OkObjectResult>(result);
 
-            var restockDTOActual = Assert.IsType<RestockDetailDTO>(okResult);
+            var restockDTOActual = Assert.IsType<RestockDetailDTO>(okResult.Value);
 
             Assert.Equal(expected, restockDTOActual);
         }
