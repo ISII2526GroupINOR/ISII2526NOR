@@ -3,6 +3,12 @@
     [Index(nameof(Name), IsUnique = true)]
     public class Brand
     {
+        public Brand(int id, string name)
+        {
+            Id = id;
+            Name = name;
+        }
+
         public int Id { get; set; }
         [Required]
         [StringLength(128, ErrorMessage = "Brand name cannot be longer than 128 characters.")]

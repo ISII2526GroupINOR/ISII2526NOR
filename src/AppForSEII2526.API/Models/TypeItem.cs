@@ -2,6 +2,12 @@
 {
     public class TypeItem
     {
+        public TypeItem(int id, string name)
+        {
+            Id = id;
+            Name = name;
+        }
+
         public int Id { get; set; } // Primary key
 
         [Required]
