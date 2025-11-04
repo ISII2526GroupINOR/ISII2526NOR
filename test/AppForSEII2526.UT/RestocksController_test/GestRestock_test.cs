@@ -7,7 +7,7 @@ using AppForSEII2526.API.Controllers;
 
 namespace AppForSEII2526.UT.RestocksController_test
 {
-    internal class GestRestock_test : AppForSEII25264SqliteUT
+    public class GestRestock_test : AppForSEII25264SqliteUT
     {
         public GestRestock_test()
         {
@@ -28,6 +28,20 @@ namespace AppForSEII2526.UT.RestocksController_test
                 0, new List<RestockItem>(), user);
             restock.RestockItems.Add(new RestockItem(2, new Restock(), items[0]));
             restock.RestockItems.Add(new RestockItem(3, new Restock(), items[1]));
+        }
+
+        [Fact]
+        [Trait ("Level Testing", "Unit Testing")]
+        public async Task GetRestock_NotFound_test()
+        {
+            var mock = new Mock<ILogger<RestocksController>>();
+            ILogger<RestocksController> logger = mock.Object;
+
+            var controller = new RestocksController(_context, logger);
+
+            var result = await controller.GetRestock(0);
+
+            Assert.IsType<NotFoundResult>(result);
         }
     }
 }
