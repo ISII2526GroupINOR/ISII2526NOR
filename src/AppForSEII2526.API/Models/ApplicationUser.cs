@@ -8,13 +8,10 @@ public class ApplicationUser : IdentityUser {
     {
     }
 
-    public ApplicationUser(string name, string surname, IList<Plan>? plans, IList<PaymentMethod>? paymentMethods, IList<Restock> restocks)
+    public ApplicationUser(string name, string surname)
     {
         Name = name;
         Surname = surname;
-        Plans = plans;
-        PaymentMethods = paymentMethods;
-        Restocks = restocks;
     }
 
     // Id is a string and is inherited from IdentityUser
