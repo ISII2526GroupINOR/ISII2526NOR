@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AppForSEII2526.API.Controllers;
+using AppForSEII2526.API.DTOs;
+using AppForSEII2526.API.DTOs.ItemDTOs;
+using AppForSEII2526.API.DTOs.RestockDTOs;
 
 namespace AppForSEII2526.UT.RestocksController_test
 {
@@ -42,6 +45,29 @@ namespace AppForSEII2526.UT.RestocksController_test
             var result = await controller.GetRestock(0);
 
             Assert.IsType<NotFoundResult>(result);
+        }
+
+        [Fact]
+        [Trait ("Level Testing", "Unit Testing")]
+        public async Task GetRestock_Found_test()
+        {
+            var mock = new Mock<ILogger<RestocksController>>();
+            ILogger<RestocksController> logger = mock.Object;
+
+            var controller = new RestocksController(_context, logger);
+
+            var expected = new RestockDetailDTO(1, "A restock", "An address", "A description", DateTime.Now,
+                0, new List<ItemForRestockingDTO>() { 
+                    new ItemForRestockingDTO(1, "Dumbbell", "Precor", "Regular dumbbell"),
+                    new ItemForRestockingDTO(2, "Kettlebell", "Precor", "Cicular dumbbell")});
+
+            var result = await controller.GetRestock(1);
+
+            var okResult = Assert.IsType<OkObjectResult>(result);
+
+            var restockDTOActual = Assert.IsType<RestockDetailDTO>(okResult);
+
+            Assert.Equal(expected, restockDTOActual);
         }
     }
 }
