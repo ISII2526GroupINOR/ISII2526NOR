@@ -28,6 +28,9 @@ namespace AppForSEII2526.API.DTOs.PlanDTOs
         [Required]
         public int PaymentMethodId { get; set; }
 
+        [Required]
+        public string? UserId { get; set; } // Used to identify the user creating the plan
+
         // TODO: Missing PaymentMethod information
     }
 }

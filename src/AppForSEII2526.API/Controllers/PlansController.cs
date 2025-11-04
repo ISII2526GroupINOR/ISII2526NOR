@@ -70,7 +70,7 @@ namespace AppForSEII2526.API.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        [ProducesResponseType(typeof(PlanDetailDTO), (int)HttpStatusCode.OK]
+        [ProducesResponseType(typeof(PlanDetailDTO), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.Conflict)]
 
@@ -81,6 +81,29 @@ namespace AppForSEII2526.API.Controllers
             // Weeks validation
             if (planForCreate.Weeks <= 0)
                 ModelState.AddModelError("Weeks", "Error! Weeks must be greater than zero.");
+
+            // PaymentMethodId validation and check for coherence with UserId
+            if(await _context.PaymentMethods.FindAsync(planForCreate.PaymentMethodId) == null)
+            {
+                ModelState.AddModelError("PaymentMethodId", $"Error! Payment method with id {planForCreate.PaymentMethodId} does not exist.");
+            }
+            else
+            {
+                var paymentMethod = await _context.PaymentMethods
+                    .Include(pm => pm.User)
+                    .FirstOrDefaultAsync(pm => pm.Id == planForCreate.PaymentMethodId);
+                if (paymentMethod != null && paymentMethod.User!.Id != planForCreate.UserId)
+                {
+                    ModelState.AddModelError("PaymentMethodId", $"Error! Payment method with id {planForCreate.PaymentMethodId} does not belong to user with id {planForCreate.UserId}.");
+                }
+            }
+
+            // Check for repeated plan name
+            var repeated_plans = await _context.Plans.Where(p => p.Name == planForCreate.Name).ToListAsync();
+            if(repeated_plans.Count > 0)
+            {
+                ModelState.AddModelError("PlanName", $"Error! Plan with name {planForCreate.Name} already exists");
+            }
 
             // Classes validation
             foreach (var classForCreate in planForCreate.classes)
@@ -213,26 +236,36 @@ namespace AppForSEII2526.API.Controllers
 
 
             // Prepare response DTO
-            var PlanDetailDTO = new PlanDetailDTO(
-                plan.Name,
-                plan.Description,
-                plan.CreatedDate,
-                plan.HealthIssues,
-                plan.TotalPrice,
-                plan.Weeks,
-                new ApplicationUserForPlanDetailDTO(
-                    plan.PaymentMethod!.User.Id,
-                    plan.PaymentMethod.User.Name,
-                    plan.PaymentMethod.User.Surname),
-                plan.PlanItems.Select(pi => new ClassForPlanDTO(
-                    pi.Class.Id,
-                    pi.Class.Name,
-                    pi.Class.Price,
-                    pi.Class.TypeItems.Select(ti => ti.Name).ToList(),
-                    pi.Class.Date
-                )).ToList()
-            );
+            var returnPlanDetail = await _context.Plans
+                .Where(p => p.Id == plan.Id)
+                .Include(p => p.PaymentMethod)
+                    .ThenInclude(pm => pm.User)
+                .Include(p => p.PlanItems)
+                    .ThenInclude(pi => pi.Class)
+                .Select(p => new PlanDetailDTO
+                    (
+                        p.Name,
+                        p.Description,
+                        p.CreatedDate,
+                        p.HealthIssues,
+                        p.TotalPrice,
+                        p.Weeks,
+                        new ApplicationUserForPlanDetailDTO(
+                            p.PaymentMethod.User.Id,
+                            p.PaymentMethod.User.Name,
+                            p.PaymentMethod.User.Surname),
+                        p.PlanItems.Select(pi => new ClassForPlanDTO(
+                            pi.Class.Id,
+                            pi.Class.Name,
+                            pi.Class.Price,
+                            pi.Class.TypeItems.Select(ti => ti.Name).ToList(),
+                            pi.Class.Date
+                        )).ToList()
+                    )
+                ).FirstOrDefaultAsync();
 
+            // Return
+            return CreatedAtAction(nameof(GetPlanDetails), new { planId = plan.Id }, returnPlanDetail);
         }
     }
 }
