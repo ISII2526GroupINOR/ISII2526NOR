@@ -17,7 +17,27 @@ public class RabbitMQLogger : ILogger, IDisposable
     {
         _name = name ?? throw new ArgumentNullException(nameof(name));
         _config = config ?? throw new ArgumentNullException(nameof(config));
-        
+
+        var factory = new ConnectionFactory
+        {
+            HostName = _config.HostName,
+            Port = _config.Port,
+            UserName = _config.UserName,
+            Password = _config.Password
+        };
+
+        _connection = factory.CreateConnection();
+        _channel = _connection.CreateModel();
+
+        _channel.ExchangeDeclare(
+            exchange: _config.Exchange,
+            type: _config.ExchangeType,
+            durable: _config.Durable);
+
+        _properties = _channel.CreateBasicProperties();
+        _properties.Persistent = true;
+        _properties.ContentType = "application/json";
+
         ValidateConfiguration(_config); 
     }
 
