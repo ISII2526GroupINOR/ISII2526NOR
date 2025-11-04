@@ -11,14 +11,23 @@ namespace AppForSEII2526.UT.RestocksController_test
     {
         public GestRestock_test()
         {
+            var brand = new Brand("Precor");
+            var typeItem = new TypeItem("Dumbbell");
             var items = new List<Item>
             {
-                new Item()
+                new Item("Dumbbell", "Regular dumbbell", 0, 8, 6, 30, brand, typeItem),
+                new Item("Kettlebell", "Cicular dumbbell", 0, 5, 3, 40, brand, typeItem)
             };
-            var restockItems = new List<RestockItem> { 
-                new RestockItem()
-            };
-            var user = new ApplicationUser("Jaime", "Domingo", null, null, new List<Restock> { });
+
+            _context.AddRange(items);
+            _context.SaveChanges();
+
+            var user = new ApplicationUser("Jaime", "Domingo");
+
+            var restock = new Restock("A restock", "An address", "A description", DateTime.Now, DateTime.Now,
+                0, new List<RestockItem>(), user);
+            restock.RestockItems.Add(new RestockItem(2, new Restock(), items[0]));
+            restock.RestockItems.Add(new RestockItem(3, new Restock(), items[1]));
         }
     }
 }
