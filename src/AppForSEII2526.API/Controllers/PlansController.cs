@@ -108,13 +108,7 @@ namespace AppForSEII2526.API.Controllers
             // Classes validation
             foreach (var classForCreate in planForCreate.classes)
             {
-                // Null check for classForCreate
-                if (classForCreate == null)
-                {
-                    ModelState.AddModelError("Classes", "Error! Class information cannot be null.");
-                    continue;
-                }
-
+                
                 // Check if class exists in the database
                 if (_context.Classes.Find(classForCreate.Id) == null)
                 {
