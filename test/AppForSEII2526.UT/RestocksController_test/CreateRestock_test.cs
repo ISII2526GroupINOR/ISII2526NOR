@@ -69,7 +69,7 @@ namespace AppForSEII2526.UT.RestocksController_test
 
             RestockForCreateDTO restockNoUser = new RestockForCreateDTO("R1", "C1", "D1",
                 DateTime.Today.AddDays(1), new DateTime(),
-                new List<ItemForCreateRestockDTO>() { new ItemForCreateRestockDTO(1, 2) }, "Jaime");
+                new List<ItemForCreateRestockDTO>() { new ItemForCreateRestockDTO(1, 2) }, "Manolo");
 
             RestockForCreateDTO restockItemNotFound = new RestockForCreateDTO("R1", "C1", "D1",
                 DateTime.Today.AddDays(1), new DateTime(),
@@ -84,9 +84,9 @@ namespace AppForSEII2526.UT.RestocksController_test
                 new object[] { restockBadDate, "Error! The expected date must start later than today." },
                 new object[] { restockNoItem, "Error! At least one item must be selected for restock." },
                 new object[] { restockNoUser, "Error! User name is not registered" },
-                new object[] { restockItemNotFound, "RestockItem\", \"The item to restock cannot be null." },
-                new object[] { restockBadQuantity, "RestockItem", $"Error! The total quantity for purchase 4 plus the" +
-                        $" quantity to restock 1 of item Dumbbell must be bigger than the quantity for restock 6." }
+                new object[] { restockItemNotFound, "The item to restock cannot be null." },
+                new object[] { restockBadQuantity, "Error! The total quantity for purchase 4 plus the" +
+                        " quantity to restock 1 of item Dumbbell must be bigger than the quantity for restock 6." }
             };
 
             return allTest;
