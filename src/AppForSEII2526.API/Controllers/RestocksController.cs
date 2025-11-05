@@ -52,6 +52,12 @@ namespace AppForSEII2526.API.Controllers
         [ProducesResponseType(typeof(string), (int) HttpStatusCode.Conflict)]
         public async Task<ActionResult> CreateRestock(RestockForCreateDTO restockForCreateDTO)
         {
+            var titles = _context.Restocks.Where(r => r.Title == restockForCreateDTO.Title).Select(r => r.Title);
+            if ( titles.FirstOrDefault() == restockForCreateDTO.Title)
+            {
+                ModelState.AddModelError("RestockTitle", "Error! There´s already a restock with that title.");
+            }
+
             if (restockForCreateDTO.ExpectedDate <= DateTime.Now)
                 ModelState.AddModelError("RestockDateFrom", "Error! The expected date must start later than today.");
 
