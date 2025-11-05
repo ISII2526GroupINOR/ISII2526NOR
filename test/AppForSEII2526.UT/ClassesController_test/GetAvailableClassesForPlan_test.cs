@@ -104,24 +104,6 @@ namespace AppForSEII2526.UT.ClassesController_test
         {
             // ARRANGE
 
-            //List<ClassForPlanDTO> expectedClasses = new List<ClassForPlanDTO>()
-            //{
-            //    new ClassForPlanDTO(
-            //        2,
-            //        "Yoga Morning", 
-            //        100.0m, 
-            //        new List<string> { /*"Mat" */},
-            //        TimeTable.Combine(TimeTable.nextWeekMonday, TimeTable.timeMorning)
-            //    ),
-            //    new ClassForPlanDTO(
-            //        3, 
-            //        "Introduction to Boxing", 
-            //        150.0m, 
-            //        new List<string> { "Bench", "Punching Bag" },
-            //        TimeTable.Combine(TimeTable.nextWeekSunday, TimeTable.timeAfternoon)
-            //    )
-
-            //};
 
             var mock = new Mock<ILogger<ClassesController>>();
             ILogger<ClassesController> logger = mock.Object;
@@ -140,20 +122,50 @@ namespace AppForSEII2526.UT.ClassesController_test
         {
             // Here we create the test cases
 
-            // We prepare the DTOs here
+            // We define the available DTOs here
             var classDTOs = new List<ClassForPlanDTO>()
             {
-                // ...
+                new ClassForPlanDTO(
+                    2,
+                    "Yoga Morning",
+                    100.0m,
+                    new List<string> { "Mat" },
+                    TimeTable.Combine(TimeTable.nextWeekMonday, TimeTable.timeMorning)
+                ),
+                new ClassForPlanDTO(
+                    3,
+                    "Introduction to Boxing",
+                    150.0m,
+                    new List<string> { "Bench", "Punching Bag" },
+                    TimeTable.Combine(TimeTable.nextWeekSunday, TimeTable.timeAfternoon)
+                ),
             };
 
-            // Prepare something here
+            // Then, we prepare the expected results for each test case
+            var expectedDTOs_TC1 = new List<ClassForPlanDTO>()
+            {
+                classDTOs[0], // Yoga Morning
+                classDTOs[1], // Introduction to Boxing
+            };
 
-            // ...
+            var expectedDTOs_TC2 = new List<ClassForPlanDTO>()
+            {
+                classDTOs[0], // Yoga Morning
+            };
+
+            var expectedDTOs_TC3 = new List<ClassForPlanDTO>() 
+            {
+                classDTOs[1], // Introduction to Boxing
+            };
+
 
 
             // Design all test cases in a collection using the pre-prepared DTOs
             var allTests = new List<object[]> {
-                new object[] { /* intput 1, input 2, Prepared DTO for expected result*/}
+                /*new object[] {intput 1, input 2, Prepared DTO for expected result}*/
+                new object[] { null, null, expectedDTOs_TC1 },
+                new object[] { "Yoga", null, expectedDTOs_TC2 },
+                new object[] { null, TimeTable.nextWeekSunday, expectedDTOs_TC3 }
             };
 
             // Return tests
