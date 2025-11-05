@@ -92,5 +92,29 @@ namespace AppForSEII2526.UT.RestocksController_test
 
             return allTest;
         }
+
+        [Fact]
+        [Trait("LevelTesting", "Unit Testing")]
+        public async Task CreateRestock_Success_test()
+        {
+            var mock = new Mock<ILogger<RestocksController>>();
+            ILogger<RestocksController> looger = mock.Object;
+            var controller = new RestocksController(_context, looger);
+
+            RestockForCreateDTO restockDTO = new RestockForCreateDTO("First", "Any", "Comment",
+                DateTime.Today.AddDays(1), new DateTime(),
+                new List<ItemForCreateRestockDTO> { new ItemForCreateRestockDTO(1, 4) }, "Jaime");
+
+            RestockDetailDTO expected = new RestockDetailDTO(2, "First", "Any", "Comment", DateTime.Today.AddDays(1),
+                120, new List<ItemForRestockingDTO> { 
+                    new ItemForRestockingDTO(1, "Dumbbell", "Precor", "Regular dumbbell", 120, 4, 4) });
+
+            var result = await controller.CreateRestock(restockDTO);
+
+            var created = Assert.IsType<CreatedAtActionResult>(result);
+            var actual = Assert.IsType<RestockDetailDTO>(created.Value);
+
+            Assert.Equal(expected, actual);
+        }
     }
 }
