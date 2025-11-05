@@ -61,7 +61,7 @@ namespace AppForSEII2526.UT.RestocksController_test
             var controller = new RestocksController(_context, logger);
 
             var expected = new RestockDetailDTO(1, "A restock", "An address", "A description", new DateTime(),
-                (decimal?)180.0, new List<ItemForRestockingDTO>() { 
+                180.0m, new List<ItemForRestockingDTO>() { 
                     new ItemForRestockingDTO(1, "Dumbbell", "Precor", "Regular dumbbell", null, 6),
                     new ItemForRestockingDTO(2, "Kettlebell", "Precor", "Cicular dumbbell", null, 3)});
 
