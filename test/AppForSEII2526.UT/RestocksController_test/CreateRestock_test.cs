@@ -71,10 +71,6 @@ namespace AppForSEII2526.UT.RestocksController_test
                 DateTime.Today.AddDays(1), new DateTime(),
                 new List<ItemForCreateRestockDTO>() { new ItemForCreateRestockDTO(1, 2) }, "Jaime");
 
-            RestockForCreateDTO restockItemNull = new RestockForCreateDTO("R1", "C1", "D1",
-                DateTime.Today.AddDays(1), new DateTime(),
-                new List<ItemForCreateRestockDTO>() { null, new ItemForCreateRestockDTO(1, 2) }, "Jaime");
-
             RestockForCreateDTO restockItemNotFound = new RestockForCreateDTO("R1", "C1", "D1",
                 DateTime.Today.AddDays(1), new DateTime(),
                 new List<ItemForCreateRestockDTO>() {new ItemForCreateRestockDTO(0, 2) }, "Jaime");
