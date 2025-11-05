@@ -27,11 +27,6 @@ namespace AppForSEII2526.API.Controllers
         [ProducesResponseType((int) HttpStatusCode.NotFound)]
         public async Task<ActionResult> GetRestock(int id)
         {
-            if(_context.Restocks == null)
-            {
-                _logger.LogError("Error: Restock table does not exist");
-                return NotFound();
-            }
             RestockDetailDTO? restock = await _context.Restocks.
                 Where(r => r.Id == id)
                     .Include(r => r.RestockItems)
@@ -95,11 +90,6 @@ namespace AppForSEII2526.API.Controllers
 
             foreach (var ritem in restockForCreateDTO.RestockItems)
             {
-                if (ritem == null)
-                {
-                    ModelState.AddModelError("RestockItem", "The item to restock cannot be null.");
-                    continue;
-                }
                 var item = items.FirstOrDefault(i => i.Id == ritem.Id);
                 if (item == null)
                 {
