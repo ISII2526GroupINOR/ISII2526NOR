@@ -90,11 +90,6 @@ namespace AppForSEII2526.API.Controllers
 
             foreach (var ritem in restockForCreateDTO.RestockItems)
             {
-                if (ritem == null)
-                {
-                    ModelState.AddModelError("RestockItem", "The item to restock cannot be null.");
-                    continue;
-                }
                 var item = items.FirstOrDefault(i => i.Id == ritem.Id);
                 if (item == null)
                 {
