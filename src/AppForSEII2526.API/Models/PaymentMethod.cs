@@ -6,6 +6,13 @@
         {
         }
 
+        public PaymentMethod(IList<Plan>? plans, List<Purchase>? purchases, ApplicationUser? user)
+        {
+            Plans = plans;
+            Purchases = purchases;
+            User = user;
+        }
+
         public PaymentMethod(IList<Plan>? plans, ApplicationUser? user) // No Purchases in constructor
         {
             Plans = plans;

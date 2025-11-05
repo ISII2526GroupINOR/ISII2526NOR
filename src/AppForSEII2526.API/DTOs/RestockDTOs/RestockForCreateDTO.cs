@@ -1,21 +1,25 @@
-﻿using AppForSEII2526.API.DTOs.ItemDTOs;
+﻿
+using AppForSEII2526.API.DTOs.ItemDTOs;
 
 namespace AppForSEII2526.API.DTOs.RestockDTOs
 {
-    public class RestockDetailDTO
+    public class RestockForCreateDTO
     {
-        public RestockDetailDTO(int id, string title, string deliveryAddress, string? description, DateTime expectedDate, decimal? totalPrice, IList<ItemForRestockingDTO> restockItems)
+        public RestockForCreateDTO()
         {
-            Id = id;
+        }
+
+        public RestockForCreateDTO(string title, string deliveryAddress, string? description, DateTime expectedDate, DateTime restockDate, IList<ItemForCreateRestockDTO> restockItems, string restockResponsible)
+        {
             Title = title;
             DeliveryAddress = deliveryAddress;
             Description = description;
             ExpectedDate = expectedDate;
-            TotalPrice = totalPrice;
+            RestockDate = restockDate;
             RestockItems = restockItems;
+            RestockResponsible = restockResponsible;
         }
 
-        public int Id { get; set; }
         [StringLength(50, ErrorMessage = "Title can´t be more than 50 characters")]
         public string Title { get; set; }
         public string DeliveryAddress { get; set; }
@@ -23,21 +27,22 @@ namespace AppForSEII2526.API.DTOs.RestockDTOs
         public string? Description { get; set; }
         [DataType(System.ComponentModel.DataAnnotations.DataType.Date)]
         public DateTime ExpectedDate { get; set; }
-        [DataType(System.ComponentModel.DataAnnotations.DataType.Currency)]
-        [Precision(5, 2)]
-        public decimal? TotalPrice { get; set; }
-        public IList<ItemForRestockingDTO> RestockItems { get; set; }
+        [DataType(System.ComponentModel.DataAnnotations.DataType.Date)]
+        public DateTime RestockDate { get; set; }
+
+        public IList<ItemForCreateRestockDTO> RestockItems { get; set; }
+        public string RestockResponsible { get; set; }
 
         public override bool Equals(object? obj)
         {
-            return obj is RestockDetailDTO dTO &&
-                   Id == dTO.Id &&
+            return obj is RestockForCreateDTO dTO &&
                    Title == dTO.Title &&
                    DeliveryAddress == dTO.DeliveryAddress &&
                    Description == dTO.Description &&
                    ExpectedDate == dTO.ExpectedDate &&
-                   TotalPrice == dTO.TotalPrice &&
-                   RestockItems.SequenceEqual(dTO.RestockItems);
+                   RestockDate == dTO.RestockDate &&
+                   EqualityComparer<IList<ItemForCreateRestockDTO>>.Default.Equals(RestockItems, dTO.RestockItems) &&
+                   RestockResponsible == dTO.RestockResponsible;
         }
     }
 }

@@ -2,6 +2,37 @@
 {
     public class Item
     {
+        public Item()
+        {
+        }
+
+        public Item(string name, string description, decimal purchasePrice, int quantityAvailableForPurchase, int quantityForRestock, decimal? restockPrice, Brand brand, TypeItem typeItem)
+        {
+            Name = name;
+            Description = description;
+            PurchasePrice = purchasePrice;
+            QuantityAvailableForPurchase = quantityAvailableForPurchase;
+            QuantityForRestock = quantityForRestock;
+            RestockPrice = restockPrice;
+            Brand = brand;
+            TypeItem = typeItem;
+        }
+
+        public Item(int id, string name, IList<PurchaseItem> purchaseItems, string description, decimal purchasePrice, int quantityAvailableForPurchase, int quantityForRestock, decimal? restockPrice, IList<RestockItem> restockItems, Brand brand, TypeItem typeItem)
+        {
+            Id = id;
+            Name = name;
+            PurchaseItems = purchaseItems;
+            Description = description;
+            PurchasePrice = purchasePrice;
+            QuantityAvailableForPurchase = quantityAvailableForPurchase;
+            QuantityForRestock = quantityForRestock;
+            RestockPrice = restockPrice;
+            RestockItems = restockItems;
+            Brand = brand;
+            TypeItem = typeItem;
+        }
+
         public int Id { get; set; }
         [Required]
         [StringLength(128, ErrorMessage = "Item name cannot be longer than 128 characters.")]

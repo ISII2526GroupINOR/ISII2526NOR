@@ -11,6 +11,19 @@ namespace AppForSEII2526.API.Models
             // Ignore warning about uninitialized non-nullable properties.
         }
 
+        public Plan(string name, string? description, DateTime createdDate, string? healthIssues, decimal totalPrice, int weeks, IList<PlanItem> planItems, PaymentMethod? paymentMethod)
+        {
+            Name = name;
+            Description = description;
+            CreatedDate = createdDate;
+            HealthIssues = healthIssues;
+            TotalPrice = totalPrice;
+            Weeks = weeks;
+            PlanItems = planItems;
+            PaymentMethod = paymentMethod;
+        }
+
+
         public Plan(string name, string? description, DateTime createdDate, string? healthIssues, decimal totalPrice, int weeks, PaymentMethod? paymentMethod)
         {
             // Ignore warning about uninitialized non-nullable properties.
