@@ -1,5 +1,6 @@
 ﻿using AppForSEII2526.API.Controllers;
 using AppForSEII2526.API.DTOs;
+using AppForSEII2526.API.DTOs.ItemDTOs;
 using AppForSEII2526.API.DTOs.RestockDTOs;
 using AppForSEII2526.API.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +20,7 @@ namespace AppForSEII2526.UT.RestocksController_test
             var typeItem = new TypeItem("Dumbbell");
             var items = new List<Item>
             {
-                new Item("Dumbbell", "Regular dumbbell", 0, 8, 6, 30, brand, typeItem),
+                new Item("Dumbbell", "Regular dumbbell", 0, 4, 6, 30, brand, typeItem),
                 new Item("Kettlebell", "Cicular dumbbell", 0, 5, 3, 40, brand, typeItem)
             };
 
@@ -39,7 +40,8 @@ namespace AppForSEII2526.UT.RestocksController_test
         }
 
         [Theory]
-        [Trait("Unit Testing", "Unit Testing")]
+        [Trait("LevelTesting", "Unit Testing")]
+        [MemberData(nameof(TestCasesFor_CreateRestock))]
         public async Task CreateRestock_Error_test(RestockForCreateDTO restockDTO, string errorExpected)
         {
             var mock = new Mock<ILogger<RestocksController>>();
@@ -54,6 +56,32 @@ namespace AppForSEII2526.UT.RestocksController_test
             var errorActual = problemDetails.Errors.First().Value[0];
 
             Assert.StartsWith(errorExpected, errorActual);
+        }
+
+        [Trait("LevelTesting", "Unit Testing")]
+        public static IEnumerable<object[]> TestCasesFor_CreateRestock()
+        {
+            RestockForCreateDTO restockBadDate = new RestockForCreateDTO("R1", "C1", "D1", 
+                new DateTime(), new DateTime(), new List<ItemForCreateRestockDTO>(), "Jaime");
+
+            RestockForCreateDTO restockNoItem = new RestockForCreateDTO("R1", "C1", "D1",
+                DateTime.Today.AddDays(1), new DateTime(), new List<ItemForCreateRestockDTO>(), "Jaime");
+
+            RestockForCreateDTO restockNoUser = new RestockForCreateDTO("R1", "C1", "D1",
+                DateTime.Today.AddDays(1), new DateTime(),
+                new List<ItemForCreateRestockDTO>() { new ItemForCreateRestockDTO(1, 2) }, "Jaime");
+
+            RestockForCreateDTO restockItemNull = new RestockForCreateDTO("R1", "C1", "D1",
+                DateTime.Today.AddDays(1), new DateTime(),
+                new List<ItemForCreateRestockDTO>() { null, new ItemForCreateRestockDTO(1, 2) }, "Jaime");
+
+            RestockForCreateDTO restockItemNotFound = new RestockForCreateDTO("R1", "C1", "D1",
+                DateTime.Today.AddDays(1), new DateTime(),
+                new List<ItemForCreateRestockDTO>() {new ItemForCreateRestockDTO(0, 2) }, "Jaime");
+
+            RestockForCreateDTO restockBadQuantity = new RestockForCreateDTO("R1", "C1", "D1",
+                DateTime.Today.AddDays(1), new DateTime(),
+                new List<ItemForCreateRestockDTO>() { new ItemForCreateRestockDTO(1, 1) }, "Jaime");
         }
     }
 }
