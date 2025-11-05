@@ -62,7 +62,7 @@ namespace AppForSEII2526.UT.RestocksController_test
         public static IEnumerable<object[]> TestCasesFor_CreateRestock()
         {
             RestockForCreateDTO restockBadDate = new RestockForCreateDTO("R1", "C1", "D1", 
-                new DateTime(), new DateTime(), new List<ItemForCreateRestockDTO>(), "Jaime");
+                DateTime.Today.AddDays(-1), new DateTime(), new List<ItemForCreateRestockDTO>(), "Jaime");
 
             RestockForCreateDTO restockNoItem = new RestockForCreateDTO("R1", "C1", "D1",
                 DateTime.Today.AddDays(1), new DateTime(), new List<ItemForCreateRestockDTO>(), "Jaime");
@@ -84,7 +84,7 @@ namespace AppForSEII2526.UT.RestocksController_test
                 new object[] { restockBadDate, "Error! The expected date must start later than today." },
                 new object[] { restockNoItem, "Error! At least one item must be selected for restock." },
                 new object[] { restockNoUser, "Error! User name is not registered" },
-                new object[] { restockItemNotFound, "The item to restock cannot be null." },
+                new object[] { restockItemNotFound, "The specified item cannot be found." },
                 new object[] { restockBadQuantity, "Error! The total quantity for purchase 4 plus the" +
                         " quantity to restock 1 of item Dumbbell must be bigger than the quantity for restock 6." }
             };
