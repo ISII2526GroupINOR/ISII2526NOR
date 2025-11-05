@@ -41,23 +41,45 @@ namespace AppForSEII2526.UT.ItemsController_test
             _context.SaveChanges();
         }
 
-        [Fact]
+        [Theory]
         [Trait ("LevelTesting", "Unit Testing")]
-        public async Task GetItemsForRestocking_null_name_null_min_null_max()
+        [MemberData(nameof(TestCasesFor_GetItemsForRestock_OK))]
+        public async Task GetItemsForRestocking_null_name_null_min_null_max(string? name, int? min, int? max, List<ItemForRestockingDTO> expectedItems)
         {
-            var expectedItems = new List<ItemForRestockingDTO>()
-            {
-                //public ItemForRestockingDTO(int id, string name, string brand, string description, decimal purchasePrice, decimal? restockPrice, int quantityForRestock, int quantityAvailableForPurchase) : this(id, name, brand, description)
-                new ItemForRestockingDTO(1, "Dumbbell", "Brand1", "Description", 0, 25, 10, 8),
-                new ItemForRestockingDTO(2, "Press machine", "Brand2", "Description2", 0, 200, 10, 9)
-            };
+            //var expectedItems = new List<ItemForRestockingDTO>()
+            //{
+            //    //public ItemForRestockingDTO(int id, string name, string brand, string description, decimal purchasePrice, decimal? restockPrice, int quantityForRestock, int quantityAvailableForPurchase) : this(id, name, brand, description)
+            //    new ItemForRestockingDTO(1, "Dumbbell", "Brand1", "Description", 0, 25, 10, 8),
+            //    new ItemForRestockingDTO(2, "Press machine", "Brand2", "Description2", 0, 200, 10, 9)
+            //};
             var controller = new ItemsController(_context, null);
 
-            var result = await controller.GetItemsForRestocking(null, null, null);
+            var result = await controller.GetItemsForRestocking(name, min, max);
 
             var okResult = Assert.IsType<OkObjectResult>(result);
             var itemsDTOsActual = Assert.IsType<List<ItemForRestockingDTO>>(okResult.Value);
             Assert.Equal(expectedItems, itemsDTOsActual);
+        }
+
+        public static IEnumerable<object[]> TestCasesFor_GetItemsForRestock_OK()
+        {
+            var itemsDTOs = new List<ItemForRestockingDTO> { new ItemForRestockingDTO(1, "Dumbbell", "Brand1", "Description", 0, 25, 10, 8),
+                new ItemForRestockingDTO(2, "Press machine", "Brand2", "Description2", 0, 200, 10, 9)};
+            var itemDTOsTC1 = new List<ItemForRestockingDTO> { itemsDTOs[0], itemsDTOs[1] };
+            var itemDTOsTC2 = new List<ItemForRestockingDTO> { itemsDTOs[0] };
+            var itemDTOsTC3 = new List<ItemForRestockingDTO> { itemsDTOs[0] };
+            var itemDTOsTC4 = new List<ItemForRestockingDTO> { itemsDTOs[1] };
+
+
+
+            var allTests = new List<object[]>
+            {
+                new object[] {null, null, null, itemDTOsTC1},
+                new object[] {"Dumbbell", null, null, itemDTOsTC2},
+                new object[] {null, null, 8, itemDTOsTC3},
+                new object[] {null, 9, null, itemDTOsTC4}
+            };
+            return allTests;
         }
 
         [Fact]
