@@ -1,11 +1,13 @@
-﻿using System;
+﻿using AppForSEII2526.API.Controllers;
+using AppForSEII2526.API.DTOs;
+using AppForSEII2526.API.DTOs.RestockDTOs;
+using AppForSEII2526.API.Models;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AppForSEII2526.API.Controllers;
-using AppForSEII2526.API.DTOs;
-using AppForSEII2526.API.Models;
 
 namespace AppForSEII2526.UT.RestocksController_test
 {
@@ -34,6 +36,24 @@ namespace AppForSEII2526.UT.RestocksController_test
             _context.Users.Add(user);
             _context.Add(restock);
             _context.SaveChanges();
+        }
+
+        [Theory]
+        [Trait("Unit Testing", "Unit Testing")]
+        public async Task CreateRestock_Error_test(RestockForCreateDTO restockDTO, string errorExpected)
+        {
+            var mock = new Mock<ILogger<RestocksController>>();
+            ILogger<RestocksController> looger = mock.Object;
+            var controller = new RestocksController(_context, looger);
+
+            var result = await controller.CreateRestock(restockDTO);
+
+            var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
+            var problemDetails = Assert.IsType<ValidationProblemDetails>(badRequestResult.Value);
+
+            var errorActual = problemDetails.Errors.First().Value[0];
+
+            Assert.StartsWith(errorExpected, errorActual);
         }
     }
 }
