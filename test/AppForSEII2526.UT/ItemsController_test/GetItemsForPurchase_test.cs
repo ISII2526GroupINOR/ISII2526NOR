@@ -9,7 +9,7 @@ using AppForSEII2526.API.DTOs.ItemDTOs;
 
 namespace AppForSEII2526.UT.ItemsController_test
 {
-    internal class GetItemsForPurchase_test : AppForSEII25264SqliteUT
+    public class GetItemsForPurchase_test : AppForSEII25264SqliteUT
     {
         public GetItemsForPurchase_test() {
             //fix these values
@@ -39,6 +39,7 @@ namespace AppForSEII2526.UT.ItemsController_test
 
         [Fact]
         [Trait("LevelTesting", "Unit Testing")]
+        //[MemberData(nameof())]
         public async Task GetItemsForPurchaseNULL4NameBrand_test()
         {
             List<ItemForPurchaseDTO> expectedItems = new List<ItemForPurchaseDTO>()
