@@ -15,9 +15,6 @@ namespace AppForSEII2526.UT.ClassesController_test
 {
     public class GetAvailableClassesForPlan_test : AppForSEII25264SqliteUT
     {
-        
-
-
         public GetAvailableClassesForPlan_test()
         {
             // Create objects in the database context (physically stored in main memory for testing)
@@ -58,7 +55,7 @@ namespace AppForSEII2526.UT.ClassesController_test
 
         [Fact]
         [Trait("LevelTesting", "Unit Testing")]
-        public async Task GetAvailableClassesForPlan_NULL4NameDate_test()
+        public async Task GetAvailableClassesForPlan_NULL4NameDate_test() //NOTE: this fact is no longer needed, but is kept for demonstration purposes and for comparison with the theory
         {
             // ARRANGE
 
@@ -94,6 +91,32 @@ namespace AppForSEII2526.UT.ClassesController_test
             Assert.Equal(expectedClasses, classesActualResult);
         }
 
+        [Fact]
+        [Trait("LevelTesting", "Unit Testing")]
+        public async Task GetAvailableClassesForPlan_NULL4Name_wrong_date_test() // NOTE: this fact is complementary to the theory for line coverage purposes
+        {
+            // ARRANGE
+
+            ValidationProblemDetails expectedDTO = new ValidationProblemDetails()
+            {
+                Title = "One or more validation errors occurred.",
+                Status = 400,
+                Detail = "The date must be within the next week (Monday to Sunday)."
+            };
+
+            var mock = new Mock<ILogger<ClassesController>>();
+            ILogger<ClassesController> logger = mock.Object;
+            ClassesController controller = new ClassesController(_context, logger); // Can also use null for the logger
+
+            // ACT
+            var result = await controller.GetAvailableClassesForPlan(null, TimeTable.previousWeekSunday);
+
+            // ASSERT
+            var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
+            var messageActualResult = Assert.IsType<string>(badRequestResult.Value);
+            Assert.Equal(expectedDTO.Detail, messageActualResult);
+        }
+
 
 
         // Transform the fact into a theory
@@ -103,8 +126,6 @@ namespace AppForSEII2526.UT.ClassesController_test
         public async Task GetAvailableClassesForPlan_theory(string? className, DateOnly? classDate, List<ClassForPlanDTO> expectedClasses)
         {
             // ARRANGE
-
-
             var mock = new Mock<ILogger<ClassesController>>();
             ILogger<ClassesController> logger = mock.Object;
             ClassesController controller = new ClassesController(_context, logger); // Can also use null for the logger
@@ -156,6 +177,13 @@ namespace AppForSEII2526.UT.ClassesController_test
             var expectedDTOs_TC3 = new List<ClassForPlanDTO>() 
             {
                 classDTOs[1], // Introduction to Boxing
+            };
+
+            var expectedDTOs_TC4 = new ValidationProblemDetails()
+            {
+                Title = "One or more validation errors occurred.",
+                Status = 400,
+                Detail = "The date must be within the next week (Monday to Sunday)."
             };
 
 
