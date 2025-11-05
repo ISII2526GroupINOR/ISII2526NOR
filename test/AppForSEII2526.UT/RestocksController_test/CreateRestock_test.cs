@@ -27,7 +27,7 @@ namespace AppForSEII2526.UT.RestocksController_test
             _context.AddRange(items);
             _context.SaveChanges();
 
-            var user = new ApplicationUser("Jaime", "Domingo");
+            var user = new ApplicationUser("Jaime", "Domingo", "Jaime");
 
             var restock = new Restock("A restock", "An address", "A description", new DateTime(), new DateTime(),
                 180, new List<RestockItem>(), user);
@@ -82,9 +82,9 @@ namespace AppForSEII2526.UT.RestocksController_test
 
             var allTest = new List<Object[]>
             {
-                //new object[] { restockBadDate, "Error! The expected date must start later than today." },
-                //new object[] { restockNoItem, "Error! At least one item must be selected for restock." },
-                //new object[] { restockNoUser, "Error! User name is not registered" },
+                new object[] { restockBadDate, "Error! The expected date must start later than today." },
+                new object[] { restockNoItem, "Error! At least one item must be selected for restock." },
+                new object[] { restockNoUser, "Error! User name is not registered" },
                 new object[] { restockItemNotFound, "The specified item cannot be found." },
                 new object[] { restockBadQuantity, "Error! The total quantity for purchase 4 plus the" +
                         " quantity to restock 1 of item Dumbbell must be bigger than the quantity for restock 6." }

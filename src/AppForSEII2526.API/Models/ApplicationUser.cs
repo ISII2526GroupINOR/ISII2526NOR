@@ -8,10 +8,11 @@ public class ApplicationUser : IdentityUser {
     {
     }
 
-    public ApplicationUser(string name, string surname)
+    public ApplicationUser(string name, string surname, string username)
     {
         Name = name;
         Surname = surname;
+        UserName = username;
     }
 
     // Id is a string and is inherited from IdentityUser
