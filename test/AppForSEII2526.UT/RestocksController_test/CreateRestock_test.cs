@@ -106,8 +106,8 @@ namespace AppForSEII2526.UT.RestocksController_test
                 new List<ItemForCreateRestockDTO> { new ItemForCreateRestockDTO(1, 4) }, "Jaime");
 
             RestockDetailDTO expected = new RestockDetailDTO(2, "First", "Any", "Comment", DateTime.Today.AddDays(1),
-                120, new List<ItemForRestockingDTO> { 
-                    new ItemForRestockingDTO(1, "Dumbbell", "Precor", "Regular dumbbell", 120, 4, 4) });
+                120.0m, new List<ItemForRestockingDTO> { 
+                    new ItemForRestockingDTO(1, "Dumbbell", "Precor", "Regular dumbbell", 120.0m, 4, 4) });
 
             var result = await controller.CreateRestock(restockDTO);
 
