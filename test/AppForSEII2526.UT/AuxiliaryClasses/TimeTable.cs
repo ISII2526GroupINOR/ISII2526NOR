@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ namespace AppForSEII2526.UT.AuxiliaryClasses
     /// </summary>
     public static class TimeTable
     {
+        public static readonly DateTime now = DateTime.Now;
         // Obtain and calculate some dates for the tests
 
         public static readonly DateOnly today = DateOnly.FromDateTime(DateTime.Now);
