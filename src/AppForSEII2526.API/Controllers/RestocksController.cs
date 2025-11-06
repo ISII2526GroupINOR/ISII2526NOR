@@ -107,7 +107,7 @@ namespace AppForSEII2526.API.Controllers
                         $" quantity to restock {ritem.RestockQuantity} of item {item.Name} must be bigger than the quantity for restock {item.QuantityForRestock}.");
                 else
                 {
-                    if (item.RestockPrice >= 0 && restock.TotalPrice != null) //If one item had price null, ignore the following
+                    if (item.RestockPrice > 0 && restock.TotalPrice != null) //If one item had price null, ignore the following
                     {
                         restock.TotalPrice += item.RestockPrice * ritem.RestockQuantity;
                     }
