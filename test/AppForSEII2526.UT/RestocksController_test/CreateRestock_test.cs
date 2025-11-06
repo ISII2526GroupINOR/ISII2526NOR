@@ -21,7 +21,8 @@ namespace AppForSEII2526.UT.RestocksController_test
             var items = new List<Item>
             {
                 new Item("Dumbbell", "Regular dumbbell", 0, 4, 6, 30, brand, typeItem),
-                new Item("Kettlebell", "Cicular dumbbell", 0, 5, 3, 40, brand, typeItem)
+                new Item("Kettlebell", "Cicular dumbbell", 0, 5, 3, 40, brand, typeItem),
+                new Item("Band", "Elastic band", 0, 3, 4, 0, brand, typeItem)
             };
 
             _context.AddRange(items);
@@ -95,6 +96,7 @@ namespace AppForSEII2526.UT.RestocksController_test
 
         [Theory]
         [Trait("LevelTesting", "Unit Testing")]
+        [MemberData(nameof(TestCasesFor_CreateRestock_Success))]
         public async Task CreateRestock_Success_test(RestockForCreateDTO restockDTO, RestockDetailDTO expected)
         {
             var mock = new Mock<ILogger<RestocksController>>();
@@ -107,6 +109,34 @@ namespace AppForSEII2526.UT.RestocksController_test
             var actual = Assert.IsType<RestockDetailDTO>(created.Value);
 
             Assert.Equal(expected, actual);
+        }
+
+        [Trait("LevelTesting", "Unit Testing")]
+        public static IEnumerable<object[]> TestCasesFor_CreateRestock_Success()
+        {
+            RestockForCreateDTO restockDTOWithPrice = new RestockForCreateDTO("First", "Any", "Comment",
+                DateTime.Today.AddDays(1), new DateTime(),
+                new List<ItemForCreateRestockDTO> { new ItemForCreateRestockDTO(1, 4) }, "Jaime");
+
+            RestockDetailDTO expectedWithPrice = new RestockDetailDTO(2, "First", "Any", "Comment", DateTime.Today.AddDays(1),
+                120.0m, new List<ItemForRestockingDTO> {
+                    new ItemForRestockingDTO(1, "Dumbbell", "Precor", "Regular dumbbell", 120.0m, 4, 4) });
+
+            RestockForCreateDTO restockDTOWithoutPrice = new RestockForCreateDTO("Second", "Any", "Comment",
+                DateTime.Today.AddDays(1), new DateTime(),
+                new List<ItemForCreateRestockDTO> { new ItemForCreateRestockDTO(3, 4) }, "Jaime");
+
+            RestockDetailDTO expectedWithoutPrice = new RestockDetailDTO(2, "Second", "Any", "Comment", DateTime.Today.AddDays(1),
+                null, new List<ItemForRestockingDTO> {
+                    new ItemForRestockingDTO(3, "Band", "Precor", "Elastic band", 0, 3, 4) });
+
+            var allTest = new List<Object[]>
+            {
+                new Object[] { restockDTOWithPrice, expectedWithPrice },
+                new Object[] { restockDTOWithoutPrice, expectedWithoutPrice }
+            };
+
+            return allTest;
         }
     }
 }
