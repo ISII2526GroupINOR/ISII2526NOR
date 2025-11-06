@@ -6,9 +6,10 @@ namespace AppForSEII2526.API.Models;
 public class ApplicationUser : IdentityUser {
     public ApplicationUser()
     {
+        // Ignore warning about uninitialized non-nullable properties.
     }
 
-    public ApplicationUser(string name, string surname)
+    public ApplicationUser(string name, string surname) // Lists not included
     {
         Name = name;
         Surname = surname;

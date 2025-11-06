@@ -2,8 +2,14 @@
 {
     public class TypeItem
     {
+        public TypeItem()
+        {
+            // Ignore warning about uninitialized non-nullable properties.
+        }
+
         public TypeItem(string name)
         {
+            // Ignore warning about uninitialized non-nullable properties.
             Name = name;
         }
 
