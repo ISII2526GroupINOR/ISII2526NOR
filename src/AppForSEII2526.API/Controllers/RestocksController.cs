@@ -96,6 +96,10 @@ namespace AppForSEII2526.API.Controllers
                     ModelState.AddModelError("Item", "The specified item cannot be found.");
                     continue;
                 }
+                if (ritem.RestockQuantity <= 0)
+                {
+                    ModelState.AddModelError("Item", "You need to restock at least one item.");
+                }
                 var quantity = ritem.RestockQuantity + item.QuantityAvailableForPurchase;
                 if (quantity < item.QuantityForRestock)
                     ModelState.AddModelError("RestockItem", $"Error! The total quantity for purchase {item.QuantityAvailableForPurchase} plus the" +
