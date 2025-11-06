@@ -99,6 +99,7 @@ namespace AppForSEII2526.API.Controllers
                 if (ritem.RestockQuantity <= 0)
                 {
                     ModelState.AddModelError("Item", "You need to restock at least one item.");
+                    continue;
                 }
                 var quantity = ritem.RestockQuantity + item.QuantityAvailableForPurchase;
                 if (quantity < item.QuantityForRestock)
