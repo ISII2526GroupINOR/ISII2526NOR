@@ -50,12 +50,14 @@ namespace AppForSEII2526.API.DTOs.PlanDTOs
             return obj is PlanDetailDTO dTO &&
                    Name == dTO.Name &&
                    Description == dTO.Description &&
-                   CreatedDate == dTO.CreatedDate &&
+                   //CreatedDate == dTO.CreatedDate &&
+                   // The dates may have different kinds (UTC, Local, Unspecified), so we compare them as UTC
+                   CreatedDate.ToUniversalTime() == dTO.CreatedDate.ToUniversalTime() &&
                    HealthIssues == dTO.HealthIssues &&
                    TotalPrice == dTO.TotalPrice &&
                    Weeks == dTO.Weeks &&
                    EqualityComparer<ApplicationUserForPlanDetailDTO?>.Default.Equals(User, dTO.User) &&
-                   EqualityComparer<IList<ClassForPlanDTO>>.Default.Equals(Classes, dTO.Classes);
+                   Classes.SequenceEqual(dTO.Classes);
         }
     }
 }

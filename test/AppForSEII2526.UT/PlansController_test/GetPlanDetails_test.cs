@@ -1,4 +1,8 @@
 ﻿using AppForSEII2526.API.Controllers;
+using AppForSEII2526.API.DTOs.ApplicationUserDTOs;
+using AppForSEII2526.API.DTOs.ClassDTOs;
+using AppForSEII2526.API.DTOs.PlanDTOs;
+using AppForSEII2526.API.DTOs.RestockDTOs;
 using AppForSEII2526.UT.AuxiliaryClasses;
 using System;
 using System.Collections.Generic;
@@ -10,8 +14,11 @@ namespace AppForSEII2526.UT.PlansController_test
 {
     public class GetPlanDetails_test : AppForSEII25264SqliteUT
     {
+        private readonly DateTime tnow = TimeTable.now;
         public GetPlanDetails_test()
         {
+            tnow = TimeTable.now;
+
             // Prepare model classes in the database context (physically stored in main memory for testing)
 
             // TypeItems needed for Classes
@@ -21,6 +28,8 @@ namespace AppForSEII2526.UT.PlansController_test
                 new TypeItem("Mat"),
                 new TypeItem("Punching Bag")
             };
+            _context.TypeItems.AddRange(typeItems);
+            _context.SaveChanges(); // Assign IDs
 
             // Classes needed for Plans
             var classes = new List<Class>
@@ -36,13 +45,17 @@ namespace AppForSEII2526.UT.PlansController_test
 
                 })
             };
+            _context.Classes.AddRange(classes);
+            _context.SaveChanges(); // Assign IDs
 
             // ApplicationUsers needed for PaymentMethods
             var users = new List<ApplicationUser>
             {
-                new ApplicationUser("David", "A. Patterson"),
-                new ApplicationUser("John", "LeRoy Hennessy")
+                new ApplicationUser("David", "A. Patterson"){Id="1"},
+                new ApplicationUser("John", "LeRoy Hennessy"){ Id="2"}
             };
+            _context.Users.AddRange(users);
+            _context.SaveChanges(); // Assign IDs
 
             // PaymentMethods needed for Plans
             var paymentMethods = new List<PaymentMethod>
@@ -57,7 +70,7 @@ namespace AppForSEII2526.UT.PlansController_test
                 new Plan {
                     Name = "Boxing Starter",
                     Description = "This is a starter boxing plan",
-                    CreatedDate = TimeTable.now,
+                    CreatedDate = tnow,
                     HealthIssues = null,
                     TotalPrice = 150.00m, // Classes: Introduction to Boxing (150.00m)
                     Weeks = 4,
@@ -67,7 +80,7 @@ namespace AppForSEII2526.UT.PlansController_test
                 new Plan {
                     Name = "Cardio Plus",
                     Description = "This plan focuses on cardio exercises",
-                    CreatedDate = TimeTable.now,
+                    CreatedDate = tnow,
                     HealthIssues = "Back pain",
                     TotalPrice = 190.00m, // Classes: Yoga Morning (100.00m) + Latino Dance (90.00m)
                     Weeks = 6,
@@ -104,7 +117,13 @@ namespace AppForSEII2526.UT.PlansController_test
                 Goal = "Learn Latin dance moves",
                 Price = classes[2].Price // 90.00m
             }); // Cardio Plus includes Latino Dance
+
+            // Add remaining objects to context
+            _context.PaymentMethods.AddRange(paymentMethods);
+            _context.Plans.AddRange(plans);
+            _context.SaveChanges();
         }
+
 
 
         [Fact]
@@ -113,12 +132,14 @@ namespace AppForSEII2526.UT.PlansController_test
         {
             // ARRANGE
 
-            var mock = new Mock<ILogger<PlansController>>();
-            ILogger<PlansController> logger = mock.Object;
-            var controller = new PlansController(_context, logger);
+
 
 
             // ACT
+
+            var mock = new Mock<ILogger<PlansController>>();
+            ILogger<PlansController> logger = mock.Object;
+            var controller = new PlansController(_context, logger);
 
             var result = await controller.GetPlanDetails(0); // ID 0 does not exist
 
@@ -126,6 +147,54 @@ namespace AppForSEII2526.UT.PlansController_test
             // ASSERT
 
             Assert.IsType<NotFoundResult>(result);
+        }
+
+
+
+        [Fact]
+        [Trait("LevelTesting", "Unit Testing")]
+        public async Task GetPlanDetails_ValidID_test()
+        {
+            // ARRANGE
+
+            // Get plan 1
+            var expectedDTO = new PlanDetailDTO(
+                "Boxing Starter",
+                "This is a starter boxing plan",
+                tnow,
+                null,
+                150.00m,
+                4,
+                new ApplicationUserForPlanDetailDTO(
+                    "1",
+                    "David",
+                    "A. Patterson"
+                ),
+                new List<ClassForPlanDTO>()
+                {
+                    new ClassForPlanDTO(
+                        2,
+                        "Introduction to Boxing",
+                        150.0m,
+                        new List<string> {"Bench", "Punching Bag" },
+                        TimeTable.Combine(TimeTable.nextWeekSunday, TimeTable.timeAfternoon)
+                    )
+                }
+            );
+
+            // ACT
+
+            var mock = new Mock<ILogger<PlansController>>();
+            ILogger<PlansController> logger = mock.Object;
+            var controller = new PlansController(_context, logger);
+
+            var result = await controller.GetPlanDetails(1); // ID 1
+
+            // ASSERT
+
+            var okResult = Assert.IsType<OkObjectResult>(result);
+            var planDTOactual = Assert.IsType<PlanDetailDTO>(okResult.Value);
+            Assert.Equal(expectedDTO, planDTOactual);
 
         }
     }
