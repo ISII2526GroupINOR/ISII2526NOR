@@ -6,12 +6,33 @@ namespace AppForSEII2526.API.Models
 
     public class Class
     {
+        public Class()
+        {
+            // Ignore warning about uninitialized non-nullable properties.
+        }
+
+        public Class(string name, DateTime date, int capacity, decimal price)
+        {
+            // Ignore warning about uninitialized non-nullable properties.
+            Name = name;
+            Date = date;
+            Capacity = capacity;
+            Price = price;
+        }
+
+        // Created for GetAvailableClassesForPlan_test
+        public Class(string name, DateTime date, int capacity, decimal price, IList<TypeItem> typeItems) : this(name, date, capacity, price)
+        {
+            TypeItems = typeItems;
+        }
+
+
         public int Id { get; set; } // Primary key
 
         [Required]
         [StringLength(256, ErrorMessage = "Class name cannot have more than 256 characters.")]
         [RegularExpression(@"^[A-Za-z0-9\s]+$", ErrorMessage = "Class name can only contain alphanumeric characters and spaces.")]
-        public required string Name { get; set; }
+        public string Name { get; set; }
 
         [DataType(DataType.DateTime)]
         public DateTime Date { get; set; }

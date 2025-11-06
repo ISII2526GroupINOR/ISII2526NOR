@@ -7,6 +7,7 @@ namespace AppForSEII2526.API.Models
     {
         public PlanItem()
         {
+            // Ignore warning about uninitialized non-nullable properties.
         }
 
         public PlanItem(Plan plan, Class @class, string goal, decimal price)
