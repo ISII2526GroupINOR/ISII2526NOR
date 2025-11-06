@@ -41,7 +41,7 @@ namespace AppForSEII2526.UT.RestocksController_test
 
         [Theory]
         [Trait("LevelTesting", "Unit Testing")]
-        [MemberData(nameof(TestCasesFor_CreateRestock))]
+        [MemberData(nameof(TestCasesFor_CreateRestock_Error))]
         public async Task CreateRestock_Error_test(RestockForCreateDTO restockDTO, string errorExpected)
         {
             var mock = new Mock<ILogger<RestocksController>>();
@@ -59,7 +59,7 @@ namespace AppForSEII2526.UT.RestocksController_test
         }
 
         [Trait("LevelTesting", "Unit Testing")]
-        public static IEnumerable<object[]> TestCasesFor_CreateRestock()
+        public static IEnumerable<object[]> TestCasesFor_CreateRestock_Error()
         {
             RestockForCreateDTO restockBadDate = new RestockForCreateDTO("R1", "C1", "D1", 
                 DateTime.Today.AddDays(-1), new DateTime(),
@@ -93,21 +93,13 @@ namespace AppForSEII2526.UT.RestocksController_test
             return allTest;
         }
 
-        [Fact]
+        [Theory]
         [Trait("LevelTesting", "Unit Testing")]
-        public async Task CreateRestock_Success_test()
+        public async Task CreateRestock_Success_test(RestockForCreateDTO restockDTO, RestockDetailDTO expected)
         {
             var mock = new Mock<ILogger<RestocksController>>();
             ILogger<RestocksController> looger = mock.Object;
             var controller = new RestocksController(_context, looger);
-
-            RestockForCreateDTO restockDTO = new RestockForCreateDTO("First", "Any", "Comment",
-                DateTime.Today.AddDays(1), new DateTime(),
-                new List<ItemForCreateRestockDTO> { new ItemForCreateRestockDTO(1, 4) }, "Jaime");
-
-            RestockDetailDTO expected = new RestockDetailDTO(2, "First", "Any", "Comment", DateTime.Today.AddDays(1),
-                120.0m, new List<ItemForRestockingDTO> { 
-                    new ItemForRestockingDTO(1, "Dumbbell", "Precor", "Regular dumbbell", 120.0m, 4, 4) });
 
             var result = await controller.CreateRestock(restockDTO);
 
