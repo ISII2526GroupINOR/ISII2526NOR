@@ -66,6 +66,10 @@ namespace AppForSEII2526.UT.RestocksController_test
                 DateTime.Today.AddDays(-1), new DateTime(),
                 new List<ItemForCreateRestockDTO>() { new ItemForCreateRestockDTO(1, 2) }, "Jaime");
 
+            RestockForCreateDTO restockBadTitle = new RestockForCreateDTO("A restock", "An address", "A description", 
+                new DateTime(), new DateTime(),
+                new List<ItemForCreateRestockDTO>() { new ItemForCreateRestockDTO(1, 2) }, "Jaime");
+
             RestockForCreateDTO restockNoItem = new RestockForCreateDTO("R1", "C1", "D1",
                 DateTime.Today.AddDays(1), new DateTime(), new List<ItemForCreateRestockDTO>(), "Jaime");
 
@@ -77,6 +81,10 @@ namespace AppForSEII2526.UT.RestocksController_test
                 DateTime.Today.AddDays(1), new DateTime(),
                 new List<ItemForCreateRestockDTO>() {new ItemForCreateRestockDTO(0, 2) }, "Jaime");
 
+            RestockForCreateDTO restockNoQuantity = new RestockForCreateDTO("R1", "C1", "D1",
+                DateTime.Today.AddDays(1), new DateTime(),
+                new List<ItemForCreateRestockDTO>() { new ItemForCreateRestockDTO(1, -2) }, "Jaime");
+
             RestockForCreateDTO restockBadQuantity = new RestockForCreateDTO("R1", "C1", "D1",
                 DateTime.Today.AddDays(1), new DateTime(),
                 new List<ItemForCreateRestockDTO>() { new ItemForCreateRestockDTO(1, 1) }, "Jaime");
@@ -84,9 +92,11 @@ namespace AppForSEII2526.UT.RestocksController_test
             var allTest = new List<Object[]>
             {
                 new object[] { restockBadDate, "Error! The expected date must start later than today." },
+                new object[] { restockBadTitle, "Error! There´s already a restock with that title." },
                 new object[] { restockNoItem, "Error! At least one item must be selected for restock." },
                 new object[] { restockNoUser, "Error! User name is not registered" },
                 new object[] { restockItemNotFound, "The specified item cannot be found." },
+                new object[] { restockBadQuantity, "You need to restock at least one item." },
                 new object[] { restockBadQuantity, "Error! The total quantity for purchase 4 plus the" +
                         " quantity to restock 1 of item Dumbbell must be bigger than the quantity for restock 6." }
             };
