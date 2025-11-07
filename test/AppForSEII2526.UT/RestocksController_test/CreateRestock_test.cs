@@ -128,7 +128,7 @@ namespace AppForSEII2526.UT.RestocksController_test
 
             RestockDetailDTO expectedWithoutPrice = new RestockDetailDTO(2, "Second", "Any", "Comment", DateTime.Today.AddDays(1),
                 null, new List<ItemForRestockingDTO> {
-                    new ItemForRestockingDTO(3, "Band", "Precor", "Elastic band", 0, 3, 4) });
+                    new ItemForRestockingDTO(3, "Band", "Precor", "Elastic band", 0, 4, 3) });
 
             var allTest = new List<Object[]>
             {
