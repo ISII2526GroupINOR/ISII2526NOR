@@ -25,7 +25,6 @@ namespace AppForSEII2526.UT.PlansController_test
             var typeItems = new List<TypeItem>
             {
                 new TypeItem("Bench"),
-                new TypeItem("Mat"),
                 new TypeItem("Punching Bag")
             };
             _context.TypeItems.AddRange(typeItems);
@@ -34,15 +33,9 @@ namespace AppForSEII2526.UT.PlansController_test
             // Classes needed for Plans
             var classes = new List<Class>
             {
-                new Class("Yoga Morning", TimeTable.Combine(TimeTable.nextWeekMonday, TimeTable.timeMorning), 40, 100.0m, new List<TypeItem> {
-                    typeItems[1]  // Mat
-                }),
                 new Class("Introduction to Boxing", TimeTable.Combine(TimeTable.nextWeekSunday, TimeTable.timeAfternoon), 30, 150.0m, new List<TypeItem> {
                     typeItems[0], // Bench
-                    typeItems[2]  // Punching Bag
-                }),
-                new Class("Latino Dance", TimeTable.Combine(TimeTable.followingWeekMonday, TimeTable.timeMiddleMorning), 50, 90.0m, new List<TypeItem> {
-
+                    typeItems[1]  // Punching Bag
                 })
             };
             _context.Classes.AddRange(classes);
@@ -51,8 +44,7 @@ namespace AppForSEII2526.UT.PlansController_test
             // ApplicationUsers needed for PaymentMethods
             var users = new List<ApplicationUser>
             {
-                new ApplicationUser("David", "A. Patterson"){Id="1"},
-                new ApplicationUser("John", "LeRoy Hennessy"){ Id="2"}
+                new ApplicationUser("David", "A. Patterson"){Id="1"}
             };
             _context.Users.AddRange(users);
             _context.SaveChanges(); // Assign IDs
@@ -60,8 +52,7 @@ namespace AppForSEII2526.UT.PlansController_test
             // PaymentMethods needed for Plans
             var paymentMethods = new List<PaymentMethod>
             {
-                new PaymentMethod(new List<Plan>(), users[0]),
-                new PaymentMethod(new List<Plan>(), users[1])
+                new PaymentMethod(new List<Plan>(), users[0])
             };
 
             // Plans to be tested
@@ -76,47 +67,21 @@ namespace AppForSEII2526.UT.PlansController_test
                     Weeks = 4,
                     PlanItems = new List<PlanItem>{ },
                     PaymentMethod = paymentMethods[0]
-                },
-                new Plan {
-                    Name = "Cardio Plus",
-                    Description = "This plan focuses on cardio exercises",
-                    CreatedDate = tnow,
-                    HealthIssues = "Back pain",
-                    TotalPrice = 190.00m, // Classes: Yoga Morning (100.00m) + Latino Dance (90.00m)
-                    Weeks = 6,
-                    PlanItems = new List<PlanItem>{ },
-                    PaymentMethod = paymentMethods[1]
                 }
             };
 
             //PaymentMethods need to reference Plans
             paymentMethods[0].Plans!.Add(plans[0]);
-            paymentMethods[1].Plans!.Add(plans[1]);
 
             // Classes need to be added to Plans via PlanItems
             plans[0].PlanItems.Add(new PlanItem
             {
                 Plan = plans[0],
-                Class = classes[1], // Introduction to Boxing
+                Class = classes[0], // Introduction to Boxing
                 Goal = "Learn basic boxing techniques",
-                Price = classes[1].Price // 150.00m
+                Price = classes[0].Price // 150.00m
             }); // Boxing Starter includes Introduction to Boxing
 
-            plans[1].PlanItems.Add(new PlanItem
-            {
-                Plan = plans[1],
-                Class = classes[0], // Yoga Morning
-                Goal = "Improve flexibility and mindfulness",
-                Price = classes[0].Price // 100.00m
-            }); // Cardio Plus includes Yoga Morning
-
-            plans[1].PlanItems.Add(new PlanItem
-            {
-                Plan = plans[1],
-                Class = classes[2], // Latino Dance
-                Goal = "Learn Latin dance moves",
-                Price = classes[2].Price // 90.00m
-            }); // Cardio Plus includes Latino Dance
 
             // Add remaining objects to context
             _context.PaymentMethods.AddRange(paymentMethods);
@@ -132,7 +97,7 @@ namespace AppForSEII2526.UT.PlansController_test
         {
             // ARRANGE
 
-
+                // No expected DTO is needed
 
 
             // ACT
@@ -173,7 +138,7 @@ namespace AppForSEII2526.UT.PlansController_test
                 new List<ClassForPlanDTO>()
                 {
                     new ClassForPlanDTO(
-                        2,
+                        1,
                         "Introduction to Boxing",
                         150.0m,
                         new List<string> {"Bench", "Punching Bag" },
