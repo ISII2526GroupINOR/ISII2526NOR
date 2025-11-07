@@ -52,6 +52,12 @@ namespace AppForSEII2526.API.Controllers
         [ProducesResponseType(typeof(string), (int) HttpStatusCode.Conflict)]
         public async Task<ActionResult> CreateRestock(RestockForCreateDTO restockForCreateDTO)
         {
+            var titles = _context.Restocks.Where(r => r.Title == restockForCreateDTO.Title).Select(r => r.Title);
+            if ( titles.FirstOrDefault() == restockForCreateDTO.Title)
+            {
+                ModelState.AddModelError("RestockTitle", "Error! There´s already a restock with that title.");
+            }
+
             if (restockForCreateDTO.ExpectedDate <= DateTime.Now)
                 ModelState.AddModelError("RestockDateFrom", "Error! The expected date must start later than today.");
 
@@ -96,13 +102,18 @@ namespace AppForSEII2526.API.Controllers
                     ModelState.AddModelError("Item", "The specified item cannot be found.");
                     continue;
                 }
+                if (ritem.RestockQuantity <= 0)
+                {
+                    ModelState.AddModelError("Item", "You need to restock at least one item.");
+                    continue;
+                }
                 var quantity = ritem.RestockQuantity + item.QuantityAvailableForPurchase;
                 if (quantity < item.QuantityForRestock)
                     ModelState.AddModelError("RestockItem", $"Error! The total quantity for purchase {item.QuantityAvailableForPurchase} plus the" +
                         $" quantity to restock {ritem.RestockQuantity} of item {item.Name} must be bigger than the quantity for restock {item.QuantityForRestock}.");
                 else
                 {
-                    if (item.RestockPrice != null && restock.TotalPrice != null) //If one item had price null, ignore the following
+                    if (item.RestockPrice > 0 && restock.TotalPrice != null) //If one item had price null, ignore the following
                     {
                         restock.TotalPrice += item.RestockPrice * ritem.RestockQuantity;
                     }
