@@ -13,6 +13,12 @@ public class ApplicationUser : IdentityUser {
     {
         Name = name;
         Surname = surname;
+    }
+
+    public ApplicationUser(string name, string surname, string username) // Lists not included
+    {
+        Name = name;
+        Surname = surname;
         UserName = username;
     }
 
