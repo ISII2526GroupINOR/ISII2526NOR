@@ -96,7 +96,7 @@ namespace AppForSEII2526.UT.RestocksController_test
                 new object[] { restockNoItem, "Error! At least one item must be selected for restock." },
                 new object[] { restockNoUser, "Error! User name is not registered" },
                 new object[] { restockItemNotFound, "The specified item cannot be found." },
-                new object[] { restockBadQuantity, "You need to restock at least one item." },
+                new object[] { restockNoQuantity, "You need to restock at least one item." },
                 new object[] { restockBadQuantity, "Error! The total quantity for purchase 4 plus the" +
                         " quantity to restock 1 of item Dumbbell must be bigger than the quantity for restock 6." }
             };
