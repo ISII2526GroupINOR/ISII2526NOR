@@ -15,6 +15,13 @@ public class ApplicationUser : IdentityUser {
         Surname = surname;
     }
 
+    public ApplicationUser(string name, string surname, string username) // Lists not included
+    {
+        Name = name;
+        Surname = surname;
+        UserName = username;
+    }
+
     // Id is a string and is inherited from IdentityUser
 
     [Required] // This attribute ensures the database column is non-nullable
