@@ -92,7 +92,7 @@ namespace AppForSEII2526.API.Controllers
                 var paymentMethod = await _context.PaymentMethods
                     .Include(pm => pm.User)
                     .FirstOrDefaultAsync(pm => pm.Id == planForCreate.PaymentMethodId);
-                if (paymentMethod != null && paymentMethod.User!.Id != planForCreate.UserId)
+                if (paymentMethod!.User == null || paymentMethod!.User.Id != planForCreate.UserId)
                 {
                     ModelState.AddModelError("PaymentMethodId", $"Error! Payment method with id {planForCreate.PaymentMethodId} does not belong to user with id {planForCreate.UserId}.");
                 }
@@ -113,12 +113,6 @@ namespace AppForSEII2526.API.Controllers
                 if (_context.Classes.Find(classForCreate.Id) == null)
                 {
                     ModelState.AddModelError("Classes", $"Error! Class with id {classForCreate.Id} does not exist.");
-                }
-
-                // Check if payment method exists in the database
-                if (await _context.PaymentMethods.FindAsync(planForCreate.PaymentMethodId) == null)
-                {
-                    ModelState.AddModelError("PaymentMethod", $"Error! Payment method with id {planForCreate.PaymentMethodId} does not exist.");
                 }
 
                 // Check for goal property and replace with default if null. NOT ACCORDING TO REQUIREMENTS
@@ -189,15 +183,9 @@ namespace AppForSEII2526.API.Controllers
             // create PlanItems and add to Plan
             foreach (var classForCreate in planForCreate.classes)
             {
-                if (classForCreate == null)
-                {
-                    continue; // This should not happen due to previous validation
-                }
+                
                 var classEntity = await _context.Classes.FindAsync(classForCreate.Id);
-                if (classEntity == null)
-                {
-                    continue; // This should not happen due to previous validation
-                }
+                
                 PlanItem planItem = new PlanItem // Create new PlanItem without constructor because goal is required and the constructor gives problems
                 {
                     Plan = plan,
@@ -208,11 +196,7 @@ namespace AppForSEII2526.API.Controllers
                 plan.PlanItems.Add(planItem);
             }
 
-            // Last error check before inserting into database
-            if (ModelState.ErrorCount > 0)
-            {
-                return BadRequest(new ValidationProblemDetails(ModelState));
-            }
+            // No additional errors will be produced before inserting to the database
 
             // INSERT into database
             _context.Plans.Add(plan);
