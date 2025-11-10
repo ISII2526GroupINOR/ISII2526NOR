@@ -273,6 +273,19 @@ namespace AppForSEII2526.UT.PlansController_test
                 "1" // userId
             );
 
+            // Plan with TotalPrice <= 0
+            PlanForCreateDTO planZeroTotalPrice = new PlanForCreateDTO(
+                "newClass",
+                "newDescription",
+                null, // health issues
+                1, // weeks
+                new List<ClassForCreatePlanDTO>
+                {
+                },
+                1, // payment method
+                "1" // userId
+            );
+
 
 
             // Set up test cases
@@ -286,7 +299,8 @@ namespace AppForSEII2526.UT.PlansController_test
                 new object[] { planClassNotExist, $"Error! Class with id {planClassNotExist.classes.First().Id} does not exist." },
                 new object[] { planDuplicateClass, $"Error! Duplicate class with id {planDuplicateClass.classes.First().Id} found in the plan." },
                 new object[] { planFullClass, $"Error! Class with id {planFullClass.classes.First().Id} has reached its capacity limit." },
-                new object[] { planClassInPast, $"Error! Class with id {planClassInPast.classes.First().Id} is scheduled in the past." }
+                new object[] { planClassInPast, $"Error! Class with id {planClassInPast.classes.First().Id} is scheduled in the past." },
+                new object[] { planZeroTotalPrice, "Error! Total price must be greater than zero." }
             };
 
 

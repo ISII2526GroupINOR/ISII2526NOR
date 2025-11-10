@@ -183,15 +183,9 @@ namespace AppForSEII2526.API.Controllers
             // create PlanItems and add to Plan
             foreach (var classForCreate in planForCreate.classes)
             {
-                if (classForCreate == null)
-                {
-                    continue; // This should not happen due to previous validation
-                }
+                
                 var classEntity = await _context.Classes.FindAsync(classForCreate.Id);
-                if (classEntity == null)
-                {
-                    continue; // This should not happen due to previous validation
-                }
+                
                 PlanItem planItem = new PlanItem // Create new PlanItem without constructor because goal is required and the constructor gives problems
                 {
                     Plan = plan,
@@ -202,11 +196,7 @@ namespace AppForSEII2526.API.Controllers
                 plan.PlanItems.Add(planItem);
             }
 
-            // Last error check before inserting into database
-            if (ModelState.ErrorCount > 0)
-            {
-                return BadRequest(new ValidationProblemDetails(ModelState));
-            }
+            // No additional errors will be produced before inserting to the database
 
             // INSERT into database
             _context.Plans.Add(plan);
