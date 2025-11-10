@@ -33,7 +33,7 @@ namespace AppForSEII2526.API.Controllers
             
 
             //we must relate the Rental to the User
-            var user = await _context.Users.FirstOrDefaultAsync(au => au.UserName == rentalForCreate.UserNameCustomer);
+            var user = await _context.Users.FirstOrDefaultAsync(au => au.UserName == PurchaseDetailDTO.UserNameCustomer);
             if (user == null)
                 ModelState.AddModelError("RentalApplicationUser", "Error! UserName is not registered");
 
