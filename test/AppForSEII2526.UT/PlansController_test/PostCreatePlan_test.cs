@@ -1,5 +1,6 @@
 ﻿using AppForSEII2526.API.Controllers;
 using AppForSEII2526.API.DTOs.PlanDTOs;
+using AppForSEII2526.API.DTOs.ClassDTOs;
 using AppForSEII2526.API.Models;
 using AppForSEII2526.UT.AuxiliaryClasses;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AppForSEII2526.API.DTOs.RestockDTOs;
 
 namespace AppForSEII2526.UT.PlansController_test
 {
@@ -93,5 +95,54 @@ namespace AppForSEII2526.UT.PlansController_test
 
 
 
+        [Theory]
+        [Trait("LevelTesting", "Unit Testing")]
+        [MemberData(nameof(TestCasesFor_PostCreatePlan_Error))]
+        public async Task PostCreatePlan_Error_test(PlanForCreateDTO planForCreate, string expectedErrorMessage)
+        {
+            // ARRANGE
+            var mock = new Mock<ILogger<PlansController>>();
+            ILogger<PlansController> logger = mock.Object;
+            PlansController controller = new PlansController(_context, logger);
+
+            // ACT
+            var result = await controller.PostCreatePlan(planForCreate);
+
+            // ASSERT
+            var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
+            var problemDetail = Assert.IsType<ValidationProblemDetails>(badRequestResult.Value);
+            var actualErrorMessage = problemDetail.Errors.First().Value[0];
+
+            Assert.StartsWith(actualErrorMessage, expectedErrorMessage);
+        }
+
+        [Trait("LevelTesting", "Unit Testing")]
+        public static IEnumerable<Object[]> TestCasesFor_PostCreatePlan_Error()
+        {
+            // Create Input DTOs
+
+            // Bad weeks
+            PlanForCreateDTO planBadWeeks = new PlanForCreateDTO
+            (
+                "newPlan",
+                "newDescription",
+                null, // health issues
+                0, // weeks
+                new List<ClassForCreatePlanDTO>(),
+                1, // payment method
+                "1" // userId
+            );
+
+
+            // Set up test cases
+            var testCases = new List<Object[]>()
+            {
+                new object[] { planBadWeeks, "Error! Weeks must be greater than zero." }
+            };
+
+            // Return test cases
+
+            return testCases;
+        }
     }
 }
