@@ -1,7 +1,7 @@
 ﻿
 namespace AppForSEII2526.API.DTOs.ItemDTOs
 {
-    public class ItemForPurchaseDTO
+    public class ItemForPurchaseSelectDTO
     {
         public int Id { get; set; }
         [Required]
@@ -9,7 +9,7 @@ namespace AppForSEII2526.API.DTOs.ItemDTOs
         [RegularExpression(@"^[a-zA-Z0-9\s\-]+$", ErrorMessage = "Item name can only contain letters, numbers, spaces, and hyphens.")]
         public string Name { get; set; }
 
-        public ItemForPurchaseDTO(int id, string name, string typeItem, string brand, string description, int quantityAvailableForPurchase, decimal purchasePrice)
+        public ItemForPurchaseSelectDTO(int id, string name, string typeItem, string brand, string description, int quantityAvailableForPurchase, decimal purchasePrice)
         {
             Id = id;
             Name = name;
@@ -34,7 +34,7 @@ namespace AppForSEII2526.API.DTOs.ItemDTOs
 
         public override bool Equals(object? obj)
         {
-            return obj is ItemForPurchaseDTO dTO &&
+            return obj is ItemForPurchaseSelectDTO dTO &&
                    Id == dTO.Id &&
                    Name == dTO.Name &&
                    TypeItem == dTO.TypeItem &&

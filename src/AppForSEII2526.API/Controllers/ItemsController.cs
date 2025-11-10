@@ -32,12 +32,12 @@ namespace AppForSEII2526.API.Controllers
 
         [HttpGet]
         [Route("[action]")]
-        [ProducesResponseType(typeof(IList<ItemForPurchaseDTO>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IList<ItemForPurchaseSelectDTO>), (int)HttpStatusCode.OK)]
         //[ProducesResponseType(typeof(ModelError), (int)HttpStatusCode.BadRequest)]
 
         public async Task<ActionResult> GetItemsForPurchase(string? itemName, string? description, string? typeItem, string? brand)
         {
-            IList<ItemForPurchaseDTO> itemsDTOs = await _context
+            IList<ItemForPurchaseSelectDTO> itemsDTOs = await _context
                 .Items
                 .Include(i => i.TypeItem)
                 .Include(i => i.PurchaseItems)
@@ -51,7 +51,7 @@ namespace AppForSEII2526.API.Controllers
                 )
                 .OrderBy(i => i.Name)
                     .ThenBy(i => i.PurchasePrice)
-                .Select(i => new ItemForPurchaseDTO(
+                .Select(i => new ItemForPurchaseSelectDTO(
                     i.Id, i.Name, i.TypeItem.Name, i.Brand.Name, i.Description,
                     i.QuantityAvailableForPurchase, i.PurchasePrice
 
