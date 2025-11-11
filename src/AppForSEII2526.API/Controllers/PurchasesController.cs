@@ -27,36 +27,36 @@ namespace AppForSEII2526.API.Controllers
         [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.Conflict)]
         [ProducesResponseType(typeof(PurchaseDetailDTO), (int)HttpStatusCode.Created)]
-        public async Task<ActionResult> CreatePurchase(PurchaseDetailDTO purchaseDetail)
+        public async Task<ActionResult> CreatePurchase(PurchaseForCreateDTO purchaseForCreate)
         {
             //any validation defined in PurchaseForCreate is checked before running the method so they don't have to be checked again
             
-
+            /*
             //we must relate the Rental to the User
             var user = await _context.Users.FirstOrDefaultAsync(au => au.UserName == PurchaseDetailDTO.UserNameCustomer);
             if (user == null)
                 ModelState.AddModelError("RentalApplicationUser", "Error! UserName is not registered");
+            */
 
+            //we must check that all the items to be purchased exist in the database 
 
-            //we must check that all the movies to be rented exist in the database 
+            var itemIds = purchaseForCreate.Items.Select(i => i.Id).ToList<int>();
 
-            var movieTitles = rentalForCreate.RentalItems.Select(ri => ri.Title).ToList<string>();
-
-            var movies = _context.Movies.Include(m => m.RentalItems)
-                .ThenInclude(ri => ri.Rental)
+            var items = _context.Items.Include(pi => pi.PurchaseItems)
+                .ThenInclude(i => i.Purchase)
 
                 //we must check that all the movies to be rented exist in the database 
-                .Where(m => movieTitles.Contains(m.Title))
+                .Where(i => itemIds.Contains(i.Id))
 
                 //we use an anonymous type https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/types/anonymous-types
-                .Select(m => new {
-                    m.Id,
-                    m.Title,
-                    m.QuantityForRental,
-                    m.PriceForRenting,
+                .Select(i => new {
+                    i.Id,
+                    i.Name,
+                    i.QuantityAvailableForPurchase,
+                    i.PurchasePrice,
 
                     //we count the number of rentalItems that are within the rental period 
-                    NumberOfRentedItems = m.RentalItems.Count(ri => ri.Rental.RentalDateFrom <= rentalForCreate.RentalDateTo
+                    NumberOfPurchasedItems = i.PurchaseItems.Count(pi => pi.Purchase.RentalDateFrom <= rentalForCreate.RentalDateTo
                             && ri.Rental.RentalDateTo >= rentalForCreate.RentalDateFrom)
                 })
                 .ToList();
