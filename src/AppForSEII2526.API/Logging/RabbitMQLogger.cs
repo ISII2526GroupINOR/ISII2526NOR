@@ -1,6 +1,8 @@
+using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using RabbitMQ.Client;
 
 namespace AppForSEII2526.API.Logging;
@@ -84,7 +86,17 @@ public class RabbitMQLogger : ILogger, IDisposable
                 Exception = exception?.ToString()
             };
 
+            var jsonLog = JsonConvert.SerializeObject(logEntry);
+            var body = Encoding.UTF8.GetBytes(jsonLog);
+
+            _channel.BasicPublish(
+                exchange: _config.Exchange,
+                routingKey: "",
+                basicProperties: _properties,
+                body: body);
+
         }
+
         catch (Exception ex)
         {
             Console.Error.WriteLine($"Error publishing log message to RabbitMQ: {ex.Message}");
