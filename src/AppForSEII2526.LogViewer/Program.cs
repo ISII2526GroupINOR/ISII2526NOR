@@ -4,8 +4,13 @@ class Program
 {
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello World");
+        Console.WriteLine("Start program");
 
-        //Subscriber subscriber = new Subscriber();
+        Subscriber subscriber = new Subscriber();
+
+        subscriber.startConsuming();
+
+
+        Console.WriteLine("Start consuming");
     }
 }

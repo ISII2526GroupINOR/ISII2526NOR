@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
 
 public class Subscriber
 {
@@ -8,9 +9,9 @@ public class Subscriber
     private readonly string _queueName = "pedidos";
     private readonly string _exchangeName = "exchange";
 
-    private readonly string _userName = ""; 
-    private readonly string _password = "";
-    private readonly int _port = -1;
+    private readonly string _userName = "guest"; 
+    private readonly string _password = "guest";
+    private readonly int _port = 5672;
 
     private readonly IConnection _connection;
     private readonly IModel _channel;
@@ -31,11 +32,31 @@ public class Subscriber
         _properties = _channel.CreateBasicProperties();
         _properties.Persistent = true; // Hace el mensaje persistente
 
-        _channel.ExchangeDeclare(_exchangeName, ExchangeType.fanout);
+        _channel.ExchangeDeclare(_exchangeName, ExchangeType.Fanout);
 
         var tempQueue = _channel.QueueDeclare();
         var _queueName = tempQueue.QueueName;
 
         _channel.QueueBind(queue: _queueName, exchange: _exchangeName, routingKey: "");
+    }
+
+    public void startConsuming()
+    {
+        var consumer = new EventingBasicConsumer(_channel);
+
+        while(true){
+            consumer.Received += (model, ea) =>
+            {
+                var body = ea.Body.ToArray(); //contenido del mensaje (array de bytes)
+                var message = Encoding.UTF8.GetString(body); //se convierte de vuelta a string
+                Console.WriteLine($"Pedido recibido: {message}");
+            };
+
+            _channel.BasicConsume(
+                queue: _queueName,
+                autoAck: true, // Confirmación automática de recepción del mensaje
+                consumer: consumer
+            ); 
+        }
     }
 }
