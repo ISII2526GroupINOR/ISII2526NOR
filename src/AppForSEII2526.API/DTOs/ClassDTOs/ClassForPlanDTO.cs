@@ -35,8 +35,7 @@ namespace AppForSEII2526.API.DTOs.ClassDTOs
                    Id == dTO.Id &&
                    Name == dTO.Name &&
                    Price == dTO.Price &&
-                   EqualityComparer<IList<string>>.Default.Equals(TypeItems, dTO.TypeItems) &&
-                   Date == dTO.Date;
+                   TypeItems.SequenceEqual(dTO.TypeItems);
         }
     }
 }

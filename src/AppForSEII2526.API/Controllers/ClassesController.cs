@@ -48,7 +48,7 @@ namespace AppForSEII2526.API.Controllers
             int daysUntilNextMonday = daysUntilNextDayOfWeek(DayOfWeek.Monday);
             if (daysUntilNextMonday == 0) // si hoy es lunes, queremos la siguiente semana
             {
-                daysUntilNextMonday = 7;
+                daysUntilNextMonday = 7; // TEST: This line is not coverageble by unit tests unless we define an FixedClock with dependency injection. This is out of scope for the course.
             }
 
             DateOnly nextWeekMonday = DateOnly.FromDateTime(today.AddDays(daysUntilNextMonday));

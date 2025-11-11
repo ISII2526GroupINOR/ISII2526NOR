@@ -27,11 +27,6 @@ namespace AppForSEII2526.API.Controllers
         [ProducesResponseType((int) HttpStatusCode.NotFound)]
         public async Task<ActionResult> GetRestock(int id)
         {
-            if(_context.Restocks == null)
-            {
-                _logger.LogError("Error: Restock table does not exist");
-                return NotFound();
-            }
             RestockDetailDTO? restock = await _context.Restocks.
                 Where(r => r.Id == id)
                     .Include(r => r.RestockItems)
@@ -57,6 +52,12 @@ namespace AppForSEII2526.API.Controllers
         [ProducesResponseType(typeof(string), (int) HttpStatusCode.Conflict)]
         public async Task<ActionResult> CreateRestock(RestockForCreateDTO restockForCreateDTO)
         {
+            var titles = _context.Restocks.Where(r => r.Title == restockForCreateDTO.Title).Select(r => r.Title);
+            if ( titles.FirstOrDefault() == restockForCreateDTO.Title)
+            {
+                ModelState.AddModelError("RestockTitle", "Error! There´s already a restock with that title.");
+            }
+
             if (restockForCreateDTO.ExpectedDate <= DateTime.Now)
                 ModelState.AddModelError("RestockDateFrom", "Error! The expected date must start later than today.");
 
@@ -80,6 +81,7 @@ namespace AppForSEII2526.API.Controllers
                     i.Id,
                     i.Name,
                     i.Brand,
+                    i.Description,
                     i.QuantityForRestock,
                     i.RestockPrice,
                     i.QuantityAvailableForPurchase
@@ -94,15 +96,15 @@ namespace AppForSEII2526.API.Controllers
 
             foreach (var ritem in restockForCreateDTO.RestockItems)
             {
-                if (ritem == null)
-                {
-                    ModelState.AddModelError("RestockItem", "The item to restock cannot be null.");
-                    continue;
-                }
                 var item = items.FirstOrDefault(i => i.Id == ritem.Id);
                 if (item == null)
                 {
                     ModelState.AddModelError("Item", "The specified item cannot be found.");
+                    continue;
+                }
+                if (ritem.RestockQuantity <= 0)
+                {
+                    ModelState.AddModelError("Item", "You need to restock at least one item.");
                     continue;
                 }
                 var quantity = ritem.RestockQuantity + item.QuantityAvailableForPurchase;
@@ -111,7 +113,7 @@ namespace AppForSEII2526.API.Controllers
                         $" quantity to restock {ritem.RestockQuantity} of item {item.Name} must be bigger than the quantity for restock {item.QuantityForRestock}.");
                 else
                 {
-                    if (item.RestockPrice != null && restock.TotalPrice != null) //If one item had price null, ignore the following
+                    if (item.RestockPrice > 0 && restock.TotalPrice != null) //If one item had price null, ignore the following
                     {
                         restock.TotalPrice += item.RestockPrice * ritem.RestockQuantity;
                     }
@@ -121,7 +123,7 @@ namespace AppForSEII2526.API.Controllers
                     }
                     var itemToRestock = await _context.Items.FindAsync(ritem.Id);
                     restock.RestockItems.Add(new RestockItem(ritem.RestockQuantity, item.RestockPrice * ritem.RestockQuantity, restock, itemToRestock));
-                    ItemRestockDTO.Add(new ItemForRestockingDTO(ritem.Id, item.Name, item.Brand.Name, item.RestockPrice * ritem.RestockQuantity, ritem.RestockQuantity, item.QuantityAvailableForPurchase));
+                    ItemRestockDTO.Add(new ItemForRestockingDTO(ritem.Id, item.Name, item.Brand.Name, item.Description,item.RestockPrice * ritem.RestockQuantity, ritem.RestockQuantity, item.QuantityAvailableForPurchase));
                 }
             }
 
