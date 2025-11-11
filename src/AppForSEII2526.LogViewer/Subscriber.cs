@@ -2,12 +2,13 @@
 using System.Text;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using System.Text.Json;
 
 public class Subscriber
 {
-    private readonly string _hostname = "localhost";
-    private readonly string _queueName = "pedidos";
-    private readonly string _exchangeName = "exchange";
+    private readonly string _hostname = "10.81.139.157";
+    private readonly string _queueName = "";
+    private readonly string _exchangeName = "logs";
 
     private readonly string _userName = "guest"; 
     private readonly string _password = "guest";
@@ -32,7 +33,7 @@ public class Subscriber
         _properties = _channel.CreateBasicProperties();
         _properties.Persistent = true; // Hace el mensaje persistente
 
-        _channel.ExchangeDeclare(_exchangeName, ExchangeType.Fanout);
+        _channel.ExchangeDeclare(_exchangeName, ExchangeType.Fanout, true);
 
         var tempQueue = _channel.QueueDeclare();
         var _queueName = tempQueue.QueueName;
@@ -49,6 +50,10 @@ public class Subscriber
             {
                 var body = ea.Body.ToArray(); //contenido del mensaje (array de bytes)
                 var message = Encoding.UTF8.GetString(body); //se convierte de vuelta a string
+
+                
+                //var json = JsonSerializer.Deserialize(message);
+
                 Console.WriteLine($"Pedido recibido: {message}");
             };
 
