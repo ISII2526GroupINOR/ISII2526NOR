@@ -116,10 +116,10 @@ namespace AppForSEII2526.API.Controllers
                 }
 
                 // Check for goal property and replace with default if null. NOT ACCORDING TO REQUIREMENTS
-                if (classForCreate.goal == null)
-                {
-                    classForCreate.goal = "Have fun!";
-                }
+                //if (classForCreate.goal == null)
+                //{
+                //    classForCreate.goal = "Have fun!";
+                //}
 
                 // Check for duplicate classes in the plan
                 if (planForCreate.classes.Count(c => c.Id == classForCreate.Id) > 1)
