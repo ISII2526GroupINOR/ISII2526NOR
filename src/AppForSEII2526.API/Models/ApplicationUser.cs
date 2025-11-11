@@ -4,6 +4,24 @@ namespace AppForSEII2526.API.Models;
 
 // Add profile data for application users by adding properties to the ApplicationUser class
 public class ApplicationUser : IdentityUser {
+    public ApplicationUser()
+    {
+        // Ignore warning about uninitialized non-nullable properties.
+    }
+
+    public ApplicationUser(string name, string surname) // Lists not included
+    {
+        Name = name;
+        Surname = surname;
+    }
+
+    public ApplicationUser(string name, string surname, string username) // Lists not included
+    {
+        Name = name;
+        Surname = surname;
+        UserName = username;
+    }
+
     // Id is a string and is inherited from IdentityUser
 
     [Required] // This attribute ensures the database column is non-nullable

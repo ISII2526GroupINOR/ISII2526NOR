@@ -20,6 +20,7 @@ namespace AppForSEII2526.API.DTOs.RestockDTOs
             RestockResponsible = restockResponsible;
         }
 
+        [StringLength(50, ErrorMessage = "Title can´t be more than 50 characters")]
         public string Title { get; set; }
         public string DeliveryAddress { get; set; }
         [StringLength(100, ErrorMessage = "Description can´t be more than 100 characters.")]
@@ -40,7 +41,7 @@ namespace AppForSEII2526.API.DTOs.RestockDTOs
                    Description == dTO.Description &&
                    ExpectedDate == dTO.ExpectedDate &&
                    RestockDate == dTO.RestockDate &&
-                   EqualityComparer<IList<ItemForCreateRestockDTO>>.Default.Equals(RestockItems, dTO.RestockItems) &&
+                   RestockItems.SequenceEqual(dTO.RestockItems) &&
                    RestockResponsible == dTO.RestockResponsible;
         }
     }
