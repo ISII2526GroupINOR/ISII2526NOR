@@ -36,6 +36,6 @@ public class Subscriber
         var tempQueue = _channel.QueueDeclare();
         var _queueName = tempQueue.QueueName;
 
-        _channel.QueueBind(queue: queueName, exchange: exchangeName, routingKey: "");
+        _channel.QueueBind(queue: _queueName, exchange: _exchangeName, routingKey: "");
     }
 }
