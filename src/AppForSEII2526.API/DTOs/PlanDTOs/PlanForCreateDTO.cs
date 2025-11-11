@@ -6,6 +6,21 @@ namespace AppForSEII2526.API.DTOs.PlanDTOs
 {
     public class PlanForCreateDTO
     {
+        public PlanForCreateDTO()
+        {
+        }
+
+        public PlanForCreateDTO(string name, string? description, string? healthIssues, int weeks, IList<ClassForCreatePlanDTO> classes, int paymentMethodId, string? userId)
+        {
+            Name = name;
+            Description = description;
+            HealthIssues = healthIssues;
+            Weeks = weeks;
+            this.classes = classes;
+            PaymentMethodId = paymentMethodId;
+            UserId = userId;
+        }
+
         [Required]
         [StringLength(128, ErrorMessage = "Plan name cannot be longer than 128 characters.")]
         [RegularExpression(@"^[a-zA-Z0-9\s\-]+$", ErrorMessage = "Plan name can only contain letters, numbers, spaces, and hyphens.")]
@@ -30,7 +45,5 @@ namespace AppForSEII2526.API.DTOs.PlanDTOs
 
         [Required]
         public string? UserId { get; set; } // Used to identify the user creating the plan
-
-        // TODO: Missing PaymentMethod information
     }
 }
