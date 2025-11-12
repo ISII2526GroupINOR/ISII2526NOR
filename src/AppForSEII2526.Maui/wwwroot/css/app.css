@@ -1,5 +1,6 @@
 ﻿html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background: #EEFFED;
 }
 
 .center {
@@ -8,6 +9,7 @@
     padding: 10px;
     justify-content: center;
     align-content: center;
+    gap: 20px;
 }
 
 .logo {
@@ -20,14 +22,19 @@
     border-radius: 40px;
     justify-content: center;
     margin-bottom: 20px;
+    border-radius: 12px;
 }
 
-.home-buttons {
+.light-home-buttons {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 20px;
     margin: 20px;
+    color: #FFFFFF;
+    background: #6DD970;
+    border-radius: 12px;
+    padding: 10px 20px;
 }
 
 a, .btn-link {
