@@ -55,40 +55,44 @@ namespace AppForSEII2526.API.Controllers
                     i.QuantityAvailableForPurchase,
                     i.PurchasePrice,
 
-                    //we count the number of rentalItems that are within the rental period 
-                    NumberOfPurchasedItems = i.PurchaseItems.Count(pi => pi.Purchase.RentalDateFrom <= rentalForCreate.RentalDateTo
-                            && ri.Rental.RentalDateTo >= rentalForCreate.RentalDateFrom)
                 })
                 .ToList();
 
 
 
             //we must provide rental with the info to be saved in the database
-            Rental rental = new Rental(rentalForCreate.DeliveryAddress, rentalForCreate.NameCustomer,
-                rentalForCreate.SurnameCustomer, user, rentalForCreate.RentalDateFrom, rentalForCreate.RentalDateTo,
-                rentalForCreate.PaymentMethod, new List<RentalItem>());
+            Purchase purchase = new Purchase(
+                purchaseForCreate.Id,
+                purchaseForCreate.City, purchaseForCreate.Country,
+                purchaseForCreate.Street, DateTime.Now, purchaseForCreate.Description,
+                purchaseForCreate.Total_price, purchaseForCreate.Items,
+                purchaseForCreate.Payment_method);
 
 
 
 
-            foreach (var item in rentalForCreate.RentalItems)
+
+            foreach (var pitem in purchaseForCreate.Items)
             {
-                var movie = movies.FirstOrDefault(m => m.Title == item.Title);
+                var item = items.FirstOrDefault(i => i.Id == i.Id);
+
                 //we must check that there is enough quantity to be rented in the database
-                if ((movie == null) || (movie.NumberOfRentedItems >= movie.QuantityForRental))
+                if ((item == null) || (pitem.Quantity >= item.QuantityAvailableForPurchase))
                 {
-                    ModelState.AddModelError("RentalItems", $"Error! Movie titled '{item.Title}' is not available for being rented from {rentalForCreate.RentalDateFrom.ToShortDateString()} to {rentalForCreate.RentalDateTo.ToShortDateString()}");
+                    ModelState.AddModelError("RentalItems", $"Error! Item titled '{item.Name}' is not available in the quantity selected");
                 }
                 else
                 {
                     // rental does not exist in the database yet and does not have a valid Id, so we must relate rentalitem to the object rental
-                    rental.RentalItems.Add(new RentalItem(movie.Id, rental, movie.PriceForRenting, item.Description));
+                    purchase.PurchaseItems.Add(new PurchaseItem(
+                        pitem, pitem.Id, purchase, purchase.Id, pitem.Quantity, pitem.PurchasePrice
+                        )
+
                     item.PriceForRenting = movie.PriceForRenting;
                 }
             }
 
-            decimal numDays = (decimal)(rental.RentalDateTo - rental.RentalDateFrom).TotalDays;
-            rental.CostofRental = rental.RentalItems.Sum(ri => ri.Price * numDays);
+
 
             //if there is any problem because of the available quantity of movies or because any movie does not exist
             if (ModelState.ErrorCount > 0)
@@ -96,7 +100,7 @@ namespace AppForSEII2526.API.Controllers
                 return BadRequest(new ValidationProblemDetails(ModelState));
             }
 
-            _context.Add(rental);
+            _context.Add(purchase);
 
             try
             {
@@ -111,13 +115,13 @@ namespace AppForSEII2526.API.Controllers
 
             }
 
-            var rentalDetail = new RentalForDetailDTO(rental.Id, rental.CostofRental,
-                rental.RentalDate, rental.DeliveryAddress, rental.NameCustomer, rental.SurnameCustomer,
-                rental.RentalDateFrom, rental.RentalDateTo, rental.PaymentMethod,
+            var purchaseDetail = new PurchaseDetailDTO(purchase.Id, purchase.Description, 
+                purchase.Street, purchase.City, purchase.Country, purchase.TotalPrice,
+                purchase.paymentMethod, purchase.PurchaseItems
+                )
 
-                rental.Customer.UserName!, rentalForCreate.RentalItems);
 
-            return CreatedAtAction("GetRental", new { id = rental.Id }, rentalDetail);
+            return CreatedAtAction("GetPurchase", new { id = purchase.Id }, purchaseDetail);
 
         }
     }

@@ -3,6 +3,20 @@
     [Index (nameof(Id), IsUnique = true)]
     public class Purchase
     {
+        public Purchase(int id, string city, string country, string street, 
+            DateTime date, string? description, decimal totalPrice, 
+            IList<PurchaseItem>? purchaseItems, PaymentMethod paymentMethod)
+        {
+            Id = id;
+            City = city;
+            Country = country;
+            Date = date;
+            Description = description;
+            Street = street;
+            TotalPrice = totalPrice;
+            PurchaseItems = purchaseItems;
+            this.paymentMethod = paymentMethod;
+        }
 
         public int Id { get; set; }
         [RegularExpression(@"^[A-Z][a-zA-z ]*$")]
