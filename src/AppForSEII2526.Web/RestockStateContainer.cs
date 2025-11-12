@@ -18,7 +18,7 @@ namespace AppForSEII2526.Web
         {
             if(!Restock.RestockItems.Any(ri => ri.Id == item.Id))
             {
-                Restock.RestockItems.Add(new ItemForCreateRestockDTO(item.Id, restockQuantity));
+                Restock.RestockItems.Add(new ItemForCreateRestockDTO { Id = item.Id, RestockQuantity = restockQuantity });
             }
         }
 
