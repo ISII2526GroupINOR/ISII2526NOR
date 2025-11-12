@@ -16,7 +16,7 @@ namespace AppForSEII2526.Maui {
     		builder.Services.AddBlazorWebViewDeveloperTools();
     		builder.Logging.AddDebug();
 #endif
-
+            builder.Services.AddBlazorBootstrap();
             return builder.Build();
         }
     }
