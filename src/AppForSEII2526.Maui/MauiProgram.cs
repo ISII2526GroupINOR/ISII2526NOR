@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using AppForSEII2526.Maui.Services;
+using Microsoft.Extensions.Logging;
 
 namespace AppForSEII2526.Maui {
     public static class MauiProgram {
@@ -17,6 +18,7 @@ namespace AppForSEII2526.Maui {
     		builder.Logging.AddDebug();
 #endif
             builder.Services.AddBlazorBootstrap();
+            builder.Services.AddScoped<LanguageServices>();
             return builder.Build();
         }
     }
