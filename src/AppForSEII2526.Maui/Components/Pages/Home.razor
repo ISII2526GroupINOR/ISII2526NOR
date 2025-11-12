@@ -4,18 +4,24 @@
 
 <h1>@AppResources.WelcomeMessage</h1>
 
-Welcome to your new app.
+<div class="Home Page">
+    <div class="center">
+        <img alt="Here goes the Logo" src="Images/logo.png" class="logo">
 
-<select @onchange="@(e => LanguageServices.SetLanguage(e.Value?.ToString() ?? "es"))">
-    <option value="es">Español</option>
-    <option value="en">English</option>
-</select>
+        <button class="btn btn-primary" @onclick="IrLogin"> @AppResources.LoginButton</button>
+
+        <select @onchange="@(e => LanguageServices.SetLanguage(e.Value?.ToString() ?? "es"))">
+            <option value="es">Español</option>
+            <option value="en">English</option>
+        </select>
+    </div>
+</div>
 
 @code {
     [Inject] NavigationManager Nav { get; set; }
     bool ShowLan = true;
 
-    void IrLogin() => Nav.NavigateTo("/Boot");
+    void IrLogin() => Nav.NavigateTo("/Counter");
 
     void ToggleLan()
     {
