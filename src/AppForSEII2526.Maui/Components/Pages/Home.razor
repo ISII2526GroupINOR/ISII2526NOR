@@ -1,5 +1,27 @@
 ﻿@page "/"
+@inject Services.LanguageServices LanguageServices
 
 <h1>Hello, world!</h1>
 
 Welcome to your new app.
+
+@if (ShowLan)
+{
+    <select @onchange="@(e => LanguageServices.SetLanguage(e.Value?.ToString() ?? "es"))">
+        <option value="es">Español</option>
+        <option value="en">English</option>
+    </select>
+}
+
+
+@code {
+    [Inject] NavigationManager Nav { get; set; }
+    bool ShowLan = false;
+
+    void IrLogin() => Nav.NavigateTo("/Boot");
+
+    void ToggleLan()
+    {
+        ShowLan = !ShowLan;
+    }
+}
