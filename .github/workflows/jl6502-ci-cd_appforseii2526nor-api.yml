@@ -6,10 +6,7 @@ name: Build and deploy ASP.Net Core app to Azure Web App - appforseii2526nor-api
 on:
   push:
     branches:
-#       - JL6502-CI-CD
-       - development
-    paths:
-      - 'src/AppForSEII2526.API**'
+      - JL6502-CI-CD
   workflow_dispatch:
 
 jobs:
@@ -17,35 +14,20 @@ jobs:
     runs-on: windows-latest
     permissions:
       contents: read #This is required for actions/checkout
-    env:
-      API: ./src/AppForSEII2526.API/AppForSEII2526.API.csproj
-      UT:  ./test/AppForSEII2526.UT/AppForSEII2526.UT.csproj
-
 
     steps:
-      - name: Check out repository code branch development
-        uses: actions/checkout@v4
-        with:
-            ref: 'development'
+      - uses: actions/checkout@v4
 
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.x'
 
-      - name: Restore dependencies        
-        run: |  
-          dotnet restore ${{ env.API }} 
-          dotnet restore ${{ env.UT }} 
       - name: Build with dotnet
-        run: |
-          dotnet build ${{ env.API }}  --configuration Release --no-restore
-          dotnet build ${{ env.UT }}  --configuration Release --no-restore
-      - name: Run unit tests with report
-        run: dotnet test ${{ env.UT }} --configuration Release --no-build --logger "trx;LogFileName=TestResults.trx"
+        run: dotnet build --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish ${{ env.API }}  -c Release -o "${{env.DOTNET_ROOT}}/myapp"
+        run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/myapp"
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -69,9 +51,9 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_1429FB28C75E4229979DB6459DBCCFCB }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_FF1A9E2E28E74AC4A46DFE996E30076D }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_83A03BD53B934205B5EDE13521F265A8 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_45085BC1EB4E4FED8F1A7902F79EAA0E }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_F9CC5D4774764386A35D4AF197D8B47A }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_F3B3537291D749569F3AA8324D99BB9F }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
@@ -80,6 +62,4 @@ jobs:
           app-name: 'appforseii2526nor-api'
           slot-name: 'Production'
           package: .
-
           
-
