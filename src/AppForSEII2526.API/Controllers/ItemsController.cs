@@ -35,24 +35,22 @@ namespace AppForSEII2526.API.Controllers
         [ProducesResponseType(typeof(IList<ItemForPurchaseSelectDTO>), (int)HttpStatusCode.OK)]
         //[ProducesResponseType(typeof(ModelError), (int)HttpStatusCode.BadRequest)]
 
-        public async Task<ActionResult> GetItemsForPurchase(string? itemName, string? description, string? typeItem, string? brand)
+        public async Task<ActionResult> GetItemsForPurchase(string? itemName, string? description, string? brand)
         {
             IList<ItemForPurchaseSelectDTO> itemsDTOs = await _context
                 .Items
-                .Include(i => i.TypeItem)
                 .Include(i => i.PurchaseItems)
                     .ThenInclude(pi => pi.Purchase)
                 .Where(i =>
                     (i.Name.Contains(itemName) || itemName == null) &&
                     (i.Description.Contains(description) || description == null) &&
-                    (i.TypeItem.Name.Equals(typeItem) || typeItem == null) &&
                     (i.Brand.Name.Equals(brand) || brand == null) &&
                     (i.QuantityAvailableForPurchase > 0)
                 )
                 .OrderBy(i => i.Name)
                     .ThenBy(i => i.PurchasePrice)
                 .Select(i => new ItemForPurchaseSelectDTO(
-                    i.Id, i.Name, i.TypeItem.Name, i.Brand.Name, i.Description,
+                    i.Id, i.Name, i.Brand.Name, i.Description,
                     i.QuantityAvailableForPurchase, i.PurchasePrice
 
                     ))

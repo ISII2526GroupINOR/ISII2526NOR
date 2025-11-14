@@ -3,7 +3,8 @@
     [PrimaryKey(nameof(ItemId), nameof(PurchaseId))]
     public class PurchaseItem
     {
-        public PurchaseItem(Item? item, int itemId, Purchase? purchase, int purchaseId, int amountBought, decimal price)
+        public PurchaseItem(Item? item, int itemId, Purchase? purchase, int purchaseId,
+            int amountBought, decimal price)
         {
             Item = item;
             ItemId = itemId;

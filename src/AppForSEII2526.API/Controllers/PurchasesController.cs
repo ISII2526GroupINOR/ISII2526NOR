@@ -7,6 +7,9 @@ using System.Collections.Generic;
 
 namespace AppForSEII2526.API.Controllers
 {
+
+
+
     [Route("api/[controller]")]
     [ApiController]
     public class PurchasesController : ControllerBase
@@ -20,7 +23,48 @@ namespace AppForSEII2526.API.Controllers
             _logger = logger;
         }
 
-        
+
+        [HttpGet]
+        [Route("[action]")]
+        [ProducesResponseType(typeof(PurchaseDetailDTO), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+
+        public async Task<ActionResult> GetPurchase(int id)
+        {
+            PurchaseDetailDTO? purchase = await _context.Purchases
+                .Where(p => p.Id == id)
+                .Include(p => p.PurchaseItems)
+                    .ThenInclude(pi => pi.Item)
+                        .ThenInclude(item => item.Brand)
+
+                .Select(p => new PurchaseDetailDTO(p.Id, p.Description, p.Street, p.City, p.Country,
+                    p.TotalPrice, p.paymentMethod,
+
+                    p.PurchaseItems
+                    .Select(
+                        pi => new ItemForPurchaseCreateDTO(pi.Item.Id, pi.Item.Name, pi.Item.Brand.Name,
+                            pi.Item.Description, pi.AmountBought, pi.Item.PurchasePrice)
+
+
+                        ).ToList()
+                    )
+                )
+                .FirstOrDefaultAsync();
+
+
+            if (purchase == null)
+            {
+                _logger.LogError($"Error: Purchase with id {id} does not exist");
+                return NotFound();
+            }
+
+
+            return Ok(purchase);
+        }
+
+
+
+
         [HttpPost]
         [Route("[action]")]
 
@@ -48,14 +92,6 @@ namespace AppForSEII2526.API.Controllers
                 //we must check that all the movies to be rented exist in the database 
                 .Where(i => itemIds.Contains(i.Id))
 
-                //we use an anonymous type https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/types/anonymous-types
-                .Select(i => new {
-                    i.Id,
-                    i.Name,
-                    i.QuantityAvailableForPurchase,
-                    i.PurchasePrice,
-
-                })
                 .ToList();
 
 
@@ -65,16 +101,17 @@ namespace AppForSEII2526.API.Controllers
                 purchaseForCreate.Id,
                 purchaseForCreate.City, purchaseForCreate.Country,
                 purchaseForCreate.Street, DateTime.Now, purchaseForCreate.Description,
-                purchaseForCreate.Total_price, purchaseForCreate.Items,
-                purchaseForCreate.Payment_method);
+                purchaseForCreate.Total_price, new List<PurchaseItem>(),
+                purchaseForCreate.Payment_method
+                );
 
 
-
+            //int totalPrice = 0;
 
 
             foreach (var pitem in purchaseForCreate.Items)
             {
-                var item = items.FirstOrDefault(i => i.Id == i.Id);
+                Item item = items.FirstOrDefault(i => i.Id == i.Id);
 
                 //we must check that there is enough quantity to be rented in the database
                 if ((item == null) || (pitem.Quantity >= item.QuantityAvailableForPurchase))
@@ -83,14 +120,16 @@ namespace AppForSEII2526.API.Controllers
                 }
                 else
                 {
+                    
                     // rental does not exist in the database yet and does not have a valid Id, so we must relate rentalitem to the object rental
-                    purchase.PurchaseItems.Add(new PurchaseItem(
-                        pitem, pitem.Id, purchase, purchase.Id, pitem.Quantity, pitem.PurchasePrice
-                        )
+                    purchase.PurchaseItems.Add(new Item(
+                         item, pitem.Id, purchase, purchase.Id, pitem.Quantity, pitem.PurchasePrice
+                        ));
 
-                    item.PriceForRenting = movie.PriceForRenting;
+                    //totalPrice += pitem.PriceForRenting;
                 }
             }
+
 
 
 
@@ -115,10 +154,10 @@ namespace AppForSEII2526.API.Controllers
 
             }
 
-            var purchaseDetail = new PurchaseDetailDTO(purchase.Id, purchase.Description, 
+            var purchaseDetail = new PurchaseDetailDTO(purchase.Id, purchase.Description,
                 purchase.Street, purchase.City, purchase.Country, purchase.TotalPrice,
                 purchase.paymentMethod, purchase.PurchaseItems
-                )
+                );
 
 
             return CreatedAtAction("GetPurchase", new { id = purchase.Id }, purchaseDetail);
