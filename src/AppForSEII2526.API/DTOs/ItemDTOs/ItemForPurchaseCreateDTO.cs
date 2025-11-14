@@ -1,7 +1,7 @@
 ﻿
 namespace AppForSEII2526.API.DTOs.ItemDTOs
 {
-    public class ItemForPurchaseDTO
+    public class ItemForPurchaseCreateDTO
     {
         public int Id { get; set; }
         [Required]
@@ -9,24 +9,23 @@ namespace AppForSEII2526.API.DTOs.ItemDTOs
         [RegularExpression(@"^[a-zA-Z0-9\s\-]+$", ErrorMessage = "Item name can only contain letters, numbers, spaces, and hyphens.")]
         public string Name { get; set; }
 
-        public ItemForPurchaseDTO(int id, string name, string typeItem, string brand, string description, int quantityAvailableForPurchase, decimal purchasePrice)
+        public ItemForPurchaseCreateDTO(int id, string name, string brand, string description, int quantity, decimal purchasePrice)
         {
             Id = id;
             Name = name;
-            TypeItem = typeItem;
             Brand = brand;
             Description = description;
-            QuantityAvailableForPurchase = quantityAvailableForPurchase;
+            Quantity = quantity;
             PurchasePrice = purchasePrice;
         }
 
-        public string TypeItem { get; set; }
+
 
         public string Brand { get; set; }
         public string Description { get; set; }
 
         [Required]
-        public int QuantityAvailableForPurchase { get; set; }
+        public int Quantity { get; set; }
 
         [Required]
         [Precision(5, 2)]
@@ -34,13 +33,12 @@ namespace AppForSEII2526.API.DTOs.ItemDTOs
 
         public override bool Equals(object? obj)
         {
-            return obj is ItemForPurchaseDTO dTO &&
+            return obj is ItemForPurchaseCreateDTO dTO &&
                    Id == dTO.Id &&
                    Name == dTO.Name &&
-                   TypeItem == dTO.TypeItem &&
                    Brand == dTO.Brand &&
                    Description == dTO.Description &&
-                   QuantityAvailableForPurchase == dTO.QuantityAvailableForPurchase &&
+                   Quantity == dTO.Quantity &&
                    PurchasePrice == dTO.PurchasePrice;
         }
     }
