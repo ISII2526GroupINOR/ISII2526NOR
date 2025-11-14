@@ -3,6 +3,22 @@
     [Index(nameof(Title), IsUnique = true)]
     public class Restock
     {
+        public Restock()
+        {
+        }
+
+        public Restock(string title, string deliveryAddress, string? description, DateTime expectedDate, DateTime restockDate, decimal? totalPrice, IList<RestockItem> restockItems, ApplicationUser restockResponsible)
+        {
+            Title = title;
+            DeliveryAddress = deliveryAddress;
+            Description = description;
+            ExpectedDate = expectedDate;
+            RestockDate = restockDate;
+            TotalPrice = totalPrice;
+            RestockItems = restockItems;
+            RestockResponsible = restockResponsible;
+        }
+
         public int Id { get; set; }
         [StringLength(50, ErrorMessage ="Title can´t be more than 50 characters")]
         public string Title { get; set; }

@@ -1,12 +1,15 @@
 ﻿using AppForSEII2526.API.DTOs.ApplicationUserDTOs;
 using AppForSEII2526.API.DTOs.ClassDTOs;
 using DataType = System.ComponentModel.DataAnnotations.DataType; // To avoid ambiguity
-
+using System; // for Math, TimeSpan (may be provided by global usings)
+using System.Linq;
 
 namespace AppForSEII2526.API.DTOs.PlanDTOs
 {
     public class PlanDetailDTO
     {
+        public const decimal TimeError = 12.000m; // seconds
+
         public PlanDetailDTO(string name, string? description, DateTime createdDate, string? healthIssues, decimal totalPrice, int weeks, ApplicationUserForPlanDetailDTO? user, IList<ClassForPlanDTO> classes)
         {
             Name = name;
@@ -50,12 +53,13 @@ namespace AppForSEII2526.API.DTOs.PlanDTOs
             return obj is PlanDetailDTO dTO &&
                    Name == dTO.Name &&
                    Description == dTO.Description &&
-                   CreatedDate == dTO.CreatedDate &&
+                   // Compare CreatedDate as UTC with an absolute tolerance of TimeError seconds
+                   Math.Abs((CreatedDate.ToUniversalTime() - dTO.CreatedDate.ToUniversalTime()).TotalSeconds) <= (double)TimeError &&
                    HealthIssues == dTO.HealthIssues &&
                    TotalPrice == dTO.TotalPrice &&
                    Weeks == dTO.Weeks &&
                    EqualityComparer<ApplicationUserForPlanDetailDTO?>.Default.Equals(User, dTO.User) &&
-                   EqualityComparer<IList<ClassForPlanDTO>>.Default.Equals(Classes, dTO.Classes);
+                   Classes.SequenceEqual(dTO.Classes);
         }
     }
 }
