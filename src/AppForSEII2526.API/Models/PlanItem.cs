@@ -27,9 +27,8 @@ namespace AppForSEII2526.API.Models
 
         // Entity attributes
 
-        [Required]
         [StringLength(4096, ErrorMessage = "Goal information cannot contain more than 4096 characters.")]
-        public required string Goal { get; set; }
+        public string? Goal { get; set; }
 
         [Precision(5, 2)]
         [DataType(DataType.Currency)]
