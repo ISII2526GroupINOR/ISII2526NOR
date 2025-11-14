@@ -1,3 +1,4 @@
+using AppForSEII2526.API.Logging;
 using Microsoft.Data.Sqlite;
 using System.Data.Common;
 
@@ -66,6 +67,26 @@ builder.Services.AddSwaggerGen(options => {
 
 });
 
+// Add RabbitMQ Logging and configure from appsettings.json
+// Credential configuration is overridden from environment variables for security
+
+// prefer explicit env vars for username/password (accept both RABBITMQ__USER and RABBITMQ_USER forms)
+var envUser = Environment.GetEnvironmentVariable("RABBITMQ__USERNAME")
+           ?? Environment.GetEnvironmentVariable("RABBITMQ_USERNAME");
+var envPass = Environment.GetEnvironmentVariable("RABBITMQ__PASSWORD")
+           ?? Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD");
+
+if (!string.IsNullOrEmpty(envUser))
+{
+    builder.Configuration["RabbitMQ:UserName"] = envUser;
+}
+
+if (!string.IsNullOrEmpty(envPass))
+{
+    builder.Configuration["RabbitMQ:Password"] = envPass;
+}
+
+builder.Logging.AddRabbitMQ(builder.Configuration.GetSection("RabbitMQ"));
 
 var app = builder.Build();
 
