@@ -1,0 +1,48 @@
+﻿
+using AppForSEII2526.API.DTOs.ItemDTOs;
+
+namespace AppForSEII2526.API.DTOs.RestockDTOs
+{
+    public class RestockForCreateDTO
+    {
+        public RestockForCreateDTO()
+        {
+        }
+
+        public RestockForCreateDTO(string title, string deliveryAddress, string? description, DateTime expectedDate, DateTime restockDate, IList<ItemForCreateRestockDTO> restockItems, string restockResponsible)
+        {
+            Title = title;
+            DeliveryAddress = deliveryAddress;
+            Description = description;
+            ExpectedDate = expectedDate;
+            RestockDate = restockDate;
+            RestockItems = restockItems;
+            RestockResponsible = restockResponsible;
+        }
+
+        [StringLength(50, ErrorMessage = "Title can´t be more than 50 characters")]
+        public string Title { get; set; }
+        public string DeliveryAddress { get; set; }
+        [StringLength(100, ErrorMessage = "Description can´t be more than 100 characters.")]
+        public string? Description { get; set; }
+        [DataType(System.ComponentModel.DataAnnotations.DataType.Date)]
+        public DateTime ExpectedDate { get; set; }
+        [DataType(System.ComponentModel.DataAnnotations.DataType.Date)]
+        public DateTime RestockDate { get; set; }
+
+        public IList<ItemForCreateRestockDTO> RestockItems { get; set; }
+        public string RestockResponsible { get; set; }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is RestockForCreateDTO dTO &&
+                   Title == dTO.Title &&
+                   DeliveryAddress == dTO.DeliveryAddress &&
+                   Description == dTO.Description &&
+                   ExpectedDate == dTO.ExpectedDate &&
+                   RestockDate == dTO.RestockDate &&
+                   RestockItems.SequenceEqual(dTO.RestockItems) &&
+                   RestockResponsible == dTO.RestockResponsible;
+        }
+    }
+}
