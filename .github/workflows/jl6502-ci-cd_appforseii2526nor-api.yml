@@ -7,7 +7,7 @@ on:
   push:    
     branches:
 #       - JL6502-CI-CD
-       - development
+      - development
     paths:
       - 'src/AppForMovies.API**'
   workflow_dispatch:
@@ -83,4 +83,5 @@ jobs:
           package: .
 
           
+
 
