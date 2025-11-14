@@ -5,7 +5,7 @@ namespace AppForSEII2526.API.DTOs.PurchaseDTOs
     public class PurchaseForCreateDTO
     {
         public PurchaseForCreateDTO(int id, string? description, string street, string city, 
-            string country, decimal total_price, PaymentMethod payment_method, IList<ItemForPurchaseCreateDTO> items)
+            string country, decimal total_price, int payment_methodId, IList<ItemForPurchaseCreateDTO> items)
         {
             Id = id;
             Description = description;
@@ -13,7 +13,7 @@ namespace AppForSEII2526.API.DTOs.PurchaseDTOs
             City = city;
             Country = country;
             Total_price = total_price;
-            Payment_method = payment_method;
+            Payment_methodId = payment_methodId;
             IList<ItemForPurchaseCreateDTO> Items = items;
         }
 
@@ -24,7 +24,7 @@ namespace AppForSEII2526.API.DTOs.PurchaseDTOs
         public string City { get; set; }
         public string Country { get; set; }
         public decimal Total_price { get; set; }
-        public PaymentMethod Payment_method { get; set; }
+        public int Payment_methodId { get; set; }
         public IList<ItemForPurchaseCreateDTO> Items { get; set; }
 
         public override bool Equals(object? obj)
@@ -36,7 +36,7 @@ namespace AppForSEII2526.API.DTOs.PurchaseDTOs
                    City == dTO.City &&
                    Country == dTO.Country &&
                    Total_price == dTO.Total_price &&
-                   EqualityComparer<PaymentMethod>.Default.Equals(Payment_method, dTO.Payment_method) &&
+                   Payment_methodId == dTO.Payment_methodId &&
                    EqualityComparer<IList<ItemForPurchaseCreateDTO>>.Default.Equals(Items, dTO.Items);
         }
     }

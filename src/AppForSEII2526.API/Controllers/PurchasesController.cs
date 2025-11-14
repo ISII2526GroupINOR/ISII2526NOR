@@ -38,7 +38,7 @@ namespace AppForSEII2526.API.Controllers
                         .ThenInclude(item => item.Brand)
 
                 .Select(p => new PurchaseDetailDTO(p.Id, p.Description, p.Street, p.City, p.Country,
-                    p.TotalPrice, p.paymentMethod,
+                    p.TotalPrice, p.paymentMethod.Id,
 
                     p.PurchaseItems
                     .Select(
@@ -96,17 +96,27 @@ namespace AppForSEII2526.API.Controllers
 
 
 
+            PaymentMethod paymentMethod = await _context.PaymentMethods.FindAsync(purchaseForCreate.Payment_methodId);
+
+
+            if (paymentMethod == null)
+            {
+                ModelState.AddModelError("PaymentMethodId", $"Payment method with id {purchaseForCreate.Payment_methodId} not found");
+            }
+
             //we must provide rental with the info to be saved in the database
             Purchase purchase = new Purchase(
                 purchaseForCreate.Id,
                 purchaseForCreate.City, purchaseForCreate.Country,
                 purchaseForCreate.Street, DateTime.Now, purchaseForCreate.Description,
                 purchaseForCreate.Total_price, new List<PurchaseItem>(),
-                purchaseForCreate.Payment_method
+                paymentMethod
                 );
 
 
-            //int totalPrice = 0;
+            decimal totalPrice = 0;
+
+            IList<ItemForPurchaseCreateDTO> itemsForPurchase = new List<ItemForPurchaseCreateDTO>();
 
 
             foreach (var pitem in purchaseForCreate.Items)
@@ -122,11 +132,16 @@ namespace AppForSEII2526.API.Controllers
                 {
                     
                     // rental does not exist in the database yet and does not have a valid Id, so we must relate rentalitem to the object rental
-                    purchase.PurchaseItems.Add(new Item(
+                    purchase.PurchaseItems.Add(new PurchaseItem(
                          item, pitem.Id, purchase, purchase.Id, pitem.Quantity, pitem.PurchasePrice
                         ));
 
-                    //totalPrice += pitem.PriceForRenting;
+                    itemsForPurchase.Add(new ItemForPurchaseCreateDTO(pitem.Id, pitem.Name,
+                        pitem.Brand, pitem.Description, pitem.Quantity, pitem.PurchasePrice));
+
+                    totalPrice += pitem.PurchasePrice * pitem.Quantity;
+
+
                 }
             }
 
@@ -155,8 +170,8 @@ namespace AppForSEII2526.API.Controllers
             }
 
             var purchaseDetail = new PurchaseDetailDTO(purchase.Id, purchase.Description,
-                purchase.Street, purchase.City, purchase.Country, purchase.TotalPrice,
-                purchase.paymentMethod, purchase.PurchaseItems
+                purchase.Street, purchase.City, purchase.Country, totalPrice,
+                purchase.paymentMethod.Id, itemsForPurchase
                 );
 
 
