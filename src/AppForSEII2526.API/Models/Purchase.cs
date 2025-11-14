@@ -3,6 +3,10 @@
     [Index (nameof(Id), IsUnique = true)]
     public class Purchase
     {
+        public Purchase()
+        {
+            PurchaseItems = new List<PurchaseItem>();
+        }
         public Purchase(int id, string city, string country, string street, 
             DateTime date, string? description, decimal totalPrice, 
             IList<PurchaseItem>? purchaseItems, PaymentMethod paymentMethod)

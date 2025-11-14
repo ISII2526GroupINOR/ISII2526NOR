@@ -36,19 +36,24 @@ namespace AppForSEII2526.API.Controllers
                 .Include(p => p.PurchaseItems)
                     .ThenInclude(pi => pi.Item)
                         .ThenInclude(item => item.Brand)
-
-                .Select(p => new PurchaseDetailDTO(p.Id, p.Description, p.Street, p.City, p.Country,
-                    p.TotalPrice, p.paymentMethod.Id,
-
-                    p.PurchaseItems
-                    .Select(
-                        pi => new ItemForPurchaseCreateDTO(pi.Item.Id, pi.Item.Name, pi.Item.Brand.Name,
-                            pi.Item.Description, pi.AmountBought, pi.Item.PurchasePrice)
-
-
-                        ).ToList()
-                    )
-                )
+                .Include(p => p.paymentMethod) // <-- add this
+                .Select(p => new PurchaseDetailDTO(
+                    p.Id,
+                    p.Description,
+                    p.Street,
+                    p.City,
+                    p.Country,
+                    p.TotalPrice,
+                    p.paymentMethod != null ? p.paymentMethod.Id : 0, // safe access
+                    p.PurchaseItems.Select(pi => new ItemForPurchaseCreateDTO(
+                        pi.Item.Id,
+                        pi.Item.Name,
+                        pi.Item.Brand.Name,
+                        pi.Item.Description,
+                        pi.AmountBought,
+                        pi.Item.PurchasePrice
+                    )).ToList()
+                ))
                 .FirstOrDefaultAsync();
 
 
@@ -126,7 +131,7 @@ namespace AppForSEII2526.API.Controllers
                 //we must check that there is enough quantity to be rented in the database
                 if ((item == null) || (pitem.Quantity >= item.QuantityAvailableForPurchase))
                 {
-                    ModelState.AddModelError("RentalItems", $"Error! Item titled '{item.Name}' is not available in the quantity selected");
+                    ModelState.AddModelError("PurchaseItems", $"Error! Item titled '{item.Name}' is not available in the quantity selected");
                 }
                 else
                 {

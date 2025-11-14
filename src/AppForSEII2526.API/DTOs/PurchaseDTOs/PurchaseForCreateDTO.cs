@@ -14,7 +14,7 @@ namespace AppForSEII2526.API.DTOs.PurchaseDTOs
             Country = country;
             Total_price = total_price;
             Payment_methodId = payment_methodId;
-            IList<ItemForPurchaseCreateDTO> Items = items;
+            Items = items;
         }
 
         public int Id { get; set; }
