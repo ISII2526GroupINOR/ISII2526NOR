@@ -70,23 +70,20 @@ builder.Services.AddSwaggerGen(options => {
 // Add RabbitMQ Logging and configure from appsettings.json
 // Credential configuration is overridden from environment variables for security
 
-// prefer explicit env vars for username/password (accept both RABBITMQ__USER and RABBITMQ_USER forms)
-var envUser = Environment.GetEnvironmentVariable("RABBITMQ__USERNAME")
-           ?? Environment.GetEnvironmentVariable("RABBITMQ_USERNAME");
-var envPass = Environment.GetEnvironmentVariable("RABBITMQ__PASSWORD")
-           ?? Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD");
+var envUser = Environment.GetEnvironmentVariable("RABBITMQ_USERNAME");
+var envPass = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD");
 
 if (!string.IsNullOrEmpty(envUser))
 {
-    builder.Configuration["RabbitMQ:UserName"] = envUser;
+    builder.Configuration["RabbitMQ:UserName"] = envUser; // override username
 }
 
 if (!string.IsNullOrEmpty(envPass))
 {
-    builder.Configuration["RabbitMQ:Password"] = envPass;
+    builder.Configuration["RabbitMQ:Password"] = envPass; // override password
 }
 
-builder.Logging.AddRabbitMQ(builder.Configuration.GetSection("RabbitMQ"));
+builder.Logging.AddRabbitMQ(builder.Configuration.GetSection("RabbitMQ")); // uses updated configuration
 
 var app = builder.Build();
 

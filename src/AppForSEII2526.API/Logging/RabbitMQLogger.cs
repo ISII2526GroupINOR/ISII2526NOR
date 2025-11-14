@@ -1,5 +1,7 @@
+using System.IdentityModel.Tokens;
 using System.Text;
 using System.Text.Json;
+using Newtonsoft.Json;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 
@@ -17,9 +19,38 @@ public class RabbitMQLogger : ILogger, IDisposable
     {
         _name = name ?? throw new ArgumentNullException(nameof(name));
         _config = config ?? throw new ArgumentNullException(nameof(config));
+
+        // Create ConnectionFactory
+        var factory = new RabbitMQ.Client.ConnectionFactory
+        {
+            HostName = _config.HostName,
+            Port = _config.Port,
+            UserName = _config.UserName,
+            Password = _config.Password
+        };
+
+        // Create connection and channel
+        _connection = factory.CreateConnection();
         
-        ValidateConfiguration(_config); 
+        _channel = _connection.CreateModel();
+
+        ValidateConfiguration(_config);
+
+        // Declare the exchange fanout for logs
+        _channel.ExchangeDeclare(
+            exchange: _config.Exchange,
+            type: _config.ExchangeType,
+            durable: _config.Durable
+        );
+
+        // Setup properties for persistence
+        _properties = _channel.CreateBasicProperties();
+        _properties.Persistent = true;
+        _properties.ContentType = "application/json";
+
+        
     }
+        
 
     private static void ValidateConfiguration(RabbitMQLoggerConfiguration config)
     {
@@ -46,13 +77,15 @@ public class RabbitMQLogger : ILogger, IDisposable
         EventId eventId,
         TState state,
         Exception? exception,
-        Func<TState, Exception?, string> formatter)
+        Func<TState, Exception?, string> formatter
+    )
     {
         if (!IsEnabled(logLevel))
             return;
 
         try
         {
+            // Create dynamic log entry object
             var logEntry = new
             {
                 Timestamp = DateTime.UtcNow,
@@ -63,6 +96,18 @@ public class RabbitMQLogger : ILogger, IDisposable
                 Message = formatter(state, exception),
                 Exception = exception?.ToString()
             };
+
+            // serialize to JSON
+            var messageBody = JsonConvert.SerializeObject(logEntry);
+            var body = Encoding.UTF8.GetBytes(messageBody);
+
+            // Publish to RabbitMQ exchange
+            _channel.BasicPublish(
+                exchange: _config.Exchange,
+                routingKey: "",
+                basicProperties: _properties,
+                body: body
+            );
 
         }
         catch (Exception ex)
