@@ -12,6 +12,7 @@
         </select>
         <img alt="Here goes the Logo" src="Images/logo.png" class="logo">
         <button class="light-home-buttons" @onclick="IrLogin"> @AppResources.LoginButton</button>
+        <button class="light-home-buttons" @onclick="IrRegister"> @AppResources.RegisterButton</button>
     </div>
 </div>
 
@@ -20,6 +21,7 @@
     bool ShowLan = true;
 
     void IrLogin() => Nav.NavigateTo("/Counter");
+    void IrRegister() => Nav.NavigateTo("/weather");
 
     void ToggleLan()
     {

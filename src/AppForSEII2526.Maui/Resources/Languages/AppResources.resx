@@ -120,6 +120,9 @@
   <data name="LoginButton" xml:space="preserve">
     <value>Iniciar Sesión</value>
   </data>
+  <data name="RegisterButton" xml:space="preserve">
+    <value>Registrarse</value>
+  </data>
   <data name="WelcomeMessage" xml:space="preserve">
     <value>Bienvenido</value>
   </data>
