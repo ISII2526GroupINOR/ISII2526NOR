@@ -37,6 +37,26 @@
     padding: 10px 20px;
 }
 
+.language-selector {
+    position: absolute;
+    right: 150px;
+    width: auto;
+    top: 100px;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.language-image {
+    display: block;
+    width: 70px;
+    height: 70px;
+    border-radius: 10%;
+    margin-bottom: 20px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
 a, .btn-link {
     color: #006bb7;
 }

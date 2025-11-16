@@ -2,19 +2,27 @@
 @inject Services.LanguageServices LanguageServices
 @using Resources.Languages
 
-<div class="Home Page">
+    <div class="language-selector">
+            <img alt="Español" src="Images/Flag-Spain.jpg" class="language-image" 
+                @onclick="@(() => LanguageServices.SetLanguage("es"))">
+            <img alt="English" src="Images/Flag-UK.jpg" class="language-image"
+                @onclick="@(() => LanguageServices.SetLanguage("en"))">
+        </div>
     <div class="center">
         <h1>@AppResources.WelcomeMessage</h1>
+        
+        <!--
         <select style="float: right"
             @onchange="@(e => LanguageServices.SetLanguage(e.Value?.ToString() ?? "es"))">
             <option value="es">Español</option>
             <option value="en">English</option>
         </select>
+        -->
         <img alt="Here goes the Logo" src="Images/logo.png" class="logo">
         <button class="light-home-buttons" @onclick="IrLogin"> @AppResources.LoginButton</button>
         <button class="light-home-buttons" @onclick="IrRegister"> @AppResources.RegisterButton</button>
     </div>
-</div>
+
 
 @code {
     [Inject] NavigationManager Nav { get; set; }
