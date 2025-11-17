@@ -227,6 +227,21 @@ namespace AppForSEII2526.UT.PlansController_test
                 "1" // userId
             );
 
+            //EXAM: Goal checking
+            PlanForCreateDTO planBadGoal = new PlanForCreateDTO
+            (
+                "Boxing Starter",
+                "newDescription",
+                null, // health issues
+                1, // weeks
+                new List<ClassForCreatePlanDTO>
+                {
+                    new ClassForCreatePlanDTO(1, "Invalid goal")
+                },
+                1, // payment method
+                "1" // userId
+            );
+
             // Duplicate classes
             PlanForCreateDTO planDuplicateClass = new PlanForCreateDTO
             (
@@ -297,6 +312,7 @@ namespace AppForSEII2526.UT.PlansController_test
                 new object[] { planMismatchPMU, $"Error! Payment method with id {planMismatchPMU.PaymentMethodId} does not belong to user with id {planMismatchPMU.UserId}." },
                 new object[] { planRepeatedName, $"Error! Plan with name {planRepeatedName.Name} already exists" },
                 new object[] { planClassNotExist, $"Error! Class with id {planClassNotExist.classes.First().Id} does not exist." },
+                new object[] { planBadGoal, "Error!, You must start the description of your goals with I would like to"},
                 new object[] { planDuplicateClass, $"Error! Duplicate class with id {planDuplicateClass.classes.First().Id} found in the plan." },
                 new object[] { planFullClass, $"Error! Class with id {planFullClass.classes.First().Id} has reached its capacity limit." },
                 new object[] { planClassInPast, $"Error! Class with id {planClassInPast.classes.First().Id} is scheduled in the past." },
