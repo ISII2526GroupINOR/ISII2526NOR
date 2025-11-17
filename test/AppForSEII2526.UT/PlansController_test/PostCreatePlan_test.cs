@@ -105,14 +105,14 @@ namespace AppForSEII2526.UT.PlansController_test
             {
                 Plan = plans[0],
                 Class = classes[0], // Introduction to Boxing
-                Goal = "Learn basic boxing techniques",
+                Goal = "I would like to earn basic boxing techniques",
                 Price = classes[0].Price // 150.00m
             }); // Boxing Starter includes Introduction to Boxing
             plans[1].PlanItems.Add(new PlanItem
             {
                 Plan = plans[1],
                 Class = classes[1],
-                Goal = "Improve",
+                Goal = "I would like to improve",
                 Price = classes[1].Price // 100.0m
             });
 
@@ -344,7 +344,7 @@ namespace AppForSEII2526.UT.PlansController_test
                 new List<ClassForCreatePlanDTO>
                 {
                     new ClassForCreatePlanDTO(1, null),
-                    new ClassForCreatePlanDTO (4, "My Goal")
+                    new ClassForCreatePlanDTO (4, "I would like to achieve my Goal")
                 },
                 1, // payment method
                 "1" // userId
