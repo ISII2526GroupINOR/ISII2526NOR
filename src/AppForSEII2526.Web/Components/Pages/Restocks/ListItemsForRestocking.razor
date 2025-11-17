@@ -1,5 +1,7 @@
-﻿<h3>ListItemsForRestocking</h3>
+﻿@page "/restocks/listitemsforrestocking"
+@using AppForSEII2526.Web.API
 
-@code {
-
-}
+@inject ILogger<ListItemsForRestocking> logger
+@inject AppForGymAPIClient apiservice
+@inject RestockStateContainer restockState
+@inject NavigationManager navigation
