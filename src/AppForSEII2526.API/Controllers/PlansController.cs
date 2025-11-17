@@ -124,7 +124,7 @@ namespace AppForSEII2526.API.Controllers
                 // EXAM: Check goal as defined in issue #128
                 if(classForCreate.goal != null && !(classForCreate.goal.StartsWith("I would like to") ))
                 {
-                    ModelState.AddModelError("Goal", "Error!, you must start the description of your goals with I would like to");
+                    ModelState.AddModelError("Goal", "Error!, You must start the description of your goals with I would like to");
                 }
 
                 // Check for duplicate classes in the plan
