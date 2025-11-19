@@ -1,4 +1,9 @@
 ﻿@inherits LayoutComponentBase
+@inject Services.FontServices FontServices
+
+<div class="font-container @SelectedFontClass">
+    @Body;
+</div>
 
 <div class="page">
     <div class="sidebar">
@@ -15,3 +20,13 @@
         </article>
     </main>
 </div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        FontServices.OnFontChanged += () =>
+        {
+            InvokeAsync.StateHasChanged();
+        }
+    }
+}

@@ -3,6 +3,22 @@
     background: #EEFFED;
 }
 
+.font-roboto-italic {
+    font-family: "Roboto Italic", sans-serif;
+}
+
+.font-roboto-ligth {
+    font-family: "Roboto Light", sans-serif;
+}
+
+.font-roboto-thin {
+    font-family: "Roboto Thin", sans-serif;
+}
+
+.font-container {
+    transition: all .2s ease;
+}
+
 .center {
     margin: auto;
     width: 50%;

@@ -16,9 +16,18 @@ namespace AppForSEII2526.Maui {
 #if DEBUG
     		builder.Services.AddBlazorWebViewDeveloperTools();
     		builder.Logging.AddDebug();
+
+            builder.ConfigureFonts(fonts =>
+                {
+                    fonts.AddFont("Robot-Italic.ttf", "Roboto Italic");
+                    fonts.AddFont("Roboto-Light.ttf", "Roboto Light");
+                    fonts.AddFont("Roboto-Thin.ttf", "Roboto Thin");
+                }
+            );
 #endif
             builder.Services.AddBlazorBootstrap();
             builder.Services.AddScoped<LanguageServices>();
+            builder.Services.AddSingleton<FontServices>();
             return builder.Build();
         }
     }
