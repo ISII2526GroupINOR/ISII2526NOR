@@ -27,6 +27,7 @@ namespace AppForSEII2526.Maui {
 #endif
             builder.Services.AddBlazorBootstrap();
             builder.Services.AddScoped<LanguageServices>();
+            builder.Services.AddScoped<FontServices>();
             builder.Services.AddSingleton<FontServices>();
             return builder.Build();
         }

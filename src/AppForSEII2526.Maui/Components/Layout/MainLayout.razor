@@ -1,7 +1,8 @@
 ﻿@inherits LayoutComponentBase
+@using Services
 @inject Services.FontServices FontServices
 
-<div class="font-container @SelectedFontClass">
+<div class="font-container @CurrentFontClass">
     @Body;
 </div>
 
@@ -24,9 +25,16 @@
 @code {
     protected override void OnInitialized()
     {
-        FontServices.OnFontChanged += () =>
-        {
-            InvokeAsync.StateHasChanged();
-        }
+        FontServices.OnFontChanged += RefreshUI;
+    }
+
+    private void RefreshUI()
+    {
+        InvokeAsync.StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        FontServices.OnFontChanged -= RefreshUI;
     }
 }
