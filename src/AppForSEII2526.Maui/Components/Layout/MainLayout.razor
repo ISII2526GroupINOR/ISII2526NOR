@@ -2,11 +2,7 @@
 @using Services
 @inject Services.FontServices FontServices
 
-<div class="font-container @CurrentFontClass">
-    @Body;
-</div>
-
-<div class="page">
+<div class="page font-container @FontServices.CurrentFontClass">
     <div class="sidebar">
         <NavMenu />
     </div>
@@ -30,7 +26,7 @@
 
     private void RefreshUI()
     {
-        InvokeAsync.StateHasChanged();
+        InvokeAsync(StateHasChanged);
     }
 
     public void Dispose()

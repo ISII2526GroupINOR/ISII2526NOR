@@ -1,5 +1,6 @@
 ﻿@page "/"
 @inject Services.LanguageServices LanguageServices
+@inject Services.FontServices FontServices
 @using Resources.Languages
 
     <div class="language-selector">
@@ -22,7 +23,7 @@
         <button class="light-home-buttons" @onclick="IrLogin"> @AppResources.LoginButton</button>
         <button class="light-home-buttons" @onclick="IrRegister"> @AppResources.RegisterButton</button>
 
-        <select>
+        <select @onchange="@(e => FontServices.SetFont(e.Value?.ToString() ?? "es"))">
             <option value="font-roboto-light">Roboto Light</option>
             <option value="font-roboto-thin">Roboto Thin</option>
             <option value="font-roboto-italic">Roboto Italic</option>

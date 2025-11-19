@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AppForSEII2526.Maui.Services
 {
-    internal class FontServices
+    public class FontServices
     {
         public string CurrentFontClass { get; private set; } = "font-opensans";
         public event Action? OnFontChanged;
