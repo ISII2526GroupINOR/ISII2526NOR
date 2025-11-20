@@ -22,6 +22,8 @@ namespace AppForSEII2526.Maui {
                     fonts.AddFont("Robot-Italic.ttf", "Roboto Italic");
                     fonts.AddFont("Roboto-Light.ttf", "Roboto Light");
                     fonts.AddFont("Roboto-Thin.ttf", "Roboto Thin");
+                    fonts.AddFont("RobotoCondensed-VariableFont_wght.ttf", "Roboto Condensed");
+                    fonts.AddFont("Comfortaa-VariableFont_wght.ttf", "Comfortaa");
                 }
             );
 #endif
