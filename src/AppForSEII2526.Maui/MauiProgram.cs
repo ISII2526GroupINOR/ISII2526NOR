@@ -23,6 +23,7 @@ namespace AppForSEII2526.Maui {
                     fonts.AddFont("Roboto-Light.ttf", "Roboto Light");
                     fonts.AddFont("RobotoCondensed-VariableFont_wght.ttf", "Roboto Condensed");
                     fonts.AddFont("PlayfairDisplay-VariableFont_wght.ttf", "Play fair");
+                    fonts.AddFont("NotoSansJP-VariableFont_wght.ttf", "Noto sans jp");
                 }
             );
 #endif

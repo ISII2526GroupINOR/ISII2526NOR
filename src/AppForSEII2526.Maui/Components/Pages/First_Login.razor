@@ -1,0 +1,17 @@
+﻿@page "/firstlogin"
+@inject Services.LanguageServices LanguageServices
+@using Resources.Languages
+
+<div class="center">
+    <h1>@AppResources.WelcomeMessage</h1>
+    <select
+            @onchange="@(e => LanguageServices.SetLanguage(e.Value?.ToString() ?? "es"))">
+            <option value="es">Español</option>
+            <option value="en">English</option>
+            <option value="ja">日本語</option>
+    </select>
+</div>
+
+@code {
+
+}

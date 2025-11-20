@@ -23,6 +23,10 @@ font-open-sans {
     font-family: "Play fair", serif;
 }
 
+.font-noto-sans-jp{
+    font-family: "Noto sans jp", sans-serif;
+}
+
 .font-container {
     transition: all .2s ease;
 }
