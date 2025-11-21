@@ -61,6 +61,9 @@ namespace AppForSEII2526.API.Controllers
             if (restockForCreateDTO.ExpectedDate <= DateTime.Now)
                 ModelState.AddModelError("RestockDateFrom", "Error! The expected date must start later than today.");
 
+            if (restockForCreateDTO.Description != null && !restockForCreateDTO.Description.StartsWith("Restock for"))
+                ModelState.AddModelError("RestockDescription", "Error! The description must start with: Restock for");
+
             if (restockForCreateDTO.RestockItems.Count == 0)
                 ModelState.AddModelError("RestockItem", "Error! At least one item must be selected for restock.");
 
