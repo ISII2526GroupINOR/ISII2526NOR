@@ -1,11 +1,14 @@
 ﻿@page "/userconfiguration"
 @inject Services.LanguageServices LanguageServices
 @inject Services.FontServices FontServices
+@inject Services.ProfileImageServices ProfileImageServices
 @using Resources.Languages
 
 <h3>UserConfiguration</h3>
 <div class="d-flex justify-content-center align-items-center">
     <div class="center">
+        <img class="profile-image" src="@ProfileImageServices.GetImageSource()" @onclick="SelectProfileImage"/>
+
         <label for="font">@AppResources.FontSelector</label>
         <select name="font" id="font" class="form-select configuration-select"
            @bind="FontServices.CurrentFontClass" @bind:after="changeFont">
@@ -33,12 +36,22 @@
     public void changeLanguage()
     {
         LanguageServices.SetLanguage(LanguageServices.CurrentLanguage);
+        if(LanguageServices.CurrentLanguage == "ja")
+        {
+            FontServices.SetFont("font-noto-sans-jp");
+        }
         StateHasChanged();
     }
 
     public void changeFont()
     {
         FontServices.SetFont(FontServices.CurrentFontClass);
+        StateHasChanged();
+    }
+
+    public async Task SelectProfileImage()
+    {
+        await ProfileImageServices.LoadImage();
         StateHasChanged();
     }
 }

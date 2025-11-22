@@ -58,6 +58,14 @@
     </ItemGroup>
 
     <ItemGroup>
+      <MauiImage Include="wwwroot\Images\defaultprofilepicture.png" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="wwwroot\Images\defaultprofilepicture.png" />
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="Blazor.Bootstrap" Version="3.4.0" />
         <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
         <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />

@@ -93,6 +93,14 @@ font-open-sans {
     width: 250px;
 }
 
+.profile-image{
+    width: 120px;
+    height: 120px;
+    border-radius: 60px;
+    object-fit: cover;
+    border: 3px solid #ccc;
+}
+
 a, .btn-link {
     color: #006bb7;
 }
