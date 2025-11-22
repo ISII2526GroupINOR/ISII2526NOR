@@ -12,7 +12,7 @@ namespace AppForSEII2526.Maui.Services
     public class LanguageServices
     {
 
-        public string CurrentLanguage { get; private set; } = "es";
+        public string CurrentLanguage { get; set; } = "es";
 
         public event Action? OnLanguageChanged;
 
