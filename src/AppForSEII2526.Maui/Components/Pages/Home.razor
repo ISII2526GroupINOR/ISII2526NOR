@@ -17,4 +17,14 @@
     void IrLogin() => Nav.NavigateTo("/userconfiguration");
     void IrRegister() => Nav.NavigateTo("/weather");
 
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        bool setupdone = Preferences.Get("SetupDone", false);
+
+        if(!setupdone)
+        {
+            Nav.NavigateTo("/firstlogin");
+        }
+    }
 }

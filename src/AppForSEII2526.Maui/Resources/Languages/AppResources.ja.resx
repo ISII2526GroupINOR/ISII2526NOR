@@ -129,6 +129,9 @@
   <data name="RegisterButton" xml:space="preserve">
     <value>登録する</value>
   </data>
+  <data name="SaveButton" xml:space="preserve">
+    <value>保つ</value>
+  </data>
   <data name="WelcomeMessage" xml:space="preserve">
     <value>いらっしゃいませ</value>
   </data>

@@ -2,16 +2,30 @@
 @inject Services.LanguageServices LanguageServices
 @using Resources.Languages
 
-<div class="center">
-    <h1>@AppResources.WelcomeMessage</h1>
-    <select @bind="LanguageServices.CurrentLanguage" @bind:after="changeLanguage">
+<div class="d-flex justify-content-center align-items-center">
+    <div class="center">
+        <label for="language">@AppResources.LanguageSelector</label>
+        <select name="language" id="language" class="form-select configuration-select"
+                @bind="LanguageServices.CurrentLanguage" @bind:after="changeLanguage">
             <option value="es">Español</option>
             <option value="en">English</option>
             <option value="ja">日本語</option>
-    </select>
+        </select>
+        <button class="light-home-buttons" @onclick="GoHome"> @AppResources.SaveButton</button>
+    </div>
 </div>
 
+
 @code {
+    [Inject] NavigationManager Nav { get; set; }
+    void GoHome() => Nav.NavigateTo("/");
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        Preferences.Set("SetupDone", true);
+    }
+
     public void changeLanguage()
     {
         LanguageServices.SetLanguage(LanguageServices.CurrentLanguage);
