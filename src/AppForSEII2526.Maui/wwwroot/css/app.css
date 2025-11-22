@@ -85,6 +85,14 @@ font-open-sans {
     transition: 0.2s;
 }
 
+.configuration-select {
+    border-radius: 12px;
+    background-color: #fafafa;
+    font-size: 18px;
+    padding: 12px;
+    width: 250px;
+}
+
 a, .btn-link {
     color: #006bb7;
 }
