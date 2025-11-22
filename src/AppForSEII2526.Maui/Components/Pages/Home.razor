@@ -1,37 +1,20 @@
 ﻿@page "/"
-@inject Services.LanguageServices LanguageServices
-@inject Services.FontServices FontServices
 @using Resources.Languages
 
-    <div class="center">
-
-        <img alt="Here goes the Logo" src="Images/logo.png" class="logo">
-        <button class="light-home-buttons" @onclick="IrLogin"> @AppResources.LoginButton</button>
-        <button class="light-home-buttons" @onclick="IrRegister"> @AppResources.RegisterButton</button>
-
-        <select @onchange="@(e => FontServices.SetFont(e.Value?.ToString() ?? "font-roboto-italic"))">
-            <option value="font-open-sans" hidden="@notlatin" disabled="@notlatin">Open sans</option>
-            <option value="font-roboto-light" hidden="@notlatin" disabled="@notlatin">Roboto Light</option>
-            <option value="font-roboto-italic" hidden="@notlatin" disabled="@notlatin">Roboto Italic</option>
-            <option value="font-roboto-condensed" hidden="@notlatin" disabled="@notlatin">Roboto Condensed</option>
-            <option value="font-play-fair" hidden="@notlatin" disabled="@notlatin">Play fair</option>
-            <option value="font-noto-sans-jp" hidden="@notjapanese" disabled="@notjapanese">Noto sans (jp)</option>
-        </select>
-    </div>
+<div class="d-flex justify-content-center align-items-center">
+  <div class="center">
+     <img alt="Here goes the Logo" src="Images/logo.png" class="logo">
+     <button class="light-home-buttons" @onclick="IrLogin"> @AppResources.LoginButton</button>
+     <button class="light-home-buttons" @onclick="IrRegister"> @AppResources.RegisterButton</button>
+  </div>
+</div>
 
 
 @code {
     [Inject] NavigationManager Nav { get; set; }
     bool ShowLan = true;
 
-    void IrLogin() => Nav.NavigateTo("/firstlogin");
+    void IrLogin() => Nav.NavigateTo("/userconfiguration");
     void IrRegister() => Nav.NavigateTo("/weather");
 
-    bool notlatin => LanguageServices.CurrentLanguage != "es" && LanguageServices.CurrentLanguage != "en";
-    bool notjapanese => LanguageServices.CurrentLanguage != "ja";
-
-    void ToggleLan()
-    {
-        ShowLan = !ShowLan;
-    }
 }

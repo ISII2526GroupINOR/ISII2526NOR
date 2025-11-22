@@ -8,7 +8,7 @@ namespace AppForSEII2526.Maui.Services
 {
     public class FontServices
     {
-        public string CurrentFontClass { get; private set; } = "font-opensans";
+        public string CurrentFontClass { get; set; } = "font-open-sans";
         public event Action? OnFontChanged;
         public void SetFont(string fontClass)
         {

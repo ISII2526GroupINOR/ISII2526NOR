@@ -1,0 +1,44 @@
+﻿@page "/userconfiguration"
+@inject Services.LanguageServices LanguageServices
+@inject Services.FontServices FontServices
+@using Resources.Languages
+
+<h3>UserConfiguration</h3>
+<div class="d-flex justify-content-center align-items-center">
+    <div class="center">
+        <label for="font">Select a font:</label>
+        <select name="font" id="font"
+            @bind="FontServices.CurrentFontClass" @bind:after="changeFont">
+           <option value="font-open-sans" hidden="@notlatin" disabled="@notlatin">Open sans</option>
+           <option value="font-roboto-light" hidden="@notlatin" disabled="@notlatin">Roboto Light</option>
+           <option value="font-roboto-italic" hidden="@notlatin" disabled="@notlatin">Roboto Italic</option>
+           <option value="font-roboto-condensed" hidden="@notlatin" disabled="@notlatin">Roboto Condensed</option>
+           <option value="font-play-fair" hidden="@notlatin" disabled="@notlatin">Play fair</option>
+           <option value="font-noto-sans-jp" hidden="@notjapanese" disabled="@notjapanese">Noto sans (jp)</option>
+        </select>
+
+        <label for="language">Select a language:</label>
+        <select name="language" id="language"
+            @bind="LanguageServices.CurrentLanguage" @bind:after="changeLanguage">
+            <option value="es">Español</option>
+            <option value="en">English</option>
+            <option value="ja">日本語</option>
+        </select>
+  </div>
+
+</div>
+@code {
+    bool notlatin => LanguageServices.CurrentLanguage != "es" && LanguageServices.CurrentLanguage != "en";
+    bool notjapanese => LanguageServices.CurrentLanguage != "ja";
+    public void changeLanguage()
+    {
+        LanguageServices.SetLanguage(LanguageServices.CurrentLanguage);
+        StateHasChanged();
+    }
+
+    public void changeFont()
+    {
+        FontServices.SetFont(FontServices.CurrentFontClass);
+        StateHasChanged();
+    }
+}
