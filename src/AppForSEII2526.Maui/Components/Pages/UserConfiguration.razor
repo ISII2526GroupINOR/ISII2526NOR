@@ -4,10 +4,10 @@
 @inject Services.ProfileImageServices ProfileImageServices
 @using Resources.Languages
 
-<h3>UserConfiguration</h3>
 <div class="d-flex justify-content-center align-items-center">
     <div class="center">
-        <img class="profile-image" src="@ProfileImageServices.GetImageSource()" @onclick="SelectProfileImage"/>
+        <img class="profile-image" src="@ProfileImageServices.GetImageSource()"/>
+        <Button Color="ButtonColor.Primary" @onclick="SelectProfileImage">@AppResources.ChangeImageButton</Button>
 
         <label for="font">@AppResources.FontSelector</label>
         <select name="font" id="font" class="form-select configuration-select"
