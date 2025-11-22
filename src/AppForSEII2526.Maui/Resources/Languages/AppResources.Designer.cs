@@ -61,6 +61,24 @@ namespace AppForSEII2526.Maui.Resources.Languages {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Seleccione una fuente:.
+        /// </summary>
+        internal static string FontSelector {
+            get {
+                return ResourceManager.GetString("FontSelector", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Seleccione su idioma:.
+        /// </summary>
+        internal static string LanguageSelector {
+            get {
+                return ResourceManager.GetString("LanguageSelector", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Iniciar Sesión.
         /// </summary>
         internal static string LoginButton {

@@ -6,7 +6,7 @@
 <h3>UserConfiguration</h3>
 <div class="d-flex justify-content-center align-items-center">
     <div class="center">
-        <label for="font">Select a font:</label>
+        <label for="font">@AppResources.FontSelector</label>
         <select name="font" id="font"
             @bind="FontServices.CurrentFontClass" @bind:after="changeFont">
            <option value="font-open-sans" hidden="@notlatin" disabled="@notlatin">Open sans</option>
@@ -17,7 +17,7 @@
            <option value="font-noto-sans-jp" hidden="@notjapanese" disabled="@notjapanese">Noto sans (jp)</option>
         </select>
 
-        <label for="language">Select a language:</label>
+        <label for="language">@AppResources.LanguageSelector</label>
         <select name="language" id="language"
             @bind="LanguageServices.CurrentLanguage" @bind:after="changeLanguage">
             <option value="es">Español</option>
