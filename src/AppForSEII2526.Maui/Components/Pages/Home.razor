@@ -14,7 +14,7 @@
     [Inject] NavigationManager Nav { get; set; }
     bool ShowLan = true;
 
-    void IrLogin() => Nav.NavigateTo("/userconfiguration");
+    void IrLogin() => Nav.NavigateTo("/adminhome");
     void IrRegister() => Nav.NavigateTo("/weather");
 
     protected override void OnInitialized()
