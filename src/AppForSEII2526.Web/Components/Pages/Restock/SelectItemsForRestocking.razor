@@ -15,7 +15,27 @@
     <div class="row">
         <div class="col-8">
             <div class="row">
-                <p>here i will show the filters</p>
+                <div class="column">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">Name</span>
+                        <input type="text" id="inputName" @bind=itemName class="form-control"
+                        placeholder="Name" aria-label="Name" aria-describedby="basic-addon1"/>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">Minimum</span>
+                        <input type="text" id="inputMin" @bind=min class="form-control"
+                        placeholder="Min" aria-label="Minimum" aria-describedby="basic-addon1" />
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">Maximum</span>
+                        <input type="text" id="inputMax" @bind=max class="form-control"
+                        placeholder="Max" aria-label="Maximum" aria-describedby="basic-addon1" />
+                    </div>
+                </div>
                 <div class="column">
                     <button type="button" class="btn btn-primary" @onclick=@SearchItems id="searchItems"> Search Items </button>
                 </div>
@@ -59,5 +79,12 @@
             logger.LogError($"{DateTime.Now} Error: {ex}");
             errors = "Error while connecting to the system";
         }
+        StateHasChanged();
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+        SearchItems();
+        return base.OnInitializedAsync();
     }
 }
