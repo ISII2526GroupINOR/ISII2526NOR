@@ -1,0 +1,109 @@
+﻿@page "/purchase/selectitemsforpurchase"
+
+@using AppForSEII2526.Web.API
+@inject AppForGymAPIClient apiclient
+@inject ILogger<SelectItemsForPurchase> logger
+@inject PurchaseStateContainer purchaseState
+
+
+
+<h3>Select Items For Purchase</h3>
+
+
+<div class="container-fluid">
+    <div class="row">
+        <p>Errors: @errors</p>
+    </div>
+    <div class="row">
+        <div class="col-8">
+            <div class="row">
+                <div class="col">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">Name</span>
+                        <input type="text" id="inputName" @bind=itemName class="form-control" 
+                        placeholder="Name" aria-label="Name" aria-describedby="basic-addon1">
+                    </div>
+                </div>
+                
+                <div class="col">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">Brand</span>
+                        <input type="text" id="inputBrand" @bind=itemBrand class="form-control"
+                               placeholder="Brand" aria-label="Brand" aria-describedby="basic-addon1">
+                    </div>
+                </div>
+
+
+
+                <button type="button" class="btn btn-primary" @onclick=@SearchItems id="searchItems">Search Items</button>
+            </div>
+            <div class="row">
+               @if (items==null){
+                    <p>Loading Items...</p>
+                }
+                else
+                {
+                    <p>Number of items: @items.Count</p>
+                    
+                }
+            </div>
+        </div>
+        <div class="col-2">
+            <p>here i will show the renting cart</p>
+        </div>
+    </div>
+
+</div>
+
+
+
+@code {
+    private ICollection<ItemForPurchaseSelectDTO> items;
+    private bool hideErrors {get { return errors.Length == 0; }}
+    private string errors = "";
+
+    private string itemName { get; set; }
+    private string itemBrand { get; set; }
+
+    private PurchaseForCreateDTO purchase => purchaseState.Purchase;
+
+    private bool hiddenRentingCart = true;
+
+    private void AddItem(ItemForPurchaseCreateDTO item)
+    {
+        PurchaseStateContainer.AddSelectedItemToPurchase(item);
+    }
+
+    private void RemovePurchaseItem(ItemForPurchaseCreateDTO item)
+    {
+        PurchaseStateContainer.RemoveSelectedItemFromPurchase(item);
+        if (purchase.Items.Count == 0) hiddenRentingCart = true;
+    }
+
+
+    public async void SearchItems()
+    {
+        try
+        {
+            items = await apiclient.GetItemsForPurchaseAsync(
+                itemName, null, itemBrand
+            );
+
+
+        }
+        catch(ApiException ex)
+        {
+            logger.LogError($"{DateTime.Now} Error: {ex}");
+            errors = "Error while connecting to the system";
+        }
+        StateHasChanged();
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+        
+        return base.OnInitializedAsync();   
+    }
+
+    //void TurnOff(){}
+}
