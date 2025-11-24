@@ -31,14 +31,7 @@ font-open-sans {
     transition: all .2s ease;
 }
 
-.center {
-    margin: auto;
-    width: 50%;
-    padding: 10px;
-    justify-content: center;
-    align-content: center;
-    gap: 20px;
-}
+
 
 .logo {
     /* logo */
@@ -105,6 +98,7 @@ font-open-sans {
     background: #FFFFFF;
     width: 90%;
     max-width: 350px;
+    min-width: 250px;
     margin: auto;
     text-align: center;
     display:flex;
@@ -140,6 +134,7 @@ font-open-sans {
     background-color: #d8f0d8;
     width: 70%;
     max-width: 350px;
+    min-width: 250px;
     margin: auto;
     text-align: center;
     display: flex;
