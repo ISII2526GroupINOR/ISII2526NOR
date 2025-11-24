@@ -1,5 +1,9 @@
 ﻿@page "/plan/selectclassesforrental"
 
+@using AppForSEII2526.Web.API
+@inject AppForGymAPIClient apiClient
+@inject ILogger<SelectClassesForPlan> logger
+
 <h3>SelectClassesForPlan</h3>
 
 <div class="container-fluid">
@@ -11,9 +15,18 @@
         <div class="col-8">
             <div class="row">
                 <p>Here I will show the filters</p>
+                <button type="button" class="btn btn-primary" @onclick=@SearchClasses id="searcClasses">Search classes</button>
             </div>
             <div class="row">
-                <p>Here I will show the list of classes</p>
+                @if (classes == null)
+                {
+                    <p>Loading classes...</p>
+                }
+                else
+                {
+                    <p>Number of classes: @classes.Count</p>
+                }
+
             </div>
         </div>
         <div class="col-2">
@@ -24,5 +37,29 @@
 </div>
 
 @code {
+    private ICollection<ClassForPlanDTO> classes;
+    private bool hideErrors { get { return errors.Length == 0;  } }
+    private string errors = "";
+    private string className { get; set; }
+    private DateTimeOffset classDate { get; set; }
+
+
+    public async void SearchClasses()
+    {
+        try
+        {
+            classes = await apiClient.GetAvailableClassesForPlanAsync(className, null);
+        }
+        catch (ApiException ex)
+        {
+            logger.LogError($"{DateTime.Now} Error: {ex}");
+            errors = "Error while connecting to the system";
+        }
+        StateHasChanged();
+    }
+
+
+
+    // For Blazor Bootstrap help, see https://docs.blazorbootstrap.com/forms/text-input
     // For distributing components, see https://github.com/Ingenieria-del-Software-II-ESIIAB/SEII-AppfForMoviesForClasses/commit/4f79a6ddb14aa83ed16f8cd9b189d393e382f345
 }
