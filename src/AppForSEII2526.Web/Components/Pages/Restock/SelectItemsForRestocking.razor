@@ -68,6 +68,16 @@
     private int min { get; set; }
     private int max { get; set; }
 
+    private void AddItem(ItemForRestockingDTO item, int quantity)
+    {
+        restockState.AddItemToRestock(item, quantity);
+    }
+
+    private void RemoveRestockItem(ItemForCreateRestockDTO item)
+    {
+        restockState.RemoveRestockItemToRestock(item);
+    }
+
     public async void SearchItems()
     {
         try
