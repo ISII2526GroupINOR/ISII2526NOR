@@ -116,9 +116,15 @@ namespace AppForSEII2526.API.Controllers
                 }
 
                 // Check for goal property and replace with default if null. NOT ACCORDING TO REQUIREMENTS
-                if (classForCreate.goal == null)
+                //if (classForCreate.goal == null)
+                //{
+                //    classForCreate.goal = "Have fun!";
+                //}
+
+                // EXAM: Check goal as defined in issue #128
+                if(classForCreate.goal != null && !(classForCreate.goal.StartsWith("I would like to") ))
                 {
-                    classForCreate.goal = "Have fun!";
+                    ModelState.AddModelError("Goal", "Error!, You must start the description of your goals with I would like to");
                 }
 
                 // Check for duplicate classes in the plan
