@@ -2,8 +2,62 @@
 @using AppForSEII2526.Web.API
 
 @inject ILogger<SelectItemsForRestocking> logger
-@inject AppForGymAPIClient apiservice
+@inject AppForGymAPIClient apiclient
 @inject RestockStateContainer restockState
 @inject NavigationManager navigation
 
 <h3>Select Items For Restocking</h3>
+
+<div class="container-fluid">
+    <div class="row" hiden="@hideErrors">
+        <p>Errors: @errors</p>
+    </div>
+    <div class="row">
+        <div class="col-8">
+            <div class="row">
+                <p>here i will show the filters</p>
+                <div class="column">
+                    <button type="button" class="btn btn-primary" @onclick=@SearchItems id="searchItems"> Search Items </button>
+                </div>
+            </div>
+            <div class="row">
+                <p>here i will show the list of items</p>
+                @if (items == null)
+                {
+                    <p>Loading items....</p>
+                }
+                else
+                {
+                    <p>number of items @items.Count</p>
+                }
+            </div>
+        </div>
+        <div class="col-2">
+            <p>here i will show the restocking cart</p>
+        </div>
+
+    </div>
+
+</div>
+
+@code{
+    private ICollection<ItemForRestockingDTO> items;
+    private bool hideErrors { get { return errors.Length == 0; } }
+    private string errors = "";
+    private string itemName { get; set; }
+    private int min { get; set; }
+    private int max { get; set; }
+
+    public async void SearchItems()
+    {
+        try
+        {
+            items = await apiclient.GetItemsForRestockingAsync(itemName, min, max);
+        }
+        catch(ApiException ex)
+        {
+            logger.LogError($"{DateTime.Now} Error: {ex}");
+            errors = "Error while connecting to the system";
+        }
+    }
+}
