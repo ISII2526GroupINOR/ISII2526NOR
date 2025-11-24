@@ -110,6 +110,7 @@ font-open-sans {
     display:flex;
     flex-direction: column;
     gap: 8px;
+    border-radius: 12px;
 }
 
 .title-widget{
@@ -129,12 +130,15 @@ font-open-sans {
     gap: 10px;
     font-size: 20px;
     font-weight: bold;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
 }
 
-notification-widget {
+.notification-widget {
     color: #333;
     background-color: #d8f0d8;
-    width: 90%;
+    width: 70%;
     max-width: 350px;
     margin: auto;
     text-align: center;
@@ -144,6 +148,11 @@ notification-widget {
     border-radius: 12px;
     margin: auto;
     gap: 8px;
+    margin-top: 30px;
+}
+
+.notification-widget .row, .notification-widget .row .column{
+    align-items: center;
 }
 
 a, .btn-link {
