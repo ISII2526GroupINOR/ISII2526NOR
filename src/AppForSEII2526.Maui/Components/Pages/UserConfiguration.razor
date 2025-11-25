@@ -9,24 +9,28 @@
         <img class="profile-image" src="@ProfileImageServices.GetImageSource()"/>
         <Button Color="ButtonColor.Primary" @onclick="SelectProfileImage">@AppResources.ChangeImageButton</Button>
 
-        <label for="font">@AppResources.FontSelector</label>
-        <select name="font" id="font" class="form-select configuration-select"
-           @bind="FontServices.CurrentFontClass" @bind:after="changeFont">
-           <option value="font-open-sans" hidden="@notlatin" disabled="@notlatin">Open sans</option>
-           <option value="font-roboto-light" hidden="@notlatin" disabled="@notlatin">Roboto Light</option>
-           <option value="font-roboto-italic" hidden="@notlatin" disabled="@notlatin">Roboto Italic</option>
-           <option value="font-roboto-condensed" hidden="@notlatin" disabled="@notlatin">Roboto Condensed</option>
-           <option value="font-play-fair" hidden="@notlatin" disabled="@notlatin">Play fair</option>
-           <option value="font-noto-sans-jp" hidden="@notjapanese" disabled="@notjapanese">Noto sans (jp)</option>
-        </select>
+        <div class="row" sytle="margin-top: 20px">
+            <label for="font">@AppResources.FontSelector</label>
+            <select name="font" id="font" class="form-select configuration-select"
+                    @bind="FontServices.CurrentFontClass" @bind:after="changeFont">
+                <option value="font-open-sans" hidden="@notlatin" disabled="@notlatin">Open sans</option>
+                <option value="font-roboto-light" hidden="@notlatin" disabled="@notlatin">Roboto Light</option>
+                <option value="font-roboto-italic" hidden="@notlatin" disabled="@notlatin">Roboto Italic</option>
+                <option value="font-roboto-condensed" hidden="@notlatin" disabled="@notlatin">Roboto Condensed</option>
+                <option value="font-play-fair" hidden="@notlatin" disabled="@notlatin">Play fair</option>
+                <option value="font-noto-sans-jp" hidden="@notjapanese" disabled="@notjapanese">Noto sans (jp)</option>
+            </select>
+        </div>
 
-        <label for="language">@AppResources.LanguageSelector</label>
-        <select name="language" id="language" class="form-select configuration-select"
-            @bind="LanguageServices.CurrentLanguage" @bind:after="changeLanguage">
-            <option value="es">Español</option>
-            <option value="en">English</option>
-            <option value="ja">日本語</option>
-        </select>
+        <div class="row" style="margin-top: 20px">
+            <label for="language">@AppResources.LanguageSelector</label>
+            <select name="language" id="language" class="form-select configuration-select"
+                    @bind="LanguageServices.CurrentLanguage" @bind:after="changeLanguage">
+                <option value="es">Español</option>
+                <option value="en">English</option>
+                <option value="ja">日本語</option>
+            </select>
+        </div>
   </div>
 
 </div>
