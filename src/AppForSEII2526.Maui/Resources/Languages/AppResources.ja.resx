@@ -120,6 +120,15 @@
   <data name="ChangeImageButton" xml:space="preserve">
     <value>写真を変更</value>
   </data>
+  <data name="Configuration" xml:space="preserve">
+    <value>構成</value>
+  </data>
+  <data name="EditBillingInformation" xml:space="preserve">
+    <value>請求情報を編集する</value>
+  </data>
+  <data name="EditUserInformation" xml:space="preserve">
+    <value>ユーザー情報を編集する</value>
+  </data>
   <data name="FontSelector" xml:space="preserve">
     <value>フォントを選択:</value>
   </data>

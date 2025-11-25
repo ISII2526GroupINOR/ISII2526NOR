@@ -120,6 +120,15 @@
   <data name="ChangeImageButton" xml:space="preserve">
     <value>Cambiar foto</value>
   </data>
+  <data name="Configuration" xml:space="preserve">
+    <value>Configuración</value>
+  </data>
+  <data name="EditBillingInformation" xml:space="preserve">
+    <value>Editar información bancaria</value>
+  </data>
+  <data name="EditUserInformation" xml:space="preserve">
+    <value>Editar información de usuario</value>
+  </data>
   <data name="FontSelector" xml:space="preserve">
     <value>Seleccione una fuente:</value>
   </data>

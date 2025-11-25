@@ -120,6 +120,15 @@
   <data name="ChangeImageButton" xml:space="preserve">
     <value>Change Image</value>
   </data>
+  <data name="Configuration" xml:space="preserve">
+    <value>Configuration</value>
+  </data>
+  <data name="EditBillingInformation" xml:space="preserve">
+    <value>Edit Billing information</value>
+  </data>
+  <data name="EditUserInformation" xml:space="preserve">
+    <value>Edit user information</value>
+  </data>
   <data name="FontSelector" xml:space="preserve">
     <value>Select a font</value>
   </data>
@@ -139,7 +148,7 @@
     <value>Enable notification widget</value>
   </data>
   <data name="RegisterButton" xml:space="preserve">
-    <value>Sing In</value>
+    <value>Sign In</value>
   </data>
   <data name="RestockWidgetOption" xml:space="preserve">
     <value>Enable restock widget</value>

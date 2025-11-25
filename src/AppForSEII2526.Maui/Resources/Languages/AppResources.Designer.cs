@@ -70,6 +70,33 @@ namespace AppForSEII2526.Maui.Resources.Languages {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Configuración.
+        /// </summary>
+        internal static string Configuration {
+            get {
+                return ResourceManager.GetString("Configuration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Editar información bancaria.
+        /// </summary>
+        internal static string EditBillingInformation {
+            get {
+                return ResourceManager.GetString("EditBillingInformation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Editar información de usuario.
+        /// </summary>
+        internal static string EditUserInformation {
+            get {
+                return ResourceManager.GetString("EditUserInformation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Seleccione una fuente:.
         /// </summary>
         internal static string FontSelector {
