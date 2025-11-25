@@ -1,6 +1,8 @@
 ﻿@inherits LayoutComponentBase
+@using Services
+@inject Services.FontServices FontServices
 
-<div class="page">
+<div class="page font-container @FontServices.CurrentFontClass">
     <div class="sidebar">
         <NavMenu />
     </div>
@@ -15,3 +17,20 @@
         </article>
     </main>
 </div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        FontServices.OnFontChanged += RefreshUI;
+    }
+
+    private void RefreshUI()
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        FontServices.OnFontChanged -= RefreshUI;
+    }
+}
