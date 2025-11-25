@@ -1,0 +1,33 @@
+﻿@page "/shop"
+
+<div class="header-icon">
+    <div style="margin-left: 200px; width=300px">
+
+        <div class="search-wrapper">
+            <input class="search-box" placeholder="Search..." />
+        </div>
+
+        <div style="margin-top: 20px;"></div> <!-- SPACE -->
+
+        <h1 class="title">Main categories</h1>
+
+    </div>
+</div>
+
+<div style="margin-top: 40px;"></div> <!-- SPACE -->
+
+
+
+
+<p role="status">Current count: @currentCount</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+@code {
+    private int currentCount = 0;
+
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+}
