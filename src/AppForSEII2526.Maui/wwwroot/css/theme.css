@@ -1,0 +1,127 @@
+﻿/* ============================================================
+   BASE VARIABLES (DEFAULT THEME: LIGHT)
+   ============================================================ */
+
+:root {
+    /* Neutral Colors */
+    --color-background: white;
+    --color-surface: whitesmoke; /* Base color for panels, menus, silouhettes, etc */
+    --color-text: black;
+    /* Primary System */
+    --color-primary: dodgerblue;
+    --color-primary-2: lightsteelblue; /* For hover ^/
+
+    /* Secondary System */
+    --color-secondary: orange;
+    --color-secondary-2: lightsalmon; /* For hover */
+
+    /* Border, muted, etc. */
+    --color-border: lightgray;
+    --color-muted: dimgray;
+}
+
+/* ============================================================
+   DARK THEME
+   ============================================================ */
+
+[data-theme="dark"] {
+    --color-background: black;
+    --color-surface: #181818; /* No named near 0x1e1e1e, so keep minimal hex */
+    --color-text: whitesmoke;
+
+    --color-primary: lightskyblue;
+    --color-primary-2: powderblue;
+    --color-secondary: darkorange;
+    --color-secondary-2: moccasin;
+    --color-border: #333333; /* closest named color is too far off */
+    --color-muted: silver;
+}
+
+/* ============================================================
+   HIGH CONTRAST THEME
+   ============================================================ */
+
+[data-theme="high-contrast"] {
+    --color-background: black;
+    --color-surface: black;
+    --color-text: white;
+    --color-primary: yellow;
+    --color-primary-2: lightyellow;
+    --color-secondary: aqua;
+    --color-secondary-2: lightcyan;
+    --color-border: white;
+    --color-muted: white;
+}
+
+/* ============================================================
+   SYSTEM THEME (auto light/dark)
+   ============================================================ */
+
+[data-theme="system"] {
+    /* Start with light theme vars */
+}
+
+@media (prefers-color-scheme: dark) {
+    [data-theme="system"] {
+        --color-background: black;
+        --color-surface: #181818;
+        --color-text: whitesmoke;
+        --color-primary: lightskyblue;
+        --color-primary-2: powderblue;
+        --color-secondary: darkorange;
+        --color-secondary-2: moccasin;
+        --color-border: #333333;
+        --color-muted: silver;
+    }
+}
+
+/* ============================================================
+   ACCENT VARIABLES (OVERRIDABLE AT RUNTIME)
+   ============================================================ */
+
+:root {
+    --accent-primary: var(--color-primary);
+    --accent-primary-2: var(--color-primary-2);
+    --accent-secondary: var(--color-secondary);
+    --accent-secondary-2: var(--color-secondary-2);
+}
+
+/* ============================================================
+   UTILITY MAPPINGS TO BOOTSTRAP
+   ============================================================ */
+/*
+body {
+    background: var(--color-background);
+    color: var(--color-text);
+}
+
+.btn-primary {
+    background-color: var(--accent-primary);
+    border-color: var(--accent-primary);
+}
+
+    .btn-primary:hover {
+        background-color: var(--accent-primary-2);
+        border-color: var(--accent-primary-2);
+    }
+
+.btn-secondary {
+    background-color: var(--accent-secondary);
+    border-color: var(--accent-secondary);
+}
+
+    .btn-secondary:hover {
+        background-color: var(--accent-secondary-2);
+        border-color: var(--accent-secondary-2);
+    }
+
+.border {
+    border-color: var(--color-border) !important;
+}
+
+.text-muted {
+    color: var(--color-muted) !important;
+}
+
+*/
+
