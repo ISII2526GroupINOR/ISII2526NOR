@@ -97,11 +97,56 @@ namespace AppForSEII2526.Maui.Resources.Languages {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a No hay notificaciones nuevas.
+        /// </summary>
+        internal static string NotificationsMessage {
+            get {
+                return ResourceManager.GetString("NotificationsMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Notificaciones.
+        /// </summary>
+        internal static string NotificationTitle {
+            get {
+                return ResourceManager.GetString("NotificationTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Habilitar widget de notificaciones.
+        /// </summary>
+        internal static string NotificationWidgetOption {
+            get {
+                return ResourceManager.GetString("NotificationWidgetOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Registrarse.
         /// </summary>
         internal static string RegisterButton {
             get {
                 return ResourceManager.GetString("RegisterButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Habilitar widget de aprovisionamiento.
+        /// </summary>
+        internal static string RestockWidgetOption {
+            get {
+                return ResourceManager.GetString("RestockWidgetOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Aprovisionar.
+        /// </summary>
+        internal static string RestockWidgetTitle {
+            get {
+                return ResourceManager.GetString("RestockWidgetTitle", resourceCulture);
             }
         }
         

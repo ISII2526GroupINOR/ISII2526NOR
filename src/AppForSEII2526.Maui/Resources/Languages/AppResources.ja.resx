@@ -129,8 +129,23 @@
   <data name="LoginButton" xml:space="preserve">
     <value>ログイン</value>
   </data>
+  <data name="NotificationsMessage" xml:space="preserve">
+    <value>新しい通知はありません</value>
+  </data>
+  <data name="NotificationTitle" xml:space="preserve">
+    <value>通知</value>
+  </data>
+  <data name="NotificationWidgetOption" xml:space="preserve">
+    <value>通知ウィジェットを有効にする</value>
+  </data>
   <data name="RegisterButton" xml:space="preserve">
     <value>登録する</value>
+  </data>
+  <data name="RestockWidgetOption" xml:space="preserve">
+    <value>再入荷ウィジェットを有効にする</value>
+  </data>
+  <data name="RestockWidgetTitle" xml:space="preserve">
+    <value>再入荷</value>
   </data>
   <data name="SaveButton" xml:space="preserve">
     <value>保つ</value>

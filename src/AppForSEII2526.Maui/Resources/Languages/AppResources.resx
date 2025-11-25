@@ -129,8 +129,23 @@
   <data name="LoginButton" xml:space="preserve">
     <value>Iniciar Sesión</value>
   </data>
+  <data name="NotificationsMessage" xml:space="preserve">
+    <value>No hay notificaciones nuevas</value>
+  </data>
+  <data name="NotificationTitle" xml:space="preserve">
+    <value>Notificaciones</value>
+  </data>
+  <data name="NotificationWidgetOption" xml:space="preserve">
+    <value>Habilitar widget de notificaciones</value>
+  </data>
   <data name="RegisterButton" xml:space="preserve">
     <value>Registrarse</value>
+  </data>
+  <data name="RestockWidgetOption" xml:space="preserve">
+    <value>Habilitar widget de aprovisionamiento</value>
+  </data>
+  <data name="RestockWidgetTitle" xml:space="preserve">
+    <value>Aprovisionar</value>
   </data>
   <data name="SaveButton" xml:space="preserve">
     <value>Guardar</value>

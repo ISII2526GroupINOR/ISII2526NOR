@@ -1,4 +1,5 @@
 ﻿@page "/adminhome"
+@using Resources.Languages
 
 <div class="d-flex justify-content-center align-items-center">
   <div class="center">
@@ -26,10 +27,10 @@
 
                 <div class="col-9">
                     <div class="row">
-                        <strong font-size="24px" font-weight="bold">Notifications</strong>
+                        <strong font-size="24px" font-weight="bold">@AppResources.NotificationTitle</strong>
                     </div>
                     <div class="row">
-                        <span>No new notifications</span>
+                        <span>@AppResources.NotificationsMessage</span>
                     </div>
                 </div>
             </div>
@@ -77,9 +78,9 @@
     [Parameter]
     public List<string> Items { get; set; } = new List<string>
     {
-        "Item1 pending",
-        "Item2 pending",
-        "Item3 pending"
+        "Dumbbell",
+        "Strech band",
+        "Press machine"
     };
 
     private bool wRestock
