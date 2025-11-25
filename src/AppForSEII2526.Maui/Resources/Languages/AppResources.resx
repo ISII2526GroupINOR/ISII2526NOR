@@ -135,7 +135,13 @@
   <data name="SaveButton" xml:space="preserve">
     <value>Guardar</value>
   </data>
+  <data name="TextOptionsSubTitle" xml:space="preserve">
+    <value>Opciones de texto</value>
+  </data>
   <data name="WelcomeMessage" xml:space="preserve">
     <value>Bienvenido</value>
+  </data>
+  <data name="Widget" xml:space="preserve">
+    <value>Widget</value>
   </data>
 </root>

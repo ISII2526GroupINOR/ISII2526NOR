@@ -115,11 +115,29 @@ namespace AppForSEII2526.Maui.Resources.Languages {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Opciones de texto.
+        /// </summary>
+        internal static string TextOptionsSubTitle {
+            get {
+                return ResourceManager.GetString("TextOptionsSubTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Bienvenido.
         /// </summary>
         internal static string WelcomeMessage {
             get {
                 return ResourceManager.GetString("WelcomeMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Widget.
+        /// </summary>
+        internal static string Widget {
+            get {
+                return ResourceManager.GetString("Widget", resourceCulture);
             }
         }
     }

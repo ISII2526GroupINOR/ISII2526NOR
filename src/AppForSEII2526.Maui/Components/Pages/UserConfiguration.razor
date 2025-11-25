@@ -8,8 +8,9 @@
     <div class="center">
         <img class="profile-image" src="@ProfileImageServices.GetImageSource()"/>
         <Button Color="ButtonColor.Primary" @onclick="SelectProfileImage">@AppResources.ChangeImageButton</Button>
-
+        
         <div class="row" sytle="margin-top: 20px">
+            <h4>@AppResources.TextOptionsSubTitle</h4>
             <label for="font">@AppResources.FontSelector</label>
             <select name="font" id="font" class="form-select configuration-select"
                     @bind="FontServices.CurrentFontClass" @bind:after="changeFont">
@@ -31,12 +32,32 @@
                 <option value="ja">日本語</option>
             </select>
         </div>
+
+        <div class="row" style="margin-top: 20px">
+            <h4>@AppResources.Widget</h4>
+            <CheckboxInput Label="Restocks widget" @bind-Value="wRestock"/>
+            <CheckboxInput Label="Notification widget" @bind-Value="wNotification"/>
+
+        </div>
   </div>
 
 </div>
 @code {
     bool notlatin => LanguageServices.CurrentLanguage != "es" && LanguageServices.CurrentLanguage != "en";
     bool notjapanese => LanguageServices.CurrentLanguage != "ja";
+    private bool wRestock
+    {
+        get { return Preferences.Get("wRestock", true); }
+        set { Preferences.Set("wRestock", !wRestock); StateHasChanged(); }
+    }
+
+    private bool wNotification
+    {
+        get { return Preferences.Get("wNotification", true); }
+        set { Preferences.Set("wNotification", !wNotification); StateHasChanged(); }
+    }
+
+
     public void changeLanguage()
     {
         LanguageServices.SetLanguage(LanguageServices.CurrentLanguage);
