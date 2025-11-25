@@ -4,19 +4,19 @@
 
 :root {
     /* Neutral Colors */
-    --color-background: white;
-    --color-surface: whitesmoke; /* Base color for panels, menus, silouhettes, etc */
-    --color-text: black;
+    --color-background: honeydew; /* Base background color */
+    --color-surface: white; /* Base color for panels, menus, silouhettes, etc */
+    --color-surface-highlight: yellowgreen; /* For highlights, accents on surface elements */
+    --color-text: black; /* Primary text color */
+    --color-text-inverse: white; /* For text on dark elements */
     /* Primary System */
-    --color-primary: dodgerblue;
-    --color-primary-2: lightsteelblue; /* For hover ^/
-
+    --color-primary: #328430; /* Very similar to forestgreen, but adjusted for matching the logo*/
+    --color-primary-2: #228c57; /* For hover */
     /* Secondary System */
-    --color-secondary: orange;
-    --color-secondary-2: lightsalmon; /* For hover */
-
+    --color-secondary: #8bdc8b;
+    --color-secondary-2: #7db5a7; /* For hover */
     /* Border, muted, etc. */
-    --color-border: lightgray;
+    --color-border: darkgray;
     --color-muted: dimgray;
 }
 
@@ -79,7 +79,7 @@
    ACCENT VARIABLES (OVERRIDABLE AT RUNTIME)
    ============================================================ */
 
-:root {
+:root { /* Default to light theme accents */
     --accent-primary: var(--color-primary);
     --accent-primary-2: var(--color-primary-2);
     --accent-secondary: var(--color-secondary);
