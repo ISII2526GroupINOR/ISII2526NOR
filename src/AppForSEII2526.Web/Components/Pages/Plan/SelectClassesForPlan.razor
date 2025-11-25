@@ -15,6 +15,20 @@
         <div class="col-8">
             <div class="row">
                 <p>Here I will show the filters</p>
+                <div class="col">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">Name</span>
+                        <input type="text" id="inputNam" @bind=className class="form-control" placeholder="Name" aria-label="Name" aria-describedby="basic-addon1">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Date</span>
+                        <InputDate @bind-Value="@classDate" id="inputDate" />
+                    </div>
+                </div>
+
+
                 <button type="button" class="btn btn-primary" @onclick=@SearchClasses id="searcClasses">Search classes</button>
             </div>
             <div class="row">
@@ -38,17 +52,18 @@
 
 @code {
     private ICollection<ClassForPlanDTO> classes;
-    private bool hideErrors { get { return errors.Length == 0;  } }
+    private bool hideErrors { get { return errors.Length == 0; } }
     private string errors = "";
-    private string className { get; set; }
-    private DateTimeOffset classDate { get; set; }
+    private string? className { get; set; }
+    private DateTimeOffset? classDate { get; set; } = DateTimeOffset.Now;
+
 
 
     public async void SearchClasses()
     {
         try
         {
-            classes = await apiClient.GetAvailableClassesForPlanAsync(className, null);
+            classes = await apiClient.GetAvailableClassesForPlanAsync(className, classDate);
         }
         catch (ApiException ex)
         {
