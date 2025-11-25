@@ -1,6 +1,7 @@
 ﻿html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    background: #EEFFED;
+    background: var(--color-background);
+    color: var(--color-text);
 }
 
 font-open-sans {
@@ -52,8 +53,9 @@ font-open-sans {
     align-items: center;
     gap: 20px;
     margin: 20px;
-    color: #FFFFFF;
-    background: #6DD970;
+    color: var(--color-text-inverse);
+    background: var(--color-primary);
+    border-color: var(--color-border);
     border-radius: 12px;
     padding: 10px 20px;
 }
@@ -80,7 +82,8 @@ font-open-sans {
 
 .configuration-select {
     border-radius: 12px;
-    background-color: #fafafa;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
     font-size: 18px;
     padding: 12px;
     width: 250px;
@@ -95,7 +98,7 @@ font-open-sans {
 }
 
 .selection-widget{
-    background: #FFFFFF;
+    background: var(--color-surface);
     width: 90%;
     max-width: 350px;
     min-width: 250px;
@@ -108,15 +111,15 @@ font-open-sans {
 }
 
 .title-widget{
-    background: #c7f7c7;
+    background: var(--color-surface-highlight);
     padding: 12px 0;
     border-radius: 12px;
     font-weight: bold;
     font-size: 24px;
 }
 
-.item-widget{
-    background: #e7ffe7;
+.item-widget {
+    background: var(--color-secondary);
     padding: 10px 16px;
     border-radius: 12px;
     display: flex;
@@ -130,8 +133,8 @@ font-open-sans {
 }
 
 .notification-widget {
-    color: #333;
-    background-color: #d8f0d8;
+    color: var(--color-text);
+    background-color: var(--color-surface);)
     width: 70%;
     max-width: 350px;
     min-width: 250px;
@@ -155,9 +158,9 @@ a, .btn-link {
 }
 
 .btn-primary {
-    color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
+    color: var(--color-text-inverse);
+    background-color: var(--color-primary);
+    border-color: var(--color-border);
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
@@ -223,7 +226,7 @@ h1:focus {
         position: sticky;
         top: 0;
         height: env(safe-area-inset-top);
-        background-color: #f7f7f7;
+        background-color: var(--color-surface-highlight);
         width: 100%;
         z-index: 1;
     }
