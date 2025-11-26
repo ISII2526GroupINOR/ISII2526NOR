@@ -1,6 +1,8 @@
 ﻿@inherits LayoutComponentBase
-@using Services
-@inject Services.FontServices FontServices
+@using AppForSEII2526.Maui.Services
+@inject FontServices FontServices
+@inject ThemeService ThemeService
+
 
 <div class="page font-container @FontServices.CurrentFontClass">
     <div class="sidebar">
@@ -32,5 +34,25 @@
     public void Dispose()
     {
         FontServices.OnFontChanged -= RefreshUI;
+    }
+
+    // Theme Initialization
+    private bool _initialized;
+    
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _initialized = true;
+            try
+            {
+                await ThemeService.InitializeAsync();
+            }
+            catch (InvalidOperationException ex)
+            {
+                // El runtime de JS no estaba listo; registra para diagnóstico sin romper la UI.
+                System.Diagnostics.Debug.WriteLine($"Inicialización de ThemeService: interop JS no disponible: {ex.Message}");
+            }
+        }
     }
 }
