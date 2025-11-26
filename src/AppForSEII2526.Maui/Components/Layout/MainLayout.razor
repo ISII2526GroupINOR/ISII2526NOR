@@ -2,6 +2,7 @@
 @using AppForSEII2526.Maui.Services
 @inject FontServices FontServices
 @inject ThemeService ThemeService
+@inject IJSRuntime JS
 
 
 <div class="page font-container @FontServices.CurrentFontClass">
@@ -24,6 +25,7 @@
     protected override void OnInitialized()
     {
         FontServices.OnFontChanged += RefreshUI;
+        ThemeService.OnChange += RefreshUI;
     }
 
     private void RefreshUI()
@@ -34,24 +36,30 @@
     public void Dispose()
     {
         FontServices.OnFontChanged -= RefreshUI;
+        ThemeService.OnChange -= RefreshUI;
     }
 
-    // Theme Initialization
-    private bool _initialized;
-    
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            _initialized = true;
             try
             {
                 await ThemeService.InitializeAsync();
+                // Aplicar tema por JS desde aquí (contexto WebView disponible)
+                try
+                {
+                    await JS.InvokeVoidAsync("themeInterop.setTheme", ThemeService.CurrentTheme);
+                }
+                catch (Exception ex)
+                {
+                    // Registrar pero no romper
+                    System.Diagnostics.Debug.WriteLine($"MainLayout: setTheme falló: {ex}");
+                }
             }
-            catch (InvalidOperationException ex)
+            catch (Exception ex)
             {
-                // El runtime de JS no estaba listo; registra para diagnóstico sin romper la UI.
-                System.Diagnostics.Debug.WriteLine($"Inicialización de ThemeService: interop JS no disponible: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Inicialización de ThemeService: {ex}");
             }
         }
     }

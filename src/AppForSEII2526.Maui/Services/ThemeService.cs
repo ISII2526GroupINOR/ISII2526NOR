@@ -9,7 +9,6 @@ using System.Diagnostics;
 
 public class ThemeService
 {
-    private readonly IJSRuntime _js;
 
     public event Action? OnChange;
 
@@ -20,9 +19,8 @@ public class ThemeService
     private const bool ForceStaticTheme = false;
     private const string StaticTheme = "dark"; // cambiar a "light", "system", etc.
 
-    public ThemeService(IJSRuntime js)
+    public ThemeService()
     {
-        _js = js;
     }
 
     // -------------------------------------------------------------
@@ -37,108 +35,99 @@ public class ThemeService
         {
             CurrentTheme = settings.Theme;
             CurrentAccent = settings.Accent;
-
-            await ApplyThemeAsync(CurrentTheme);
-            await ApplyAccentAsync(settings.AccentPrimary, settings.AccentSecondary);
         }
         else
         {
             // Default: system theme
-            await ApplyThemeAsync("system");
+            CurrentTheme = "system";
+            CurrentAccent = "default";
         }
+        // Apply the theme and accent
+        OnChange?.Invoke();
+        await Task.CompletedTask;
     }
 
-    public async Task ApplyThemeAsync(string theme)
+    public Task ApplyThemeAsync(string theme)
     {
         CurrentTheme = theme;
 
         try
         {
-            await _js.InvokeVoidAsync("themeInterop.setTheme", theme);
+            SaveSettingsAsync(new ThemeSettings
+            {
+                Theme = theme,
+                Accent = CurrentAccent,
+                AccentPrimary = null,
+                AccentSecondary = null
+            }).Wait();
         }
-        catch (InvalidOperationException ex)
+        catch (Exception ex)
         {
             // JS runtime no disponible en este momento; registrar para diagnóstico.
-            Debug.WriteLine($"ThemeService.ApplyThemeAsync: interop no listo: {ex}");
-            return;
+            Debug.WriteLine($"ThemeService.ApplyThemeAsync: fallo al guardar: {ex}");
         }
 
-        await SaveSettingsAsync(new ThemeSettings
-        {
-            Theme = theme,
-            Accent = CurrentAccent,
-            AccentPrimary = null,
-            AccentSecondary = null
-        });
 
         OnChange?.Invoke();
+        return Task.CompletedTask;
     }
 
-    public async Task ApplyAccentAsync(string primary, string secondary)
+    public Task ApplyAccentAsync(string primary, string secondary)
     {
         CurrentAccent = primary;
 
         try
         {
-            await _js.InvokeVoidAsync("themeInterop.setAccent", primary, secondary);
+            SaveSettingsAsync(new ThemeSettings
+            {
+                Theme = CurrentTheme,
+                Accent = primary,
+                AccentPrimary = primary,
+                AccentSecondary = secondary
+            }).Wait();
         }
-        catch (InvalidOperationException ex)
+        catch (Exception ex)
         {
-            Debug.WriteLine($"ThemeService.ApplyAccentAsync: interop no listo: {ex}");
-            return;
+            Debug.WriteLine($"ThemeService.ApplyAccentAsync: fallo al guardar: {ex}");
         }
-
-        await SaveSettingsAsync(new ThemeSettings
-        {
-            Theme = CurrentTheme,
-            Accent = primary,
-            AccentPrimary = primary,
-            AccentSecondary = secondary
-        });
 
         OnChange?.Invoke();
+        return Task.CompletedTask;
     }
 
     // -------------------------------------------------------------
     // Persistence
     // -------------------------------------------------------------
 
-    private async Task SaveSettingsAsync(ThemeSettings settings)
+    private Task SaveSettingsAsync(ThemeSettings settings)
     {
         var json = JsonSerializer.Serialize(settings);
-        try
-        {
-            await _js.InvokeVoidAsync("localStorage.setItem", "theme-settings", json);
-        }
-        catch (InvalidOperationException ex)
-        {
-            Debug.WriteLine($"ThemeService.SaveSettingsAsync: no disponible: {ex}");
-            // No disponible; ignorar o almacenar en otra parte si es necesario.
-        }
+        Preferences.Set("theme-settings", json);
+        return Task.CompletedTask;
     }
 
-    private async Task<ThemeSettings?> LoadSettingsAsync()
+    private Task<ThemeSettings?> LoadSettingsAsync()
     {
         try
         {
-            var json = await _js.InvokeAsync<string>("localStorage.getItem", "theme-settings");
-            if (string.IsNullOrWhiteSpace(json)) return null;
+            var json = Preferences.Get("theme-settings", (string?)null);
+            if (string.IsNullOrWhiteSpace(json)) return Task.FromResult<ThemeSettings?>(null);
 
             try
             {
-                return JsonSerializer.Deserialize<ThemeSettings>(json);
+                var s = JsonSerializer.Deserialize<ThemeSettings>(json);
+                return Task.FromResult<ThemeSettings?>(s);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"ThemeService.LoadSettingsAsync: fallo al deserializar: {ex}");
-                return null;
+                return Task.FromResult<ThemeSettings?>(null);
             }
         }
-        catch (InvalidOperationException ex)
+        catch (Exception ex)
         {
-            Debug.WriteLine($"ThemeService.LoadSettingsAsync: interop no listo: {ex}");
-            // JS runtime no listo; devolver null para usar valores por defecto.
-            return null;
+            Debug.WriteLine($"ThemeService.LoadSettingsAsync: fallo al leer Preferences: {ex}");
+            return Task.FromResult<ThemeSettings?>(null);
         }
     }
 }

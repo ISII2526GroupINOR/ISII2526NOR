@@ -3,6 +3,7 @@
 @inject Services.FontServices FontServices
 @inject Services.ProfileImageServices ProfileImageServices
 @inject ThemeService ThemeService
+@inject IJSRuntime JS
 @using Resources.Languages
 
 <div class="d-flex justify-content-center align-items-center">
@@ -142,6 +143,17 @@
         var newTheme = e.Value?.ToString() ?? "system";
         SelectedTheme = newTheme;
         await ThemeService.ApplyThemeAsync(newTheme);
+
+        // Aplicar JS desde aquí (componente => WebView context)
+        try
+        {
+            await JS.InvokeVoidAsync("themeInterop.setTheme", newTheme);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"AdminConfiguration: setTheme falló: {ex}");
+        }
+
         StateHasChanged();
     }
 }
