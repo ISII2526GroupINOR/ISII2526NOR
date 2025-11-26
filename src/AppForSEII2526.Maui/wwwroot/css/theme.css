@@ -25,15 +25,17 @@
    ============================================================ */
 
 [data-theme="dark"] {
-    --color-background: black;
-    --color-surface: #181818; /* No named near 0x1e1e1e, so keep minimal hex */
-    --color-text: whitesmoke;
+    --color-background: #1c311f; /* huntergreen */
+    --color-surface: #303631;
+    --color-surface-highlight: #254141; /* More bluish and slightly lighter*/
 
-    --color-primary: lightskyblue;
-    --color-primary-2: powderblue;
-    --color-secondary: darkorange;
-    --color-secondary-2: moccasin;
-    --color-border: #333333; /* closest named color is too far off */
+    --color-text: whitesmoke;
+    --color-text-inverse: whitesmoke;
+    --color-primary: #006633;
+    --color-primary-2: #00b359;
+    --color-secondary: #3a7859;
+    --color-secondary-2: #98cdb3;
+    --color-border: 36454F; /* closest named color is too far off */
     --color-muted: silver;
 }
 
@@ -45,6 +47,7 @@
     --color-background: black;
     --color-surface: black;
     --color-text: white;
+    --color-text-inverse: black;
     --color-primary: yellow;
     --color-primary-2: lightyellow;
     --color-secondary: aqua;
