@@ -1,10 +1,14 @@
 ﻿@page "/restocks/selectitemsforrestocking"
 @using AppForSEII2526.Web.API
+@using Microsoft.AspNetCore.Authorization
 
 @inject ILogger<SelectItemsForRestocking> logger
 @inject AppForGymAPIClient apiclient
 @inject RestockStateContainer restockState
 @inject NavigationManager navigation
+
+
+@attribute [Authorize]
 
 <h3>Select Items For Restocking</h3>
 
