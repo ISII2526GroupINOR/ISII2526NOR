@@ -112,9 +112,9 @@
     private ICollection<ItemForRestockingDTO> items;
     private bool hideErrors { get { return errors.Length == 0; } }
     private string errors = "";
-    private string itemName { get; set; }
-    private int min { get; set; }
-    private int max { get; set; }
+    private string? itemName { get; set; }
+    private int? min { get; set; }
+    private int? max { get; set; }
 
     private RestockForCreateDTO restock => restockState.Restock;
 
