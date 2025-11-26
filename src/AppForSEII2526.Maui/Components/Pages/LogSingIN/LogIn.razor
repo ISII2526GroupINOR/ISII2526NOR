@@ -1,0 +1,28 @@
+﻿@page "/LogSingIN"
+
+@using AppForSEII2526.Maui.Resources.Languages
+
+<div class="d-flex justify-content-center align-items-center">
+    <div class="center">
+        <img alt="Here goes the Logo" src="Images/logo.png" class="logo">
+        <h3>Log In</h3>
+        <TextInput @bind-Value="@user" TextAlignment="Alignment.Center" @bind-Value:after ="DisablePassword"/>
+        <TextInput @bind-Value="@password" TextAlignment="Alignment.Center" Disabled="missingUser" @bind-Value:after="DisableLog" />
+        <button class="light-home-buttons" @onclick="Log"> @AppResources.LoginButton</button>
+        <button class="light-home-buttons" @onclick="Cancel"> @AppResources.RegisterButton</button>
+    </div>
+</div>
+
+@code {
+    [Inject] NavigationManager Nav { get; set; }
+    private bool missingData = true;
+    private bool missingUser = true;
+    private string user = null;
+    private string password = null;
+
+    private void DisablePassword() => missingUser = user == null || user == "";
+    private void DisableLog() => missingData = user == null || user == "" || password == null || password == "";
+
+    private void Log() { Nav.NavigateTo("/adminhome"); }
+    private void Cancel() { Nav.NavigateTo("/"); }
+}
