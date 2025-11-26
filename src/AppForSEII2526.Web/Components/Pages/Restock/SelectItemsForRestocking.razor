@@ -48,7 +48,35 @@
                 }
                 else
                 {
-                    <p>number of items @items.Count</p>
+                    <div class="mh-100 table-responsive">
+                        <table class="table table-condensed table-hover" id="TableOfItems">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Brand</th>
+                                    <th>Stock Quantity</th>
+                                    <th>Restock Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in items)
+                                {
+                                    <tr id="ItemData_@item.Name">
+                                        <td>@item.Name</td>
+                                        <td>@item.Brand</td>
+                                        <td>@item.QuantityAvailableForPurchase</td>
+                                        <td>@item.RestockPrice</td>
+                                        <td>
+                                            <button class="btn btn-outline-secondary" id="itemToRestock_@item.Name"
+                                                @onclick="@(() => AddItem(item, 0))">
+                                                Add
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 }
             </div>
         </div>
