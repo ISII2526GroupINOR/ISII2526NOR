@@ -9,8 +9,8 @@
 <h3>Select Items For Restocking</h3>
 
 <div class="container-fluid">
-    <div class="row" hiden="@hideErrors">
-        <p>Errors: @errors</p>
+    <div class="row alert alert-danger" role="alert" hidden="@hideErrors">
+        <p id="ErrorsShown">Errors: @errors</p>
     </div>
     <div class="row">
         <div class="col-8">
@@ -111,6 +111,14 @@
         try
         {
             items = await apiclient.GetItemsForRestockingAsync(itemName, min, max);
+            if(items.Count <= 0)
+            {
+                errors = "There is no item to restock";
+            }
+            else
+            {
+                errors = "";
+            }
         }
         catch(ApiException ex)
         {
