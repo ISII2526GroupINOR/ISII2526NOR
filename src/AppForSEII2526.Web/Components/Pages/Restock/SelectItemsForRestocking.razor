@@ -80,8 +80,23 @@
                 }
             </div>
         </div>
-        <div class="col-2">
-            <p>here i will show the restocking cart</p>
+        <div class="col-2" hidden="@hideRestockCart">
+            <div class="row">
+                Restock Cart
+            </div>
+            @foreach (ItemForCreateRestockDTO item in restock.RestockItems)
+            {
+                <div class="row">
+                    <button type="button" class="btn btn-light" id="removeItem_@item.Id"
+                    @onclick="@(() => RemoveRestockItem(item))">
+                        x @items?.FirstOrDefault(i => i.Id == item.Id)?.Name
+                        @items?.FirstOrDefault(i => i.Id == item.Id)?.RestockPrice
+                    </button>
+                </div>
+            }
+            <div class="row">
+                <button type="button" class="btn btn-primary" id="RestockItemButton" @onclick="RestockItems">Restock</button>
+            </div>
         </div>
 
     </div>
@@ -89,12 +104,15 @@
 </div>
 
 @code{
+    private bool hideRestockCart { get { return restock.RestockItems.Count == 0; } }
     private ICollection<ItemForRestockingDTO> items;
     private bool hideErrors { get { return errors.Length == 0; } }
     private string errors = "";
     private string itemName { get; set; }
     private int min { get; set; }
     private int max { get; set; }
+
+    private RestockForCreateDTO restock => restockState.Restock;
 
     private void AddItem(ItemForRestockingDTO item, int quantity)
     {
@@ -132,5 +150,10 @@
     {
         SearchItems();
         return base.OnInitializedAsync();
+    }
+
+    private void RestockItems()
+    {
+        navigation.NavigateTo("/restock/createrestock");
     }
 }
