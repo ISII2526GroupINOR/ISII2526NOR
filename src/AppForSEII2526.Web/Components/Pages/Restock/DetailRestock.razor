@@ -1,0 +1,14 @@
+﻿<h3>DetailRestock</h3>
+
+@using AppForSEII2526.Web.API
+
+@code {
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public int RestockId { get; set; }
+    private RestockDetailDTO restock;
+    private string error = "";
+
+    [CascadingParameter]
+    private Task<AuthenticationState>? authenticationState { get; set; }
+}
