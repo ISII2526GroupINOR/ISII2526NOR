@@ -35,13 +35,6 @@
             </select>
         </div>
 
-        <div class="row" style="margin-top: 20px">
-            <h4>@AppResources.Widget</h4>
-            <CheckboxInput Label="@AppResources.RestockWidgetOption" @bind-Value="wRestock"/>
-            <CheckboxInput Label="@AppResources.NotificationWidgetOption" @bind-Value="wNotification"/>
-
-        </div>
-
         <!-- Theme selector (simple widget para pruebas) -->
         <div class="row" style="margin-top: 20px">
             <label for="theme">Theme</label>
@@ -52,6 +45,15 @@
                 <option value="high-contrast">High contrast</option>
             </select>
         </div>
+
+        <div class="row" style="margin-top: 20px">
+            <h4>@AppResources.Widget</h4>
+            <CheckboxInput Label="@AppResources.RestockWidgetOption" @bind-Value="wRestock"/>
+            <CheckboxInput Label="@AppResources.NotificationWidgetOption" @bind-Value="wNotification"/>
+
+        </div>
+
+        
 
         <div class="fixed-bottom gym-menu-bar py-2">
             <div class="d-flex justify-content-center gap-5">
