@@ -8,6 +8,15 @@
 
 @attribute [Authorize]
 
+@if(restock == null)
+{
+    <p>@error</p>
+}
+else
+{
+    
+}
+
 @code {
     [Parameter]
     [SupplyParameterFromQuery]
