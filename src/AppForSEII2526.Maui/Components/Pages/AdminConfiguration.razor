@@ -51,10 +51,12 @@
             <label for="accent">Accent Color</label>
             <select id="accent" class="form-select configuration-select" @onchange="changeAccent">
                 <option value="default">Default</option>
+                <option value="blue">Blue</option>
                 <option value="rgb">RGB</option>
             </select>
         </div>
 
+        <!-- Widget selector -->
         <div class="row" style="margin-top: 20px">
             <h4>@AppResources.Widget</h4>
             <CheckboxInput Label="@AppResources.RestockWidgetOption" @bind-Value="wRestock"/>

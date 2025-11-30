@@ -102,6 +102,15 @@
    /* No overrides needed */
 }
 
+
+[data-accent="blue"] {
+    --accent-primary: #4169E1;
+    --accent-primary-2: #41e1e1;
+    --accent-secondary: #91a8ee;
+    --accent-secondary-2: #91eeee;
+    --accent-surface-highlight: #2222dd
+}
+
 [data-accent="rgb"] {
     --accent-primary: #6666FF;
     --accent-primary-2: #B8B8FF;
