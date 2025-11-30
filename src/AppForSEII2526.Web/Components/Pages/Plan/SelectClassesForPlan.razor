@@ -59,7 +59,7 @@
                                         <td>@cl.Name</td>
                                         <td>@cl.Date.DateTime.ToShortDateString()</td>
                                         <td>@cl.Price</td>
-                                        <td>@cl.TypeItems.ToString()</td>
+                                        <td>@string.Join(", ", cl.TypeItems)</td>
                                         <td>
                                             @{
                                                 string goal = "";
