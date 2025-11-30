@@ -41,9 +41,31 @@ else
         {
             <tr>
                 <th>Expected Date</th>
-                <td id="ExpectedDate">@restock.ExpectedDate</td>
+                <td id="ExpectedDate">@restock.ExpectedDate.ToString("dd/MM/yyyy hh:mm:ss")</td>
             </tr>
         }
+    </table>
+
+    <h4>Restocked Items</h4>
+
+    <table class="table" id="RestockedItems">
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Brand</th>
+                <th scope="col">Price per unit</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (ItemForRestockingDTO item in restock.RestockItems)
+            {
+                <tr id="RestockItem_@item.Name">
+                    <td>@item.Name</td>
+                    <td>@item.Brand</td>
+                    <td>@item.RestockPrice</td>
+                </tr>
+            }
+        </tbody>
     </table>
 }
 
