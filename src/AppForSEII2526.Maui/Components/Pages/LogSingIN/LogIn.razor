@@ -1,4 +1,4 @@
-﻿@page "/LogSingIN"
+﻿@page "/LogSingIn/LogIn"
 
 @using AppForSEII2526.Maui.Resources.Languages
 
@@ -6,10 +6,14 @@
     <div class="center">
         <img alt="Here goes the Logo" src="Images/logo.png" class="logo">
         <h3>Log In</h3>
-        <TextInput @bind-Value="@user" TextAlignment="Alignment.Center" @bind-Value:after ="DisablePassword"/>
-        <TextInput @bind-Value="@password" TextAlignment="Alignment.Center" Disabled="missingUser" @bind-Value:after="DisableLog" />
-        <button class="light-home-buttons" @onclick="Log"> @AppResources.LoginButton</button>
-        <button class="light-home-buttons" @onclick="Cancel"> @AppResources.RegisterButton</button>
+        <TextInput @bind-Value="@user" TextAlignment="Alignment.Center" @bind-Value:after ="DisablePassword"
+            Style="margin-bottom: 10px; margin-top: 10px; border-radius: 20px;"/>
+        <div class="mb-3">
+            <PasswordInput @bind-Value="@password" Disabled="missingUser" @bind-Value:after="DisableLog"
+                Style="margin-bottom: 10px; margin-top: 10px; border-radius: 20px; text-align: center;" />
+        </div>
+        <button class="light-home-buttons" @onclick="Log" disabled="@missingData"> @AppResources.LoginButton</button>
+        <button class="light-home-buttons" @onclick="Cancel"> @AppResources.Cancel</button>
     </div>
 </div>
 
@@ -17,11 +21,11 @@
     [Inject] NavigationManager Nav { get; set; }
     private bool missingData = true;
     private bool missingUser = true;
-    private string user = null;
-    private string password = null;
+    private string user = "";
+    private string password = "";
 
-    private void DisablePassword() => missingUser = user == null || user == "";
-    private void DisableLog() => missingData = user == null || user == "" || password == null || password == "";
+    private void DisablePassword() => missingUser = user == "";
+    private void DisableLog() => missingData = (user == "" || password == "");
 
     private void Log() { Nav.NavigateTo("/adminhome"); }
     private void Cancel() { Nav.NavigateTo("/"); }
