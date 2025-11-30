@@ -24,7 +24,7 @@
                 <div class="col">
                     <div class="input-group mb-3">
                         <span class="input-group-text">Date</span>
-                        <InputDate @bind-Value="@classDate" id="inputDate" />
+                        <InputDate @bind-Value="@ClassDate" id="inputDate" />
                     </div>
                 </div>
 
@@ -55,9 +55,26 @@
     private bool hideErrors { get { return errors.Length == 0; } }
     private string errors = "";
     private string? className { get; set; }
-    private DateTimeOffset? classDate { get; set; } = DateTimeOffset.Now;
+    private DateTime? _classDate;
+    private DateTime? ClassDate
+    {
+        get { return _classDate; }
+        set
+        {
+            if(_classDate != value)
+            {
+                _classDate = value;
+            }
+        }
+    }
+        }
+    }
 
 
+
+
+
+    // Method to search classes based on filters
 
     public async void SearchClasses()
     {
@@ -71,6 +88,17 @@
             errors = "Error while connecting to the system";
         }
         StateHasChanged();
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+        // The type of classDate is DateTimeOffset. A conversion is required
+        ClassDate = (ClassDate == new DateTime(1, 1, 1)) ?
+            DateTime.SpecifyKind(DateTime.Today, DateTimeKind.Utc) :
+            _classDate;
+
+
+        return base.OnInitializedAsync();
     }
 
 
