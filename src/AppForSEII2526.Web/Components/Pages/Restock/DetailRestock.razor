@@ -14,7 +14,37 @@
 }
 else
 {
-    
+    <table class="table table-borderless table-sm">
+        @if(restock.TotalPrice != null)
+        {
+            <tr>
+                <th>Total Price</th>
+                <td id="TotalPrice">@restock.TotalPrice</td>
+            </tr>
+        }
+        <tr>
+            <th>Title</th>
+            <td id="Title">@restock.Title</td>
+        </tr>
+        <tr>
+            <th>Delivery Address</th>
+            <td id="DeliveryAddress">@restock.DeliveryAddress</td>
+        </tr>
+        @if(restock.Description != null)
+        {
+            <tr>
+                <th>Description</th>
+                <td id="Description">@restock.Description</td>
+            </tr>
+        }
+        @if (restock.ExpectedDate != null)
+        {
+            <tr>
+                <th>Expected Date</th>
+                <td id="ExpectedDate">@restock.ExpectedDate</td>
+            </tr>
+        }
+    </table>
 }
 
 @code {
