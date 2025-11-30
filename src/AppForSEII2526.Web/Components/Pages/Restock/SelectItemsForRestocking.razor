@@ -1,0 +1,163 @@
+﻿@page "/restocks/selectitemsforrestocking"
+@using AppForSEII2526.Web.API
+@using Microsoft.AspNetCore.Authorization
+
+@inject ILogger<SelectItemsForRestocking> logger
+@inject AppForGymAPIClient apiclient
+@inject RestockStateContainer restockState
+@inject NavigationManager navigation
+
+
+@attribute [Authorize]
+
+<h3>Select Items For Restocking</h3>
+
+<div class="container-fluid">
+    <div class="row alert alert-danger" role="alert" hidden="@hideErrors">
+        <p id="ErrorsShown">Errors: @errors</p>
+    </div>
+    <div class="row">
+        <div class="col-8">
+            <div class="row">
+                <div class="column">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">Name</span>
+                        <input type="text" id="inputName" @bind=itemName class="form-control"
+                        placeholder="Name" aria-label="Name" aria-describedby="basic-addon1"/>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">Minimum</span>
+                        <input type="text" id="inputMin" @bind=min class="form-control"
+                        placeholder="Min" aria-label="Minimum" aria-describedby="basic-addon1" />
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">Maximum</span>
+                        <input type="text" id="inputMax" @bind=max class="form-control"
+                        placeholder="Max" aria-label="Maximum" aria-describedby="basic-addon1" />
+                    </div>
+                </div>
+                <div class="column">
+                    <button type="button" class="btn btn-primary" @onclick=@SearchItems id="searchItems"> Search Items </button>
+                </div>
+            </div>
+            <div class="row">
+                <p>here i will show the list of items</p>
+                @if (items == null)
+                {
+                    <p>Loading items....</p>
+                }
+                else
+                {
+                    <div class="mh-100 table-responsive">
+                        <table class="table table-condensed table-hover" id="TableOfItems">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Brand</th>
+                                    <th>Stock Quantity</th>
+                                    <th>Restock Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in items)
+                                {
+                                    <tr id="ItemData_@item.Name">
+                                        <td>@item.Name</td>
+                                        <td>@item.Brand</td>
+                                        <td>@item.QuantityAvailableForPurchase</td>
+                                        <td>@item.RestockPrice</td>
+                                        <td>
+                                            <button class="btn btn-outline-secondary" id="itemToRestock_@item.Name"
+                                                @onclick="@(() => AddItem(item, 0))">
+                                                Add
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="col-2" hidden="@hideRestockCart">
+            <div class="row">
+                Restock Cart
+            </div>
+            @foreach (ItemForCreateRestockDTO item in restock.RestockItems)
+            {
+                <div class="row">
+                    <button type="button" class="btn btn-light" id="removeItem_@item.Id"
+                    @onclick="@(() => RemoveRestockItem(item))">
+                        x @items?.FirstOrDefault(i => i.Id == item.Id)?.Name
+                        Price: @items?.FirstOrDefault(i => i.Id == item.Id)?.RestockPrice
+                    </button>
+                </div>
+            }
+            <div class="row">
+                <button type="button" class="btn btn-primary" id="RestockItemButton" @onclick="RestockItems">Restock</button>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+@code{
+    private bool hideRestockCart { get { return restock.RestockItems.Count == 0; } }
+    private ICollection<ItemForRestockingDTO> items;
+    private bool hideErrors { get { return errors.Length == 0; } }
+    private string errors = "";
+    private string? itemName { get; set; }
+    private int? min { get; set; }
+    private int? max { get; set; }
+
+    private RestockForCreateDTO restock => restockState.Restock;
+
+    private void AddItem(ItemForRestockingDTO item, int quantity)
+    {
+        restockState.AddItemToRestock(item, quantity);
+    }
+
+    private void RemoveRestockItem(ItemForCreateRestockDTO item)
+    {
+        restockState.RemoveRestockItemToRestock(item);
+    }
+
+    public async void SearchItems()
+    {
+        try
+        {
+            items = await apiclient.GetItemsForRestockingAsync(itemName, min, max);
+            if(items.Count <= 0)
+            {
+                errors = "There is no item to restock";
+            }
+            else
+            {
+                errors = "";
+            }
+        }
+        catch(ApiException ex)
+        {
+            logger.LogError($"{DateTime.Now} Error: {ex}");
+            errors = "Error while connecting to the system";
+        }
+        StateHasChanged();
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+        SearchItems();
+        return base.OnInitializedAsync();
+    }
+
+    private void RestockItems()
+    {
+        navigation.NavigateTo("/restock/createrestock");
+    }
+}

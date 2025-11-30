@@ -5,6 +5,7 @@ using AppForSEII2526.Web.Components;
 using AppForSEII2526.Web.Components.Account;
 using AppForSEII2526.Web.Data;
 using AppForSEII2526.Web.API;
+using AppForSEII2526.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,6 +42,8 @@ string URI2API = builder.Configuration.GetValue(typeof(string), "AppForGym_API")
 
 // we create the service for accessing the API from where .WEB project
 builder.Services.AddScoped<AppForGymAPIClient>(sp => new AppForGymAPIClient(URI2API, new HttpClient()));
+
+builder.Services.AddScoped<RestockStateContainer>();
 
 var app = builder.Build();
 
