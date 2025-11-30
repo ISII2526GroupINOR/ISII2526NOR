@@ -46,15 +46,24 @@
             try
             {
                 await ThemeService.InitializeAsync();
-                // Aplicar tema por JS desde aquí (contexto WebView disponible)
+                // Apply theme
                 try
                 {
                     await JS.InvokeVoidAsync("themeInterop.setTheme", ThemeService.CurrentTheme);
                 }
                 catch (Exception ex)
                 {
-                    // Registrar pero no romper
                     System.Diagnostics.Debug.WriteLine($"MainLayout: setTheme falló: {ex}");
+                }
+
+                // Apply accent
+                try
+                {
+                    await JS.InvokeVoidAsync("themeInterop.setAccent", ThemeService.CurrentAccent);
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"MainLayout: setAccent falló: {ex}");
                 }
             }
             catch (Exception ex)

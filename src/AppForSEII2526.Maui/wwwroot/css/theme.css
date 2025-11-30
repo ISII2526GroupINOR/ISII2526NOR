@@ -6,21 +6,18 @@
     /* Neutral Colors */
     --color-background: honeydew; /* Base background color */
     --color-surface: white; /* Base color for panels, menus, silouhettes, etc */
-    --color-surface-highlight: yellowgreen; /* For highlights, accents on surface elements */
+    --color-surface-highlight: #7ea480; /* For highlights, accents on surface elements */
     --color-text: black; /* Primary text color */
     --color-text-inverse: white; /* For text on dark elements */
     /* Primary System */
-    --color-primary: #328430; /* Very similar to forestgreen, but adjusted for matching the logo*/
+    --color-primary: #71b570; /* Very similar to forestgreen, but adjusted for matching the logo*/
     --color-primary-2: #228c57; /* For hover */
     /* Secondary System */
-    --color-secondary: #8bdc8b;
+    --color-secondary: #bef0bf;
     --color-secondary-2: #7db5a7; /* For hover */
     /* Border, muted, etc. */
     --color-border: darkgray;
     --color-muted: dimgray;
-
-
-    
 }
 
 /* ============================================================

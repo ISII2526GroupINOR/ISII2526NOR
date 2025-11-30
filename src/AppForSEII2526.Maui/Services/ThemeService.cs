@@ -15,10 +15,6 @@ public class ThemeService
     public string CurrentTheme { get; private set; } = "system";
     public string CurrentAccent { get; private set; } = "default";
 
-    // TEMPORAL: forzar tema estático durante pruebas
-    private const bool ForceStaticTheme = false;
-    private const string StaticTheme = "dark"; // cambiar a "light", "system", etc.
-
     public ThemeService()
     {
     }
