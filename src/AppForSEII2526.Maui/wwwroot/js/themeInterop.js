@@ -5,8 +5,7 @@
         document.body.setAttribute("data-theme", themeName);
     },
 
-    setAccent: function (primary, secondary) {
-        document.documentElement.style.setProperty("--accent-primary", primary);
-        document.documentElement.style.setProperty("--accent-primary-2", secondary);
+    setAccent: function (accentName) {
+        document.body.setAttribute("data-accent", accentName);
     }
 };

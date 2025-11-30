@@ -56,9 +56,7 @@ public class ThemeService
             SaveSettingsAsync(new ThemeSettings
             {
                 Theme = theme,
-                Accent = CurrentAccent,
-                AccentPrimary = null,
-                AccentSecondary = null
+                Accent = CurrentAccent
             }).Wait();
         }
         catch (Exception ex)
@@ -72,18 +70,16 @@ public class ThemeService
         return Task.CompletedTask;
     }
 
-    public Task ApplyAccentAsync(string primary, string secondary)
+    public Task ApplyAccentAsync(string accentName)
     {
-        CurrentAccent = primary;
+        CurrentAccent = accentName;
 
         try
         {
             SaveSettingsAsync(new ThemeSettings
             {
                 Theme = CurrentTheme,
-                Accent = primary,
-                AccentPrimary = primary,
-                AccentSecondary = secondary
+                Accent = accentName,
             }).Wait();
         }
         catch (Exception ex)
@@ -136,7 +132,5 @@ public class ThemeSettings
 {
     public string Theme { get; set; } = "system";
     public string Accent { get; set; } = "default";
-    public string? AccentPrimary { get; set; }
-    public string? AccentSecondary { get; set; }
 }
 

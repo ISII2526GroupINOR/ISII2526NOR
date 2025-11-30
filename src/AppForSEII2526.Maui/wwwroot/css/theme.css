@@ -18,6 +18,9 @@
     /* Border, muted, etc. */
     --color-border: darkgray;
     --color-muted: dimgray;
+
+
+    
 }
 
 /* ============================================================
@@ -30,12 +33,12 @@
     --color-surface-highlight: #254141; /* More bluish and slightly lighter*/
 
     --color-text: whitesmoke;
-    --color-text-inverse: whitesmoke;
+    --color-text-inverse: black;
     --color-primary: #006633;
     --color-primary-2: #00b359;
     --color-secondary: #3a7859;
     --color-secondary-2: #98cdb3;
-    --color-border: 36454F; /* closest named color is too far off */
+    --color-border: #36454F; /* closest named color is too far off */
     --color-muted: silver;
 }
 
@@ -50,7 +53,7 @@
     --color-text-inverse: black;
     --color-primary: yellow;
     --color-primary-2: lightyellow;
-    --color-secondary: aqua;
+    --color-secondary: white;
     --color-secondary-2: lightcyan;
     --color-border: white;
     --color-muted: white;
@@ -79,15 +82,37 @@
 }
 
 /* ============================================================
-   ACCENT VARIABLES (OVERRIDABLE AT RUNTIME)
+   ACCENT DEFAULTS
    ============================================================ */
 
-:root { /* Default to light theme accents */
+/* Always inherit from the current theme's color variables */
+[data-theme] {
     --accent-primary: var(--color-primary);
     --accent-primary-2: var(--color-primary-2);
     --accent-secondary: var(--color-secondary);
     --accent-secondary-2: var(--color-secondary-2);
+    --accent-surface: var(--color-surface);
+    --accent-surface-highlight: var(--color-surface-highlight);
 }
+
+
+
+/* ============================================================
+   ACCENT OVERRIDES
+   ============================================================ */
+
+[data-accent="default"] {
+   /* No overrides needed */
+}
+
+[data-accent="rgb"] {
+    --accent-primary: #6666FF;
+    --accent-primary-2: #B8B8FF;
+    --accent-secondary: #66FF66;
+    --accent-secondary-2: #B8FFB8;
+    --accent-surface-highlight: #FF6666;
+}
+
 
 /* ============================================================
    UTILITY MAPPINGS TO BOOTSTRAP

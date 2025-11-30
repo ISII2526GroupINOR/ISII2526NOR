@@ -11,7 +11,7 @@
         <img class="profile-image" src="@ProfileImageServices.GetImageSource()"/>
         <Button Color="ButtonColor.Primary" @onclick="SelectProfileImage">@AppResources.ChangeImageButton</Button>
         
-        <div class="row" sytle="margin-top: 20px">
+        <div class="row" style="margin-top: 20px">
             <h4>@AppResources.TextOptionsSubTitle</h4>
             <label for="font">@AppResources.FontSelector</label>
             <select name="font" id="font" class="form-select configuration-select"
@@ -38,11 +38,20 @@
         <!-- Theme selector (simple widget para pruebas) -->
         <div class="row" style="margin-top: 20px">
             <label for="theme">Theme</label>
-            <select id="theme" class="form-select configuration-select" @onchange="OnThemeChanged" value="@SelectedTheme">
+            <select id="theme" class="form-select configuration-select" @onchange="changeTheme" value="@SelectedTheme">
                 <option value="system">System (auto)</option>
                 <option value="light">Light</option>
                 <option value="dark">Dark</option>
                 <option value="high-contrast">High contrast</option>
+            </select>
+        </div>
+
+        <!-- Accent selector -->
+        <div class="row" style="margin-top: 20px">
+            <label for="accent">Accent Color</label>
+            <select id="accent" class="form-select configuration-select" @onchange="changeAccent">
+                <option value="default">Default</option>
+                <option value="rgb">RGB</option>
             </select>
         </div>
 
@@ -140,7 +149,7 @@
         base.OnInitialized();
     }
 
-    private async Task OnThemeChanged(ChangeEventArgs e)
+    private async Task changeTheme(ChangeEventArgs e)
     {
         var newTheme = e.Value?.ToString() ?? "system";
         SelectedTheme = newTheme;
@@ -154,6 +163,24 @@
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"AdminConfiguration: setTheme falló: {ex}");
+        }
+
+        StateHasChanged();
+    }
+
+    private async Task changeAccent(ChangeEventArgs e)
+    {
+        var newAccent = e.Value?.ToString() ?? "default";
+        await ThemeService.ApplyAccentAsync(newAccent);
+
+        // Apply JS from here (component => WebView context)
+        try
+        {
+            await JS.InvokeVoidAsync("themeInterop.setAccent", newAccent);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"AdminConfiguration: setAccent falló: {ex}");
         }
 
         StateHasChanged();
