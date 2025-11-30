@@ -1,0 +1,161 @@
+﻿/* ============================================================
+   BASE VARIABLES (DEFAULT THEME: LIGHT)
+   ============================================================ */
+
+:root {
+    /* Neutral Colors */
+    --color-background: honeydew; /* Base background color */
+    --color-surface: white; /* Base color for panels, menus, silouhettes, etc */
+    --color-surface-highlight: #7ea480; /* For highlights, accents on surface elements */
+    --color-text: black; /* Primary text color */
+    --color-text-inverse: white; /* For text on dark elements */
+    /* Primary System */
+    --color-primary: #71b570; /* Very similar to forestgreen, but adjusted for matching the logo*/
+    --color-primary-2: #228c57; /* For hover */
+    /* Secondary System */
+    --color-secondary: #bef0bf;
+    --color-secondary-2: #7db5a7; /* For hover */
+    /* Border, muted, etc. */
+    --color-border: darkgray;
+    --color-muted: dimgray;
+}
+
+/* ============================================================
+   DARK THEME
+   ============================================================ */
+
+[data-theme="dark"] {
+    --color-background: #1c311f; /* huntergreen */
+    --color-surface: #303631;
+    --color-surface-highlight: #254141; /* More bluish and slightly lighter*/
+
+    --color-text: whitesmoke;
+    --color-text-inverse: black;
+    --color-primary: #006633;
+    --color-primary-2: #00b359;
+    --color-secondary: #3a7859;
+    --color-secondary-2: #98cdb3;
+    --color-border: #36454F; /* closest named color is too far off */
+    --color-muted: silver;
+}
+
+/* ============================================================
+   HIGH CONTRAST THEME
+   ============================================================ */
+
+[data-theme="high-contrast"] {
+    --color-background: black;
+    --color-surface: black;
+    --color-text: white;
+    --color-text-inverse: black;
+    --color-primary: yellow;
+    --color-primary-2: lightyellow;
+    --color-secondary: white;
+    --color-secondary-2: lightcyan;
+    --color-border: white;
+    --color-muted: white;
+}
+
+/* ============================================================
+   SYSTEM THEME (auto light/dark)
+   ============================================================ */
+
+[data-theme="system"] {
+    /* Start with light theme vars */
+}
+
+@media (prefers-color-scheme: dark) {
+    [data-theme="system"] {
+        --color-background: black;
+        --color-surface: #181818;
+        --color-text: whitesmoke;
+        --color-primary: lightskyblue;
+        --color-primary-2: powderblue;
+        --color-secondary: darkorange;
+        --color-secondary-2: moccasin;
+        --color-border: #333333;
+        --color-muted: silver;
+    }
+}
+
+/* ============================================================
+   ACCENT DEFAULTS
+   ============================================================ */
+
+/* Always inherit from the current theme's color variables */
+[data-theme] {
+    --accent-primary: var(--color-primary);
+    --accent-primary-2: var(--color-primary-2);
+    --accent-secondary: var(--color-secondary);
+    --accent-secondary-2: var(--color-secondary-2);
+    --accent-surface: var(--color-surface);
+    --accent-surface-highlight: var(--color-surface-highlight);
+}
+
+
+
+/* ============================================================
+   ACCENT OVERRIDES
+   ============================================================ */
+
+[data-accent="default"] {
+   /* No overrides needed */
+}
+
+
+[data-accent="blue"] {
+    --accent-primary: #4169E1;
+    --accent-primary-2: #41e1e1;
+    --accent-secondary: #91a8ee;
+    --accent-secondary-2: #91eeee;
+    --accent-surface-highlight: #2222dd
+}
+
+[data-accent="rgb"] {
+    --accent-primary: #6666FF;
+    --accent-primary-2: #B8B8FF;
+    --accent-secondary: #66FF66;
+    --accent-secondary-2: #B8FFB8;
+    --accent-surface-highlight: #FF6666;
+}
+
+
+/* ============================================================
+   UTILITY MAPPINGS TO BOOTSTRAP
+   ============================================================ */
+/*
+body {
+    background: var(--color-background);
+    color: var(--color-text);
+}
+
+.btn-primary {
+    background-color: var(--accent-primary);
+    border-color: var(--accent-primary);
+}
+
+    .btn-primary:hover {
+        background-color: var(--accent-primary-2);
+        border-color: var(--accent-primary-2);
+    }
+
+.btn-secondary {
+    background-color: var(--accent-secondary);
+    border-color: var(--accent-secondary);
+}
+
+    .btn-secondary:hover {
+        background-color: var(--accent-secondary-2);
+        border-color: var(--accent-secondary-2);
+    }
+
+.border {
+    border-color: var(--color-border) !important;
+}
+
+.text-muted {
+    color: var(--color-muted) !important;
+}
+
+*/
+

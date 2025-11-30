@@ -2,6 +2,8 @@
 @inject Services.LanguageServices LanguageServices
 @inject Services.FontServices FontServices
 @inject Services.ProfileImageServices ProfileImageServices
+@inject ThemeService ThemeService
+@inject IJSRuntime JS
 @using Resources.Languages
 
 <div class="d-flex justify-content-center align-items-center">
@@ -9,7 +11,7 @@
         <img class="profile-image" src="@ProfileImageServices.GetImageSource()"/>
         <Button Color="ButtonColor.Primary" @onclick="SelectProfileImage">@AppResources.ChangeImageButton</Button>
         
-        <div class="row" sytle="margin-top: 20px">
+        <div class="row" style="margin-top: 20px">
             <h4>@AppResources.TextOptionsSubTitle</h4>
             <label for="font">@AppResources.FontSelector</label>
             <select name="font" id="font" class="form-select configuration-select"
@@ -33,6 +35,28 @@
             </select>
         </div>
 
+        <!-- Theme selector (simple widget para pruebas) -->
+        <div class="row" style="margin-top: 20px">
+            <label for="theme">Theme</label>
+            <select id="theme" class="form-select configuration-select" @onchange="changeTheme" value="@SelectedTheme">
+                <option value="system">System (auto)</option>
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+                <option value="high-contrast">High contrast</option>
+            </select>
+        </div>
+
+        <!-- Accent selector -->
+        <div class="row" style="margin-top: 20px">
+            <label for="accent">Accent Color</label>
+            <select id="accent" class="form-select configuration-select" @onchange="changeAccent">
+                <option value="default">Default</option>
+                <option value="blue">Blue</option>
+                <option value="rgb">RGB</option>
+            </select>
+        </div>
+
+        <!-- Widget selector -->
         <div class="row" style="margin-top: 20px">
             <h4>@AppResources.Widget</h4>
             <CheckboxInput Label="@AppResources.RestockWidgetOption" @bind-Value="wRestock"/>
@@ -40,7 +64,9 @@
 
         </div>
 
-         <div class="fixed-bottom bg-white py-2">
+        
+
+        <div class="fixed-bottom gym-menu-bar py-2">
             <div class="d-flex justify-content-center gap-5">
                 <div style="font-size: 36px">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6" @onclick="GoHome" cursor="pointer" width="20px" height="20px">
@@ -111,6 +137,54 @@
     public async Task SelectProfileImage()
     {
         await ProfileImageServices.LoadImage();
+        StateHasChanged();
+    }
+
+    // Theme change widget
+    private string SelectedTheme { get; set; } = "system";
+
+    protected override void OnInitialized()
+    {
+        // inicializa valor actual del tema desde el servicio
+        SelectedTheme = ThemeService.CurrentTheme ?? "system";
+
+        base.OnInitialized();
+    }
+
+    private async Task changeTheme(ChangeEventArgs e)
+    {
+        var newTheme = e.Value?.ToString() ?? "system";
+        SelectedTheme = newTheme;
+        await ThemeService.ApplyThemeAsync(newTheme);
+
+        // Aplicar JS desde aquí (componente => WebView context)
+        try
+        {
+            await JS.InvokeVoidAsync("themeInterop.setTheme", newTheme);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"AdminConfiguration: setTheme falló: {ex}");
+        }
+
+        StateHasChanged();
+    }
+
+    private async Task changeAccent(ChangeEventArgs e)
+    {
+        var newAccent = e.Value?.ToString() ?? "default";
+        await ThemeService.ApplyAccentAsync(newAccent);
+
+        // Apply JS from here (component => WebView context)
+        try
+        {
+            await JS.InvokeVoidAsync("themeInterop.setAccent", newAccent);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"AdminConfiguration: setAccent falló: {ex}");
+        }
+
         StateHasChanged();
     }
 }

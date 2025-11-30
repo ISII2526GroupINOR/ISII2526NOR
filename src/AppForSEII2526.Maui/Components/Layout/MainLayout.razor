@@ -1,6 +1,9 @@
 ﻿@inherits LayoutComponentBase
-@using Services
-@inject Services.FontServices FontServices
+@using AppForSEII2526.Maui.Services
+@inject FontServices FontServices
+@inject ThemeService ThemeService
+@inject IJSRuntime JS
+
 
 <div class="page font-container @FontServices.CurrentFontClass">
     <div class="sidebar">
@@ -22,6 +25,7 @@
     protected override void OnInitialized()
     {
         FontServices.OnFontChanged += RefreshUI;
+        ThemeService.OnChange += RefreshUI;
     }
 
     private void RefreshUI()
@@ -32,5 +36,40 @@
     public void Dispose()
     {
         FontServices.OnFontChanged -= RefreshUI;
+        ThemeService.OnChange -= RefreshUI;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            try
+            {
+                await ThemeService.InitializeAsync();
+                // Apply theme
+                try
+                {
+                    await JS.InvokeVoidAsync("themeInterop.setTheme", ThemeService.CurrentTheme);
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"MainLayout: setTheme falló: {ex}");
+                }
+
+                // Apply accent
+                try
+                {
+                    await JS.InvokeVoidAsync("themeInterop.setAccent", ThemeService.CurrentAccent);
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"MainLayout: setAccent falló: {ex}");
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Inicialización de ThemeService: {ex}");
+            }
+        }
     }
 }
