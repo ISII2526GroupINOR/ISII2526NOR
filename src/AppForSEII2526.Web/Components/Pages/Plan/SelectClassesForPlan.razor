@@ -40,6 +40,41 @@
                 else
                 {
                     <p>Number of classes: @classes.Count</p>
+                    <div class="mh-100 table-responsive">
+                        <table class="table table-condensed table-hover" id="TableOfClasses">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Date</th>
+                                    <th>Price</th>
+                                    <th>Item Types</th>
+                                    <th>Goal</th>
+                                    <th>Select</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var cl in classes)
+                                {
+                                    <tr id="ClassData_@cl.Name">
+                                        <td>@cl.Name</td>
+                                        <td>@cl.Date.DateTime.ToShortDateString()</td>
+                                        <td>@cl.Price</td>
+                                        <td>@cl.TypeItems.ToString()</td>
+                                        <td>
+                                            @{
+                                                string goal = "";
+                                            }
+                                            <input type="text" id="ClassGoalInput_@cl.Name" @bind="@goal"
+                                                   class="form-control" placeholder="Goal" aria-label="Goal" aria-describedby="basic-addon1" />
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-outline-secondary" id="classToInclude_@cl.Name" @onclick="@(() => AddClass(cl, goal))">Add</button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 }
 
             </div>
@@ -78,14 +113,21 @@
 
     private bool hiddenClassesSelectedList = true;
 
-    private void AddClass(ClassForCreatePlanDTO selectedClass) {
-        planState.AddSelectedClassToPlan(selectedClass);
+    private void AddClass(ClassForPlanDTO selectedClass, string goal) {
+        // Construct a ClassForCreatePlanDTO
+        ClassForCreatePlanDTO classToAdd = new ClassForCreatePlanDTO
+        {
+            Id = selectedClass.Id,
+            Goal = goal
+        };
+        // Add the class
+        planState.AddSelectedClassToPlan(classToAdd);
         hiddenClassesSelectedList = false;
     }
 
-    private void RemovePlanItem(ClassForCreatePlanDTO selectedClass)
+    private void RemovePlanItem(ClassForPlanDTO selectedClass, string goal)
     {
-        planState.RemoveSelectedClassFromPlan(selectedClass);
+        //planState.RemoveSelectedClassFromPlan(selectedClass);
         if (plan.Classes.Count == 0) hiddenClassesSelectedList = true;
     }
 
