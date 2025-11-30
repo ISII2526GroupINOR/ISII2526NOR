@@ -65,7 +65,7 @@
                                                 string goal = "";
                                             }
                                             <input type="text" id="ClassGoalInput_@cl.Name" @bind="@goal"
-                                                   class="form-control" placeholder="Goal" aria-label="Goal" aria-describedby="basic-addon1" />
+                                                style="min-width:150px" class="form-control" placeholder="Goal" aria-label="Goal" aria-describedby="basic-addon1" />
                                         </td>
                                         <td>
                                             <button class="btn btn-outline-secondary" id="classToInclude_@cl.Name" @onclick="@(() => AddClass(cl, goal))">Add</button>
