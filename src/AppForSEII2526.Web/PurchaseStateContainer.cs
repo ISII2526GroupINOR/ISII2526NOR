@@ -20,21 +20,26 @@ namespace AppForSEII2526.Web
 
         private void NotifyStateChanged() => OnChange?.Invoke();
 
-        public void AddSelectedItemToPurchase(ItemForPurchaseCreateDTO itemForPurchase)
+        public void AddSelectedItemToPurchase(ItemForPurchaseSelectDTO itemForPurchase)
         {
             if (!Purchase.Items.Any(i => i.Id == itemForPurchase.Id))
             {
                 Purchase.Items.Add(new ItemForPurchaseCreateDTO()
                 {
                     Id = itemForPurchase.Id,
-                    Name = itemForPurchase.Name
+                    Name = itemForPurchase.Name,
+                    Description = itemForPurchase.Description,
+                    Brand = itemForPurchase.Brand,
+                    PurchasePrice = itemForPurchase.PurchasePrice
                 });
             }
         }
 
         public void RemoveSelectedItemFromPurchase(ItemForPurchaseCreateDTO itemForPurchase)
         {
-            Purchase.Items.Remove(itemForPurchase);
+            Purchase.Items.Remove(
+                itemForPurchase
+                );
         }
 
         public void ClearSelectedItemsInPurchase()

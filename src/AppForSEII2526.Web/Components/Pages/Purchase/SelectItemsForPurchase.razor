@@ -1,9 +1,12 @@
 ﻿@page "/purchase/selectitemsforpurchase"
 
+
+@using Microsoft.AspNetCore.Authorization
 @using AppForSEII2526.Web.API
 @inject AppForGymAPIClient apiclient
 @inject ILogger<SelectItemsForPurchase> logger
 @inject PurchaseStateContainer purchaseState
+@inject NavigationManager navigation
 
 
 
@@ -38,19 +41,69 @@
                 <button type="button" class="btn btn-primary" @onclick=@SearchItems id="searchItems">Search Items</button>
             </div>
             <div class="row">
-               @if (items==null){
-                    <p>Loading Items...</p>
+                @if (items == null)
+                {
+                    <p>Loading items....</p>
                 }
                 else
                 {
-                    <p>Number of items: @items.Count</p>
-                    
+                    if(items.Count == 0)
+                    {
+                        <p>No items found!</p>
+                        @addError("No items found");
+                    }
+                    else
+                    {
+                        <div class="mh-100 table-responsive">
+                            <table class="table table-condensed table-hover" id="TableOfItems">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Brand</th>
+                                        <th>Description</th>
+                                        <th>Price</th>
+                                        <th>Quantity Available</th>
+                                        <th>Purchase</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in items)
+                                    {
+                                        <tr id="ItemData_@item.Name">
+                                            <td>@item.Name</td>
+                                            <td>@item.Brand</td>
+                                            <td>@item.Description</td>
+                                            <td>@item.PurchasePrice€</td>
+                                            <td>@item.QuantityAvailableForPurchase</td>
+                                            <td>
+                                                <button class="btn btn-outline-secondary" id="itemToPurchase_@item.Name" @onclick="@(() => AddItem(item))">Add</button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+
                 }
             </div>
         </div>
-        <div class="col-2">
-            <p>here i will show the renting cart</p>
+
+        <div class="col-2" hidden="@hideRentingCart">
+            <div class="row">
+                <h3>Shopping Cart</h3>
+            </div>
+            @foreach (ItemForPurchaseCreateDTO item in purchase.Items)
+            {
+                <div class="row">
+                    <button type="button" class="btn btn-light" id="removeItem_@item.Name" @onclick="@(() => RemovePurchaseItem(item))">x @item.Name - @item.PurchasePrice€</button>
+                </div>
+            }
+            <div class="row">
+                <button type="button" class="btn btn-primary" id="purchaseItemButton" @onclick=@PurchaseItems>Purchase Items</button>
+            </div>
         </div>
+
     </div>
 
 </div>
@@ -62,6 +115,9 @@
     private bool hideErrors {get { return errors.Length == 0; }}
     private string errors = "";
 
+
+    private bool hideRentingCart { get { return purchase.Items.Count == 0; } }
+
     private string itemName { get; set; }
     private string itemBrand { get; set; }
 
@@ -69,14 +125,25 @@
 
     private bool hiddenRentingCart = true;
 
-    private void AddItem(ItemForPurchaseCreateDTO item)
+
+
+    public string addError(string error)
     {
-        PurchaseStateContainer.AddSelectedItemToPurchase(item);
+        errors += '\n' + error;
+
+        return "";
+    }
+
+
+
+    private void AddItem(ItemForPurchaseSelectDTO item)
+    {
+        purchaseState.AddSelectedItemToPurchase(item);
     }
 
     private void RemovePurchaseItem(ItemForPurchaseCreateDTO item)
     {
-        PurchaseStateContainer.RemoveSelectedItemFromPurchase(item);
+        purchaseState.RemoveSelectedItemFromPurchase(item);
         if (purchase.Items.Count == 0) hiddenRentingCart = true;
     }
 
@@ -103,6 +170,11 @@
     {
         
         return base.OnInitializedAsync();   
+    }
+
+    private void PurchaseItems()
+    {
+        navigation.NavigateTo("/items/createpurchase");
     }
 
     //void TurnOff(){}
