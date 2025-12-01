@@ -4,7 +4,7 @@ namespace AppForSEII2526.API.DTOs.RestockDTOs
 {
     public class RestockDetailDTO
     {
-        public RestockDetailDTO(int id, string title, string deliveryAddress, string? description, DateTime expectedDate, decimal? totalPrice, IList<ItemForRestockingDTO> restockItems)
+        public RestockDetailDTO(int id, string title, string deliveryAddress, string? description, DateTime expectedDate, decimal? totalPrice, IList<ItemForRestockingDTO> restockItems, string name, string surname)
         {
             Id = id;
             Title = title;
@@ -13,6 +13,8 @@ namespace AppForSEII2526.API.DTOs.RestockDTOs
             ExpectedDate = expectedDate;
             TotalPrice = totalPrice;
             RestockItems = restockItems;
+            Name = name;
+            Surname = surname;
         }
 
         public int Id { get; set; }
@@ -27,6 +29,8 @@ namespace AppForSEII2526.API.DTOs.RestockDTOs
         [Precision(5, 2)]
         public decimal? TotalPrice { get; set; }
         public IList<ItemForRestockingDTO> RestockItems { get; set; }
+        public string Name { get; set; }
+        public string Surname { get; set; }
 
         public override bool Equals(object? obj)
         {

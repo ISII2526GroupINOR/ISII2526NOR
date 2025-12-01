@@ -35,7 +35,8 @@ namespace AppForSEII2526.API.Controllers
                 .Select(r => new RestockDetailDTO(r.Id, r.Title, r.DeliveryAddress, r.Description,
                 r.ExpectedDate, r.TotalPrice, r.RestockItems
                     .Select(ri => new ItemForRestockingDTO(ri.Item.Id, ri.Item.Name, ri.Item.Brand.Name, 
-                    ri.Item.Description, ri.RestockPrice, ri.Item.QuantityForRestock)).ToList<ItemForRestockingDTO>())
+                    ri.Item.Description, ri.RestockPrice, ri.Item.QuantityForRestock)).ToList<ItemForRestockingDTO>(), 
+                    r.RestockResponsible.Name, r.RestockResponsible.Surname)
                 ).FirstOrDefaultAsync();
             if (restock == null)
             {
@@ -150,7 +151,7 @@ namespace AppForSEII2526.API.Controllers
 
             var restockDetail = new RestockDetailDTO(restock.Id, restock.Title, restock.DeliveryAddress, 
                 restock.Description, restock.ExpectedDate, restock.TotalPrice, 
-                ItemRestockDTO);
+                ItemRestockDTO, user.Name, user.Surname);
 
             return CreatedAtAction("GetRestock", new {id = restock.Id}, restockDetail);
         }
