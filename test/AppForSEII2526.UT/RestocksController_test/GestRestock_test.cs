@@ -63,7 +63,7 @@ namespace AppForSEII2526.UT.RestocksController_test
             var expected = new RestockDetailDTO(1, "A restock", "An address", "A description", new DateTime(),
                 180.0m, new List<ItemForRestockingDTO>() { 
                     new ItemForRestockingDTO(1, "Dumbbell", "Precor", "Regular dumbbell", null, 6),
-                    new ItemForRestockingDTO(2, "Kettlebell", "Precor", "Cicular dumbbell", null, 3)});
+                    new ItemForRestockingDTO(2, "Kettlebell", "Precor", "Cicular dumbbell", null, 3)}, "Jaime", "Domingo");
 
             var result = await controller.GetRestock(1);
 
