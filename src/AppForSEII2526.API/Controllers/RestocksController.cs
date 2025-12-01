@@ -35,7 +35,7 @@ namespace AppForSEII2526.API.Controllers
                 .Select(r => new RestockDetailDTO(r.Id, r.Title, r.DeliveryAddress, r.Description,
                 r.ExpectedDate, r.TotalPrice, r.RestockItems
                     .Select(ri => new ItemForRestockingDTO(ri.Item.Id, ri.Item.Name, ri.Item.Brand.Name, 
-                    ri.Item.Description, ri.RestockPrice, ri.Item.QuantityForRestock)).ToList<ItemForRestockingDTO>(), 
+                    ri.Item.Description, ri.Item.PurchasePrice, ri.RestockPrice, ri.Item.QuantityForRestock, ri.Item.QuantityAvailableForPurchase, ri.Quantity)).ToList<ItemForRestockingDTO>(), 
                     r.RestockResponsible.Name, r.RestockResponsible.Surname)
                 ).FirstOrDefaultAsync();
             if (restock == null)
@@ -127,7 +127,7 @@ namespace AppForSEII2526.API.Controllers
                     }
                     var itemToRestock = await _context.Items.FindAsync(ritem.Id);
                     restock.RestockItems.Add(new RestockItem(ritem.RestockQuantity, item.RestockPrice * ritem.RestockQuantity, restock, itemToRestock));
-                    ItemRestockDTO.Add(new ItemForRestockingDTO(ritem.Id, item.Name, item.Brand.Name, item.Description,item.RestockPrice * ritem.RestockQuantity, ritem.RestockQuantity, item.QuantityAvailableForPurchase));
+                    ItemRestockDTO.Add(new ItemForRestockingDTO(ritem.Id, item.Name, item.Brand.Name, item.Description, 0, item.RestockPrice * ritem.RestockQuantity, ritem.RestockQuantity, item.QuantityAvailableForPurchase, ritem.RestockQuantity));
                 }
             }
 
