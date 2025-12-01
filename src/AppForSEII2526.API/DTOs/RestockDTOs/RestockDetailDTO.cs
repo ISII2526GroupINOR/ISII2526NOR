@@ -41,7 +41,9 @@ namespace AppForSEII2526.API.DTOs.RestockDTOs
                    Description == dTO.Description &&
                    ExpectedDate == dTO.ExpectedDate &&
                    TotalPrice == dTO.TotalPrice &&
-                   RestockItems.SequenceEqual(dTO.RestockItems);
+                   RestockItems.SequenceEqual(dTO.RestockItems) &&
+                   Name == dTO.Name &&
+                   Surname == dTO.Surname;
         }
     }
 }
