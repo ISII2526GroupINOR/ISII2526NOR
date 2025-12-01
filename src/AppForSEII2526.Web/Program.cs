@@ -43,6 +43,13 @@ string URI2API = builder.Configuration.GetValue(typeof(string), "AppForGym_API")
 // we create the service for accessing the API from where .WEB project
 builder.Services.AddScoped<AppForGymAPIClient>(sp => new AppForGymAPIClient(URI2API, new HttpClient()));
 
+
+
+//adding an In-memory state container service
+//https://learn.microsoft.com/en-us/aspnet/core/blazor/state-management/?view=aspnetcore-8.0#in-memory-state-container-service
+builder.Services.AddScoped<PlanStateContainer>();
+builder.Services.AddScoped<RestockStateContainer>();
+
 builder.Services.AddScoped<PurchaseStateContainer>();
 
 
