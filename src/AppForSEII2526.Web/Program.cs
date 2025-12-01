@@ -48,8 +48,7 @@ builder.Services.AddScoped<AppForGymAPIClient>(sp => new AppForGymAPIClient(URI2
 //adding an In-memory state container service
 //https://learn.microsoft.com/en-us/aspnet/core/blazor/state-management/?view=aspnetcore-8.0#in-memory-state-container-service
 builder.Services.AddScoped<PlanStateContainer>();
-
-
+builder.Services.AddScoped<RestockStateContainer>();
 
 var app = builder.Build();
 
