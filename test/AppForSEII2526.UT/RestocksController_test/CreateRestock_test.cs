@@ -135,7 +135,7 @@ namespace AppForSEII2526.UT.RestocksController_test
 
             RestockDetailDTO expectedWithPrice = new RestockDetailDTO(2, "First", "Any", "Restock for", DateTime.Today.AddDays(1),
                 120.0m, new List<ItemForRestockingDTO> {
-                    new ItemForRestockingDTO(1, "Dumbbell", "Precor", "Regular dumbbell", 120.0m, 4, 4) }, "Jaime", "Domingo");
+                    new ItemForRestockingDTO(1, "Dumbbell", "Precor", "Regular dumbbell", 0, 120.0m, 4, 4, 4) }, "Jaime", "Domingo");
 
             RestockForCreateDTO restockDTOWithoutPrice = new RestockForCreateDTO("Second", "Any", "Restock for",
                 DateTime.Today.AddDays(1), new DateTime(),
@@ -143,7 +143,7 @@ namespace AppForSEII2526.UT.RestocksController_test
 
             RestockDetailDTO expectedWithoutPrice = new RestockDetailDTO(2, "Second", "Any", "Restock for", DateTime.Today.AddDays(1),
                 null, new List<ItemForRestockingDTO> {
-                    new ItemForRestockingDTO(3, "Band", "Precor", "Elastic band", 0, 4, 3) }, "Jaime", "Domingo");
+                    new ItemForRestockingDTO(3, "Band", "Precor", "Elastic band", 0, 0, 4, 3, 4) }, "Jaime", "Domingo");
 
             var allTest = new List<Object[]>
             {
