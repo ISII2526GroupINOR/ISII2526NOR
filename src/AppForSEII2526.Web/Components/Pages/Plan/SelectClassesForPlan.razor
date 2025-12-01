@@ -4,12 +4,15 @@
 @inject AppForGymAPIClient apiClient
 @inject ILogger<SelectClassesForPlan> logger
 @inject PlanStateContainer planState
+@inject NavigationManager navigation
+
+
 
 <h3>SelectClassesForPlan</h3>
 
 <div class="container-fluid">
-    <div class="row">
-        <p>Here I will show the errors</p>
+    <div class="row alert alert-danger" role="alert" hidden="@hideErrors">
+        <p id="ErrorsShown">Errors: @errors</p>
     </div>
 
     <div class="row">
@@ -76,8 +79,19 @@
 
             </div>
         </div>
-        <div class="col-2">
-            <p>Here I will show the selected classes</p>
+        <div class="col-2" hidden="@hiddenClassesSelectedList">
+            <div class="row">
+                <h3>Shopping Cart</h3>
+            </div>
+            @foreach (ClassForCreatePlanDTO item in plan.Classes)
+            {
+                <div class="row">
+                    <button type="button" class="btn btn-light" id="removeMovie_@item.Id" @onclick="@(() => RemovePlanItem(item))"> Name - XX.XX€</button>
+                </div>
+            }
+            <div class="row">
+                <button type="button" class="btn btn-primary" id="purchaseMovieButton" @onclick=@CreatePlan>Rent movies</button>
+            </div>
         </div>
 
     </div>
@@ -123,7 +137,7 @@
         hiddenClassesSelectedList = false;
     }
 
-    private void RemovePlanItem(ClassForPlanDTO selectedClass)
+    private void RemovePlanItem(ClassForCreatePlanDTO selectedClass)
     {
         //planState.RemoveSelectedClassFromPlan(selectedClass);
         if (plan.Classes.Count == 0) hiddenClassesSelectedList = true;
@@ -168,6 +182,11 @@
 
 
         return base.OnInitializedAsync();
+    }
+
+    private void CreatePlan()
+    {
+        navigation.NavigateTo("/plans/createplan");
     }
 
 
