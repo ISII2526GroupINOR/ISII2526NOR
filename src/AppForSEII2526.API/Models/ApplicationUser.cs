@@ -24,13 +24,13 @@ public class ApplicationUser : IdentityUser {
 
     // Id is a string and is inherited from IdentityUser
 
-    [Required] // This attribute ensures the database column is non-nullable
+    //[Required] // This attribute ensures the database column is non-nullable
     [MaxLength(128)]
-    public string Name { get; set; } // There is no compile-time check for nullability, so we avoid constructors (compile errors) for simplicity
+    public string? Name { get; set; } // There is no compile-time check for nullability, so we avoid constructors (compile errors) for simplicity
 
-    [Required] // This attribute ensures the database column is non-nullable
+    //[Required] // This attribute ensures the database column is non-nullable
     [MaxLength(256)]
-    public string Surname { get; set; } // There is no compile-time check for nullability, so we avoid constructors (compile errors) for simplicity
+    public string? Surname { get; set; } // There is no compile-time check for nullability, so we avoid constructors (compile errors) for simplicity
 
     public IList<Plan>? Plans { get; set; }
 
