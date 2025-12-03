@@ -1,7 +1,12 @@
 ﻿@page "/restock/createrestock"
 
+@using AppForSEII2526.Web.API
+@inject AppForGymAPIClient apiclient
+@inject ILogger<CreateRestock> logger
+@inject RestockStateContainer restockState
+
 <h3>CreateRestock</h3>
 
 @code {
-
+    private RestockForCreateDTO restock => restockState.Restock;
 }
