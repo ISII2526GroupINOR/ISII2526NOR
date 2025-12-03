@@ -9,23 +9,13 @@
             Description = description;
         }
 
-        public ItemForRestockingDTO(int id, string name, string brand, string description, decimal? restockPrice, int quantityForRestock) : this(id, name, brand, description)
-        {
-            RestockPrice = restockPrice;
-            QuantityForRestock = quantityForRestock;
-        }
-
-        public ItemForRestockingDTO(int id, string name, string brand, string description, decimal? restockPrice, int quantityForRestock, int quantityAvailableForPurchase) : this(id, name, brand, description, restockPrice, quantityForRestock)
-        {
-            QuantityAvailableForPurchase = quantityAvailableForPurchase;
-        }
-
-        public ItemForRestockingDTO(int id, string name, string brand, string description, decimal purchasePrice, decimal? restockPrice, int quantityForRestock, int quantityAvailableForPurchase) : this(id, name, brand, description)
+        public ItemForRestockingDTO(int id, string name, string brand, string description, decimal purchasePrice, decimal? restockPrice, int quantityForRestock, int quantityAvailableForPurchase, int quantityToRestock) : this(id, name, brand, description)
         {
             PurchasePrice = purchasePrice;
             RestockPrice = restockPrice;
             QuantityForRestock = quantityForRestock;
             QuantityAvailableForPurchase = quantityAvailableForPurchase;
+            QuantityToRestock = quantityToRestock;
         }
 
         public int Id { get; set; }
@@ -46,6 +36,8 @@
         [Required]
         public int QuantityAvailableForPurchase { get; set; }
 
+        public int QuantityToRestock { get; set; }
+
         public override bool Equals(object? obj)
         {
             return obj is ItemForRestockingDTO dTO &&
@@ -56,7 +48,8 @@
                    PurchasePrice == dTO.PurchasePrice &&
                    RestockPrice == dTO.RestockPrice &&
                    QuantityForRestock == dTO.QuantityForRestock &&
-                   QuantityAvailableForPurchase == dTO.QuantityAvailableForPurchase;
+                   QuantityAvailableForPurchase == dTO.QuantityAvailableForPurchase &&
+                   QuantityToRestock == dTO.QuantityToRestock;
         }
     }
 }
