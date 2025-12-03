@@ -1,0 +1,181 @@
+﻿@page "/purchase/selectitemsforpurchase"
+
+
+@using Microsoft.AspNetCore.Authorization
+@using AppForSEII2526.Web.API
+@inject AppForGymAPIClient apiclient
+@inject ILogger<SelectItemsForPurchase> logger
+@inject PurchaseStateContainer purchaseState
+@inject NavigationManager navigation
+
+@attribute [Authorize]
+
+<h3>Select Items For Purchase</h3>
+
+
+<div class="container-fluid">
+    <div class="row">
+        <p>Errors: @errors</p>
+    </div>
+    <div class="row">
+        <div class="col-8">
+            <div class="row">
+                <div class="col">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">Name</span>
+                        <input type="text" id="inputName" @bind=itemName class="form-control" 
+                        placeholder="Name" aria-label="Name" aria-describedby="basic-addon1">
+                    </div>
+                </div>
+                
+                <div class="col">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">Brand</span>
+                        <input type="text" id="inputBrand" @bind=itemBrand class="form-control"
+                               placeholder="Brand" aria-label="Brand" aria-describedby="basic-addon1">
+                    </div>
+                </div>
+
+
+
+                <button type="button" class="btn btn-primary" @onclick=@SearchItems id="searchItems">Search Items</button>
+            </div>
+            <div class="row">
+                @if (items == null)
+                {
+                    <p>Loading items....</p>
+                }
+                else
+                {
+                    if(items.Count == 0)
+                    {
+                        <p>No items found!</p>
+                        @addError("No items found");
+                    }
+                    else
+                    {
+                        <div class="mh-100 table-responsive">
+                            <table class="table table-condensed table-hover" id="TableOfItems">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Brand</th>
+                                        <th>Description</th>
+                                        <th>Price</th>
+                                        <th>Quantity Available</th>
+                                        <th>Purchase</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in items)
+                                    {
+                                        <tr id="ItemData_@item.Name">
+                                            <td>@item.Name</td>
+                                            <td>@item.Brand</td>
+                                            <td>@item.Description</td>
+                                            <td>@item.PurchasePrice€</td>
+                                            <td>@item.QuantityAvailableForPurchase</td>
+                                            <td>
+                                                <button class="btn btn-outline-secondary" id="itemToPurchase_@item.Name" @onclick="@(() => AddItem(item))">Add</button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+
+                }
+            </div>
+        </div>
+
+        <div class="col-2" hidden="@hideRentingCart">
+            <div class="row">
+                <h3>Shopping Cart</h3>
+            </div>
+            @foreach (ItemForPurchaseCreateDTO item in purchase.Items)
+            {
+                <div class="row">
+                    <button type="button" class="btn btn-light" id="removeItem_@item.Name" @onclick="@(() => RemovePurchaseItem(item))">x @item.Name - @item.PurchasePrice€</button>
+                </div>
+            }
+            <div class="row">
+                <button type="button" class="btn btn-primary" id="purchaseItemButton" @onclick=@PurchaseItems>Purchase Items</button>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+@code {
+    private ICollection<ItemForPurchaseSelectDTO> items;
+    private bool hideErrors {get { return errors.Length == 0; }}
+    private string errors = "";
+
+
+    private bool hideRentingCart { get { return purchase.Items.Count == 0; } }
+
+    private string itemName { get; set; }
+    private string itemBrand { get; set; }
+
+    private PurchaseForCreateDTO purchase => purchaseState.Purchase;
+
+    private bool hiddenRentingCart = true;
+
+
+
+    public string addError(string error)
+    {
+        errors += '\n' + error;
+
+        return "";
+    }
+
+
+
+    private void AddItem(ItemForPurchaseSelectDTO item)
+    {
+        purchaseState.AddSelectedItemToPurchase(item);
+    }
+
+    private void RemovePurchaseItem(ItemForPurchaseCreateDTO item)
+    {
+        purchaseState.RemoveSelectedItemFromPurchase(item);
+        if (purchase.Items.Count == 0) hiddenRentingCart = true;
+    }
+
+
+    public async void SearchItems()
+    {
+        try
+        {
+            items = await apiclient.GetItemsForPurchaseAsync(
+                itemName, null, itemBrand
+            );
+
+
+        }
+        catch(ApiException ex)
+        {
+            logger.LogError($"{DateTime.Now} Error: {ex}");
+            errors = "Error while connecting to the system";
+        }
+        StateHasChanged();
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+        SearchItems();
+        return base.OnInitializedAsync();   
+    }
+
+    private void PurchaseItems()
+    {
+        navigation.NavigateTo("/purchase/createpurchase");
+    }
+
+    //void TurnOff(){}
+}
