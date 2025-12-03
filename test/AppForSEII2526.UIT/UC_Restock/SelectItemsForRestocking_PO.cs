@@ -17,10 +17,17 @@ namespace AppForSEII2526.UIT.UC_Restock
         {
         }
 
-        public void SearchItems(string itemName)
+        public void SearchItems(string itemName, string min, string max)
         {
             WaitForBeingClickable(inputName);
             _driver.FindElement(inputName).SendKeys(itemName);
+
+            WaitForBeingClickable(inputmin);
+            _driver.FindElement(inputmin).SendKeys(min);
+
+            WaitForBeingClickable(inputmax);
+            _driver.FindElement(inputmax).SendKeys(max);
+
             _driver.FindElement(buttonSearchItems).Click();
         }
     }
