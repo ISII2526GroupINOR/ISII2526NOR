@@ -5,8 +5,26 @@
 @inject ILogger<CreateRestock> logger
 @inject RestockStateContainer restockState
 
-<h3>CreateRestock</h3>
+<h3>Create Restock</h3>
+
+<EditForm Model="restock" OnValidSubmit="OpenDialog">
+    <div class="row">
+        <div class="col-md">
+            <div class="form-floating">
+                @*button to ask the user if they want to proceed*@
+                <button class="btn btn-primary" type="submit" id="submit">
+                    Restock your items
+                </button>
+            </div>
+        </div>
+    </div>
+</EditForm>
 
 @code {
     private RestockForCreateDTO restock => restockState.Restock;
+
+    private void OpenDialog()
+    {
+        
+    }
 }
