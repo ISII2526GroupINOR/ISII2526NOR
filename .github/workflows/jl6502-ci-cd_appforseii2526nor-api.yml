@@ -6,8 +6,8 @@ name: Build and deploy ASP.Net Core app to Azure Web App - appforseii2526nor-api
 on:
   push:    
     branches:
-      - JL6502-CI-CD
-#      - development
+#      - JL6502-CI-CD
+      - development
 #    paths:
 #      - 'src/AppForSEII2526.API**'
   workflow_dispatch:
@@ -83,6 +83,7 @@ jobs:
           package: .
 
           
+
 
 
 
