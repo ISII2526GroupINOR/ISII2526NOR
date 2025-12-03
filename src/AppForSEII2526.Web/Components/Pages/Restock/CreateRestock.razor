@@ -1,6 +1,7 @@
 ﻿@page "/restock/createrestock"
 
 @using AppForSEII2526.Web.API
+@using AppForSEII2526.Web.Components.Shared
 @inject AppForGymAPIClient apiclient
 @inject ILogger<CreateRestock> logger
 @inject RestockStateContainer restockState
@@ -20,11 +21,30 @@
     </div>
 </EditForm>
 
+@if (DialogIsOpen)
+{
+    <Dialog Caption="Restock items"
+        Message="Do you want to proceed to restock the selected items?"
+        OnClose="@OnDialogClose"
+        Type=Dialog.Category.SaveNot>
+    </Dialog>
+}
+
 @code {
+    private bool DialogIsOpen;
+
     private RestockForCreateDTO restock => restockState.Restock;
 
     private void OpenDialog()
     {
-        
+        DialogIsOpen = true;
+    }
+
+    private void OnDialogClose(bool isOk)
+    {
+        @if (isOk)
+        {
+            // Proceeds the data introduced by the user
+        }
     }
 }
