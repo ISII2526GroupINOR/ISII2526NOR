@@ -18,6 +18,14 @@ else
         @if(restock.TotalPrice != null)
         {
             <tr>
+                <th>Name</th>
+                <td id="Name">@restock.Name</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td id="Name">@restock.Surname</td>
+            </tr>
+            <tr>
                 <th>Total Price</th>
                 <td id="TotalPrice">@restock.TotalPrice</td>
             </tr>
@@ -54,6 +62,7 @@ else
                 <th scope="col">Name</th>
                 <th scope="col">Brand</th>
                 <th scope="col">Price per unit</th>
+                <th scope="col">Quantity To Restock</th>
             </tr>
         </thead>
         <tbody>
@@ -63,6 +72,7 @@ else
                     <td>@item.Name</td>
                     <td>@item.Brand</td>
                     <td>@item.RestockPrice</td>
+                    <td>@item.QuantityToRestock</td>
                 </tr>
             }
         </tbody>
