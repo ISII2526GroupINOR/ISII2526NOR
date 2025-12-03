@@ -7,9 +7,9 @@ on:
   push:
     branches:
       - SergioMarGon-Ci-CD
-#      - development
-#    paths:
-#      - 'src/AppForSEII2526.API**'
+      - development
+    paths:
+      - 'src/AppForSEII2526.API**'
   workflow_dispatch:
 
 jobs:
@@ -82,4 +82,5 @@ jobs:
           package: .
 
           
+
 
