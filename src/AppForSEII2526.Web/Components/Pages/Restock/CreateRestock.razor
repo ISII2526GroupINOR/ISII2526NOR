@@ -19,6 +19,25 @@
             </div>
         </div>
     </div>
+
+    <div class="mh-100 table-responsive">
+        <table class="table table-condensed table-hover" id="TableOfRestockItems">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Brand</th>
+                    <th>Quantity</th>
+                    <th>Price of Restock</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in restock.RestockItems)
+                {
+
+                }
+            </tbody>
+        </table>
+    </div>
 </EditForm>
 
 @if (DialogIsOpen)
