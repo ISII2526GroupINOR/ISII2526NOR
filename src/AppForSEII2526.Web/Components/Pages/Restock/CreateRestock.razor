@@ -53,6 +53,10 @@
         </div>
     </div>
 
+    <p>
+        <button class="btn btn-primary" type="submit" @onclick="ModifyRestockItems" id="ModifyItems">Modify Items</button>
+    </p>
+
     <div class="mh-100 table-responsive">
         <table class="table table-condensed table-hover" id="TableOfRestockItems">
             <thead>
@@ -95,6 +99,11 @@
     private object? errors;
 
     private RestockForCreateDTO restock => restockState.Restock;
+
+    private void ModifyRestockItems()
+    {
+        navigation.NavigateTo("/restocks/selectitemsforrestocking");
+    }
 
     private void OpenDialog()
     {
