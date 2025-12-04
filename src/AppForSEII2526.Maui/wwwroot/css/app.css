@@ -181,6 +181,11 @@ a, .btn-link {
 
 .content {
     padding-top: 1.1rem;
+    max-width: 300px;
+    height:600px;
+    background-color:cyan;
+    border-color:black;
+    border-width:50px;
 }
 
 h1:focus {
