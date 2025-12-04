@@ -122,6 +122,7 @@
 
     private async Task OnDialogClose(bool isOk)
     {
+        DialogIsOpen = false;
         @if (isOk)
         {
             // Process the data introduced by the user
