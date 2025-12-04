@@ -18,6 +18,9 @@
         <DataAnnotationsValidator/>
         <ValidationSummary class="row alert alert-danger" />
     </div>
+    <div class="row alert alert-danger" role="alert" hidden="@hideErrors">
+        <p id="ErrorShown">Errors: @messageError</p>
+    </div>
     <div class="row g-3">
         <div class="col-md">
             <div class="form-floating mb-3">
@@ -98,6 +101,9 @@
 }
 
 @code {
+    private string messageError = "";
+    private bool hideErrors { get { return messageError.Length == 0; } }
+
     private bool DialogIsOpen;
 
     private object? errors;
@@ -114,11 +120,35 @@
         DialogIsOpen = true;
     }
 
-    private void OnDialogClose(bool isOk)
+    private async Task OnDialogClose(bool isOk)
     {
         @if (isOk)
         {
-            // Proceeds the data introduced by the user
+            // Process the data introduced by the user
+            if(restock.RestockItems.Count > 0)
+            {
+                try
+                {
+                    var restocked = await apiclient.CreateRestockAsync(restock);
+                    restockState.RestockProcessed();
+                    navigation.NavigateTo("/restock/detailrestock/?RestockId={restocked.Id}");
+                }
+                catch (ApiException<ValidationProblemDetails> apiexceptionvalidation)
+                {
+                    if(apiexceptionvalidation.Result.Errors.Values != null)
+                    {
+                        messageError = "";
+                        foreach (var errors in apiexceptionvalidation.Result.Errors.Values)
+                        {
+                            messageError = string.Join("(*) ", messageError, string.Join(" (*) ", errors));
+                        }
+                    }
+                }
+                catch (ApiException apiexception)
+                {
+                    messageError = "Error while processing your request, please try again later!";
+                }
+            }
         }
     }
 
