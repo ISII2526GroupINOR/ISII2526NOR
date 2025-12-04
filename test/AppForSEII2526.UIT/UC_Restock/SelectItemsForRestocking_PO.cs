@@ -12,6 +12,7 @@ namespace AppForSEII2526.UIT.UC_Restock
         By inputmin = By.Id("inputMin");
         By inputmax = By.Id("inputMax");
         By buttonSearchItems = By.Id("searchItems");
+        By tableOfItemsBy = By.Id("TableOfItems");
 
         public SelectItemsForRestocking_PO(IWebDriver driver, ITestOutputHelper output) : base(driver, output)
         {
@@ -29,6 +30,11 @@ namespace AppForSEII2526.UIT.UC_Restock
             _driver.FindElement(inputmax).SendKeys(max);
 
             _driver.FindElement(buttonSearchItems).Click();
+        }
+
+        public bool CheckListOfItems(List<string[]> expectedItems)
+        {
+            return CheckBodyTable(expectedItems, tableOfItemsBy);
         }
     }
 }
