@@ -2,17 +2,21 @@
 
 @using AppForSEII2526.Web.API
 @using AppForSEII2526.Web.Components.Shared
+@using Microsoft.AspNetCore.Authorization
+
 @inject AppForGymAPIClient apiclient
 @inject ILogger<CreateRestock> logger
 @inject RestockStateContainer restockState
 @inject NavigationManager navigation
+
+@attribute [Authorize]
 
 <h3>Create Restock</h3>
 
 <EditForm Model="restock" OnValidSubmit="OpenDialog">
     <div class="row">
         <DataAnnotationsValidator/>
-        <ValidationSummary/>
+        <ValidationSummary class="row alert alert-danger" />
     </div>
     <div class="row g-3">
         <div class="col-md">
@@ -117,4 +121,25 @@
             // Proceeds the data introduced by the user
         }
     }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (authenticationState is not null)
+        {
+            var authState = await authenticationState;
+            var user = authState?.User;
+            if (user is not null)
+            {
+                if (user.Identity is not null && user.Identity.IsAuthenticated)
+                {
+                    restock.RestockResponsible = user.Identity.Name;
+                }
+            }
+
+            restock.DeliveryAddress = restock.DeliveryAddress == null ? "" : restock.DeliveryAddress;
+        }
+    }
+
+    [CascadingParameter]
+    private Task<AuthenticationState>? authenticationState { get; set; }
 }
