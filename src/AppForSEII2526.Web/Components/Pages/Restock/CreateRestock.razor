@@ -5,6 +5,7 @@
 @inject AppForGymAPIClient apiclient
 @inject ILogger<CreateRestock> logger
 @inject RestockStateContainer restockState
+@inject NavigationManager navigation
 
 <h3>Create Restock</h3>
 
@@ -60,6 +61,7 @@
                     <th>Brand</th>
                     <th>Quantity</th>
                     <th>Price of Restock</th>
+                    <th>Quantity To Restock</th>
                 </tr>
             </thead>
             <tbody>
@@ -70,6 +72,7 @@
                         <td>@restockState.itemInfo[item.Id].Brand</td>
                         <td>@restockState.itemInfo[item.Id].QuantityAvailableForPurchase</td>
                         <td>@restockState.itemInfo[item.Id].RestockPrice</td>
+                        <InputNumber @bind-Value="item.RestockQuantity" class="form-control" id="@($"Quantity_{item.Id}")" />
                     </tr>
                 }
             </tbody>
