@@ -33,7 +33,12 @@
             <tbody>
                 @foreach (var item in restock.RestockItems)
                 {
-
+                    <tr id="ItemData_@item.Id">
+                        <td>@restockState.itemInfo[item.Id].Name</td>
+                        <td>@restockState.itemInfo[item.Id].Brand</td>
+                        <td>@restockState.itemInfo[item.Id].QuantityAvailableForPurchase</td>
+                        <td>@restockState.itemInfo[item.Id].RestockPrice</td>
+                    </tr>
                 }
             </tbody>
         </table>
