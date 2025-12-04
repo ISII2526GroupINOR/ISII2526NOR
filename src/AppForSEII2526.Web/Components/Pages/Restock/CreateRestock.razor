@@ -10,6 +10,38 @@
 
 <EditForm Model="restock" OnValidSubmit="OpenDialog">
     <div class="row">
+        <DataAnnotationsValidator/>
+        <ValidationSummary/>
+    </div>
+    <div class="row g-3">
+        <div class="col-md">
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="restock.Title" class="form-control" id="Title" />
+                <label for="Title">Title</label>
+            </div>
+        </div>
+
+        <div class="col-md">
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="restock.DeliveryAddress" class="form-control" id="Address"/>
+                <label for="Address">Address</label>
+            </div>
+        </div>
+
+        <div class="col-md">
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="restock.Description" class="form-control" id="Description" />
+                <label for="Description">Description</label>
+            </div>
+        </div>
+
+        <div class="col-md">
+            <div class="form-floating mb-3">
+                <InputDate @bind-Value="restock.ExpectedDate" class="form-control" id="ExpectedDate" />
+                <label for="ExpectedDate">ExpectedDate</label>
+            </div>
+        </div>
+
         <div class="col-md">
             <div class="form-floating">
                 @*button to ask the user if they want to proceed*@
@@ -56,6 +88,8 @@
 
 @code {
     private bool DialogIsOpen;
+
+    private object? errors;
 
     private RestockForCreateDTO restock => restockState.Restock;
 
