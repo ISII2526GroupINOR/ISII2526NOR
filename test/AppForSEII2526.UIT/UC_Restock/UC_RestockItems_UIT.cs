@@ -40,10 +40,10 @@ namespace AppForSEII2526.UIT.UC_Restock
 
         [Theory]
         [InlineData(itemName1, itemBrand1, itemStockQuantity1, itemRestockPrice1, "Resistance Band", "", "")]
-        [InlineData(itemName1, itemBrand1, itemStockQuantity1, itemRestockPrice1, "", "8", "")]
         [InlineData(itemName2, itemBrand2, itemStockQuantity2, itemRestockPrice2, "", "", "2")]
+        [InlineData(itemName1, itemBrand1, itemStockQuantity1, itemRestockPrice1, "", "8", "")]
         [Trait("LevelTesting", "Functional Testing")]
-        public void UC14_3_AF2_UC14_3_4_5_filtering(string itemName, string itemBrand, string itemStockQuantity, string itemRestockPrice,
+        public void UC14_3_AF2_UC14_2_3_4_filtering(string itemName, string itemBrand, string itemStockQuantity, string itemRestockPrice,
             string filterName, string filterMin, string filterMax)
         {
             // Arrange
@@ -60,7 +60,7 @@ namespace AppForSEII2526.UIT.UC_Restock
         //[Fact(Skip = "first run dbo.Items.data.UpdateQuantityAvailable.sql, after run dbo.Items.data.RecoverQuantityAvailable")]
         [Fact]
         [Trait("LevelTesting", "Functional Testing")]
-        public void UC14_AF1_UC14_X_filtering()
+        public void UC14_AF1_UC14_13_filtering()
         {
             InitialStepsForRestockItems();
             var expectedItems = new List<string[]> { };
