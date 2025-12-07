@@ -29,8 +29,8 @@ namespace AppForSEII2526.UT.RestocksController_test
 
             var restock = new Restock("A restock", "An address", "A description", new DateTime(), new DateTime(),
                 180, new List<RestockItem>(), user);
-            restock.RestockItems.Add(new RestockItem(2, new Restock(), items[0]));
-            restock.RestockItems.Add(new RestockItem(3, new Restock(), items[1]));
+            restock.RestockItems.Add(new RestockItem(2, 30, new Restock(), items[0]));
+            restock.RestockItems.Add(new RestockItem(3, 40, new Restock(), items[1]));
 
             _context.Users.Add(user);
             _context.Add(restock);
@@ -62,8 +62,8 @@ namespace AppForSEII2526.UT.RestocksController_test
 
             var expected = new RestockDetailDTO(1, "A restock", "An address", "A description", new DateTime(),
                 180.0m, new List<ItemForRestockingDTO>() { 
-                    new ItemForRestockingDTO(1, "Dumbbell", "Precor", "Regular dumbbell", null, 6),
-                    new ItemForRestockingDTO(2, "Kettlebell", "Precor", "Cicular dumbbell", null, 3)});
+                    new ItemForRestockingDTO(1, "Dumbbell", "Precor", "Regular dumbbell", 0, 30, 6, 8, 2),
+                    new ItemForRestockingDTO(2, "Kettlebell", "Precor", "Cicular dumbbell", 0, 40, 3, 5, 3)}, "Jaime", "Domingo");
 
             var result = await controller.GetRestock(1);
 
