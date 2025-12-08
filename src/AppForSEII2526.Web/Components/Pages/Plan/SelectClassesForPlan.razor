@@ -18,6 +18,10 @@
         <p id="ErrorsShown">Errors: @errors</p>
     </div>
 
+    <div class="row alert alert-warning" role="alert" hidden="@hideWarnings">
+        <p id="WarningsShown">Warnings: @warnings</p>
+    </div>
+
     <div class="row">
         <div class="col-8">
             <div class="row">
@@ -103,6 +107,8 @@
     private ICollection<ClassForPlanDTO> classes; // Classes fetched from API
     private bool hideErrors { get { return errors.Length == 0; } }
     private string errors = "";
+    private bool hideWarnings { get { return warnings.Length == 0; } }
+    private string warnings = "";
     private string? className { get; set; }
     private DateTime? _classDate;
     private DateTime? ClassDate
@@ -182,6 +188,16 @@
             // Call the API to get the classes
             classes = await apiClient.GetAvailableClassesForPlanAsync(className, ClassDate);
             errors = "";
+
+            // Warnings management
+            if(classes.Count == 0)
+            {
+                warnings = "No classes found with the given filters";
+            }
+            else
+            {
+                warnings = "";
+            }
         }
         catch (ApiException ex)
         {
