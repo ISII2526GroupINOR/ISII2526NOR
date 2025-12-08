@@ -1,11 +1,14 @@
 ﻿@page "/plan/selectclassesforrental"
 
+
 @using AppForSEII2526.Web.API
+@using Microsoft.AspNetCore.Authorization
 @inject AppForGymAPIClient apiClient
 @inject ILogger<SelectClassesForPlan> logger
 @inject PlanStateContainer planState
 @inject NavigationManager navigation
 
+@attribute [Authorize]
 
 
 <h3>SelectClassesForPlan</h3>
