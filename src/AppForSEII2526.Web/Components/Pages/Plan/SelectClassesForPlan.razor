@@ -18,7 +18,6 @@
     <div class="row">
         <div class="col-8">
             <div class="row">
-                <p>Here I will show the filters</p>
                 <div class="col">
                     <div class="input-group mb-3">
                         <span class="input-group-text" id="basic-addon1">Name</span>
@@ -151,10 +150,35 @@
 
     public async void SearchClasses()
     {
+        // Error management
+        if(ClassDate != null && ClassDate < DateTime.SpecifyKind(DateTime.Today, DateTimeKind.Utc))
+        {
+            errors = "The class date cannot be in the past";
+            StateHasChanged();
+            return;
+        }
+
+        DateTime now = DateTime.Now;
+        DateOnly today = DateOnly.FromDateTime(DateTime.Now);
+        DateOnly nextWeekMonday = today.DayOfWeek == DayOfWeek.Sunday // Remember: Sunday = 0, Monday = 1, ..., Saturday = 6
+            ? today.AddDays(1)
+            : today.AddDays(8 - (int)today.DayOfWeek);
+        DateOnly nextWeekSunday = nextWeekMonday.AddDays(6);
+
+        if (ClassDate != null && (DateOnly.FromDateTime(ClassDate.Value) < nextWeekMonday || DateOnly.FromDateTime(ClassDate.Value) > nextWeekSunday))
+        {
+            errors = "The class date must be within the next week (from Monday to Sunday)";
+            StateHasChanged();
+            return;
+        }
+
+
+        // API call 
         try
         {   
             // Call the API to get the classes
             classes = await apiClient.GetAvailableClassesForPlanAsync(className, ClassDate);
+            errors = "";
         }
         catch (ApiException ex)
         {
