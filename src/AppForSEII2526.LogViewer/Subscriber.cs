@@ -6,9 +6,9 @@ using System.Text.Json;
 
 public class Subscriber
 {
-    private readonly string _hostname = "10.81.139.157";
+    private readonly string _hostname = "10.90.23.157";
     private readonly string _queueName = "";
-    private readonly string _exchangeName = "logs";
+    private readonly string _exchangeName = "topic_logs";
 
     private readonly string _userName = "guest"; 
     private readonly string _password = "guest";
@@ -33,16 +33,20 @@ public class Subscriber
         _properties = _channel.CreateBasicProperties();
         _properties.Persistent = true; // Hace el mensaje persistente
 
-        _channel.ExchangeDeclare(_exchangeName, ExchangeType.Fanout, true);
+        _channel.ExchangeDeclare(_exchangeName, ExchangeType.Topic, true);
 
         var tempQueue = _channel.QueueDeclare();
         var _queueName = tempQueue.QueueName;
 
-        _channel.QueueBind(queue: _queueName, exchange: _exchangeName, routingKey: "");
+
+
     }
 
-    public void startConsuming()
+    public void startConsuming(string routingKey)
     {
+
+        _channel.QueueBind(queue: _queueName, exchange: _exchangeName, routingKey: routingKey);
+
         var consumer = new EventingBasicConsumer(_channel);
 
         while(true){
@@ -52,7 +56,6 @@ public class Subscriber
                 var message = Encoding.UTF8.GetString(body); //se convierte de vuelta a string
 
                 
-                //var json = JsonSerializer.Deserialize(message);
 
                 Console.WriteLine($"Pedido recibido: {message}");
             };
