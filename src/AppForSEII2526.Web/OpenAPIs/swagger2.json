@@ -863,6 +863,10 @@
           "quantityAvailableForPurchase": {
             "type": "integer",
             "format": "int32"
+          },
+          "quantityToRestock": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -1113,6 +1117,14 @@
             "items": {
               "$ref": "#/components/schemas/ItemForRestockingDTO"
             },
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "surname": {
+            "type": "string",
             "nullable": true
           }
         },
