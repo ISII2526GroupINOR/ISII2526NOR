@@ -132,7 +132,7 @@
                 {
                     var restocked = await apiclient.CreateRestockAsync(restock);
                     restockState.RestockProcessed();
-                    navigation.NavigateTo("/restock/detailrestock/?RestockId={restocked.Id}");
+                    navigation.NavigateTo($"/restock/detailrestock/?RestockId={restocked.Id}");
                 }
                 catch (ApiException<ValidationProblemDetails> apiexceptionvalidation)
                 {
