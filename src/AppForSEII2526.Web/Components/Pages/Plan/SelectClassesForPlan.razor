@@ -165,12 +165,6 @@
     public async void SearchClasses()
     {
         // Error management
-        if(ClassDate != null && ClassDate < DateTime.SpecifyKind(DateTime.Today, DateTimeKind.Utc))
-        {
-            errors = "The class date cannot be in the past";
-            StateHasChanged();
-            return;
-        }
 
         DateTime now = DateTime.Now;
         DateOnly today = DateOnly.FromDateTime(DateTime.Now);
@@ -181,6 +175,7 @@
 
         if (ClassDate != null && (DateOnly.FromDateTime(ClassDate.Value) < nextWeekMonday || DateOnly.FromDateTime(ClassDate.Value) > nextWeekSunday))
         {
+            // Also takes into account if the specified date is in the past, because in that case it won't be in the next week (hopefully)
             errors = "The class date must be within the next week (from Monday to Sunday)";
             StateHasChanged();
             return;
