@@ -1,4 +1,4 @@
-﻿@page "/plan/selectclassesforrental"
+﻿@page "/plan/selectclassesforplan"
 
 
 @using AppForSEII2526.Web.API
@@ -69,7 +69,7 @@
                                         <td>@cl.Price</td>
                                         <td>@string.Join(", ", cl.TypeItems)</td>
                                         <td>
-                                            <button class="btn btn-outline-secondary" id="classToInclude_@cl.Id" @onclick="@(() => AddClass(cl))">Add</button>
+                                            <button class="btn btn-outline-secondary" id="bt_add_class_@cl.Id" @onclick="@(() => AddClass(cl))">Add</button>
                                         </td>
                                     </tr>
                                 }
