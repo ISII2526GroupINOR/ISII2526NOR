@@ -6,7 +6,7 @@ INSERT INTO [dbo].[Brands] ([Id], [Name]) VALUES (4, N'Cybex')
 SET IDENTITY_INSERT [dbo].[Brands] OFF
 
 SET IDENTITY_INSERT [dbo].[TypeItems] ON
-INSERT INTO [dbo].[TypeItems] ([Id], [Name], [ClassId]) VALUES (1, N'Dumbbell', NULL)
+INSERT INTO [dbo].[TypeItems] ([Id], [Name], [ClassId]) VALUES (1, N'Dumbbell', 5)
 INSERT INTO [dbo].[TypeItems] ([Id], [Name], [ClassId]) VALUES (2, N'Band', 4)
 INSERT INTO [dbo].[TypeItems] ([Id], [Name], [ClassId]) VALUES (3, N'Machine', 3)
 INSERT INTO [dbo].[TypeItems] ([Id], [Name], [ClassId]) VALUES (4, N'Mat', 1)
