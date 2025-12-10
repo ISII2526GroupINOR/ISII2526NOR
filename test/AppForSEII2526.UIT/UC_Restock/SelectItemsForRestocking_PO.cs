@@ -14,6 +14,7 @@ namespace AppForSEII2526.UIT.UC_Restock
         By buttonSearchItems = By.Id("searchItems");
         By tableOfItemsBy = By.Id("TableOfItems");
         By errorShownBy = By.Id("ErrorShown");
+        By buttonRestockItems = By.Id("RestockItemButton");
 
         public SelectItemsForRestocking_PO(IWebDriver driver, ITestOutputHelper output) : base(driver, output)
         {
@@ -43,6 +44,23 @@ namespace AppForSEII2526.UIT.UC_Restock
             IWebElement actualErrorShown = _driver.FindElement(errorShownBy);
             _output.WriteLine($"actual message shown: {actualErrorShown.Text}");
             return actualErrorShown.Text.Contains(message);
+        }
+
+        public void AddItemToRestockingCart(string itemName)
+        {
+            WaitForBeingClickable(By.Id("itemToRestock_" + itemName));
+            _driver.FindElement(By.Id("itemToRestock_" + itemName)).Click();
+        }
+
+        public void RemoveItemFromRestockingCArt(int itemId)
+        {
+            WaitForBeingClickable(By.Id("removeItem_" + itemId));
+            _driver.FindElement(By.Id("removeItem_" + itemId)).Click();
+        }
+
+        public bool RestockNotAvailable()
+        {
+            return _driver.FindElement(buttonRestockItems).Displayed == false;
         }
     }
 }

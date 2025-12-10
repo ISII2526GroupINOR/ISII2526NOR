@@ -16,6 +16,7 @@ namespace AppForSEII2526.UIT.UC_Restock
         private const string itemStockQuantity1 = "8";
         private const string itemRestockPrice1 = "7";
 
+        private const int Id2 = 9;
         private const string itemName2 = "20 Kg Kettlebell";
         private const string itemBrand2 = "Precor";
         private const string itemStockQuantity2 = "2";
@@ -68,6 +69,17 @@ namespace AppForSEII2526.UIT.UC_Restock
             selectItemsForRestocking_PO.SearchItems("", "", "");
 
             Assert.True(selectItemsForRestocking_PO.CheckListOfItems(expectedItems));
+        }
+
+        [Fact]
+        [Trait("LevelTesting", "Functional Testing")]
+        public void UC14_AF3_UC14_5_RestockNotAvailable()
+        {
+            InitialStepsForRestockItems();
+            selectItemsForRestocking_PO.AddItemToRestockingCart(itemName2);
+            selectItemsForRestocking_PO.RemoveItemFromRestockingCArt(Id2);
+
+            Assert.True(selectItemsForRestocking_PO.RestockNotAvailable());
         }
     }
 }
