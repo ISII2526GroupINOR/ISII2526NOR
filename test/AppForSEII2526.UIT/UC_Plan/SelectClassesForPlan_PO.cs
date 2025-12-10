@@ -16,7 +16,6 @@ namespace AppForSEII2526.UIT.UC_Plan
         public SelectClassesForPlan_PO(IWebDriver driver, ITestOutputHelper output) : base(driver, output)
         {
             
-            
         }
 
         public void SearchClasses(string className, DateOnly classDate)
@@ -27,7 +26,7 @@ namespace AppForSEII2526.UIT.UC_Plan
 
             // Write the classDate into the inputDate webelement
             WaitForBeingClickable(inputDate);
-            _driver.FindElement(inputDate).SendKeys(classDate.ToString("dd-MM-yyyy"));
+            _driver.FindElement(inputDate).SendKeys(classDate.ToString("dd/MM/yyyy"));
 
             // Perform search by clicking the button
             WaitForBeingClickable(button);
