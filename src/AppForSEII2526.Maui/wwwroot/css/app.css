@@ -183,9 +183,9 @@ a, .btn-link {
     padding-top: 1.1rem;
     max-width: 300px;
     height:600px;
-    background-color:cyan;
+    border:solid;
     border-color:black;
-    border-width:50px;
+    border-width:4px;
 }
 
 h1:focus {
@@ -263,7 +263,7 @@ h1:focus {
 */
 
 
-title {
+.title {
     /* Cyclops Title */
     font-family: 'Roboto';
     font-style: normal;
@@ -278,7 +278,15 @@ title {
 }
 
 
+.header-content {
+    position: relative; /* Add this */
+    z-index: 2; /* Add this - higher than header-icon */
+    padding-left: 150px;
+    padding-top: 20px;
+}
+
 .header-icon {
+    position:absolute !important;
     width: 122px;
     height: 122px;
     left: -11px;
@@ -288,7 +296,7 @@ title {
     background-position: center;
     box-shadow: 0 0 40px 26px rgba(90, 175, 83, 0.25);
     border-radius: 40px;
-    z-index: -1;
+    z-index: 1;
 }
 
 
