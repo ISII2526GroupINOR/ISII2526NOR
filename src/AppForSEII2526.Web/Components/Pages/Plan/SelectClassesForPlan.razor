@@ -55,6 +55,7 @@
                                 <tr>
                                     <th>Name</th>
                                     <th>Date</th>
+                                    <th>Time</th>
                                     <th>Price</th>
                                     <th>Item Types</th>
                                     <th>Select</th>
@@ -66,6 +67,7 @@
                                     <tr id="ClassData_@cl.Name">
                                         <td>@cl.Name</td>
                                         <td>@cl.Date.DateTime.ToShortDateString()</td>
+                                        <td>@cl.Date.DateTime.ToString("HH:mm")</td>
                                         <td>@cl.Price</td>
                                         <td>@string.Join(", ", cl.TypeItems)</td>
                                         <td>
@@ -88,10 +90,13 @@
             {
                 <div class="row">
                     <button type="button" class="btn btn-light" id="removeMovie_@item.Id" @onclick="@(() => RemovePlanItem(item))">
-                        @item.Name - @item.Date.DateTime.ToShortDateString() - @item.Price €  [Remove]
+                        @item.Name <br> @item.Date.DateTime.ToShortDateString() @item.Date.DateTime.ToString("HH:mm") <br> @item.Price € <br> [Remove]
                     </button>
                 </div>
             }
+            <div class="row" id="totalPrice">
+                <h4>Total Price: @planState.TotalPrice €</h4>
+            </div>
             <div class="row">
                 <button type="button" class="btn btn-primary" id="purchaseClassesButton" @onclick=@CreatePlan>Create plan</button>
             </div>
