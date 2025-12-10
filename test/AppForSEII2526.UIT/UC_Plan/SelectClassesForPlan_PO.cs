@@ -19,15 +19,22 @@ namespace AppForSEII2526.UIT.UC_Plan
             
         }
 
-        public void SearchClasses(string className, DateOnly classDate)
+        public void SearchClasses(string className, DateOnly? classDate)
         {
             // Write the className into the inputName webelement
             WaitForBeingClickable(inputName);
             _driver.FindElement(inputName).SendKeys(className);
 
             // Write the classDate into the inputDate webelement
-            WaitForBeingClickable(inputDate);
-            _driver.FindElement(inputDate).SendKeys(classDate.ToString("dd/MM/yyyy"));
+            // If classDate is null, do not write anything. This allows searching without date filter on some test cases.
+            if (classDate != null)
+            {
+                DateOnly strictClassDate = (DateOnly)classDate;
+                WaitForBeingClickable(inputDate);
+                _driver.FindElement(inputDate).SendKeys(strictClassDate.ToString("dd/MM/yyyy"));
+            }
+
+
 
             // Perform search by clicking the button
             WaitForBeingClickable(button);
