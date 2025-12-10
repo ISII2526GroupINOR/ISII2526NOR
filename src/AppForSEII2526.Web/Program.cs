@@ -50,6 +50,9 @@ builder.Services.AddScoped<AppForGymAPIClient>(sp => new AppForGymAPIClient(URI2
 builder.Services.AddScoped<PlanStateContainer>();
 builder.Services.AddScoped<RestockStateContainer>();
 
+builder.Services.AddScoped<PurchaseStateContainer>();
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
