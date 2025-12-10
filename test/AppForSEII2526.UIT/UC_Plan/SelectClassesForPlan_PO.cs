@@ -19,14 +19,20 @@ namespace AppForSEII2526.UIT.UC_Plan
             
         }
 
-        public void SearchClasses(string className)
+        public void SearchClasses(string className, DateOnly classDate)
         {
-            // Wait for the webelement to be clickable
+            // Write the className into the inputName webelement
             WaitForBeingClickable(inputName);
-
             _driver.FindElement(inputName).SendKeys(className);
+
+            // Write the classDate into the inputDate webelement
+            WaitForBeingClickable(inputDate);
+            _driver.FindElement(inputDate).SendKeys(classDate.ToString("dd-MM-yyyy"));
+
+            // Perform search by clicking the button
+            WaitForBeingClickable(button);
             _driver.FindElement(button).Click();
-            
+
 
         }
     }
