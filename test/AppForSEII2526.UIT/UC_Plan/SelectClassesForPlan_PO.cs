@@ -12,6 +12,7 @@ namespace AppForSEII2526.UIT.UC_Plan
         By inputName = By.Id("inputName");
         By inputDate = By.Id("inputDate");
         By button = By.Id("searcClasses");
+        By tableOfClassesBy = By.Id("tableOfClasses");
 
         public SelectClassesForPlan_PO(IWebDriver driver, ITestOutputHelper output) : base(driver, output)
         {
@@ -32,7 +33,12 @@ namespace AppForSEII2526.UIT.UC_Plan
             WaitForBeingClickable(button);
             _driver.FindElement(button).Click();
 
+        }
 
+
+        public bool CheckListOfClasses(List<string[]> expectedClasses)
+        {
+            return CheckBodyTable(expectedClasses, tableOfClassesBy);
         }
     }
 }
