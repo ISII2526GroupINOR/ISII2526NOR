@@ -56,6 +56,17 @@
     </ItemGroup>
 
     <ItemGroup>
+      <MauiImage Remove="Resources\Images\assistant_icon.jpeg" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="Resources\Images\assistant_icon.jpeg">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
+    </ItemGroup>
+
+    <ItemGroup>
       <MauiImage Include="wwwroot\Images\defaultprofilepicture.png" />
     </ItemGroup>
 
