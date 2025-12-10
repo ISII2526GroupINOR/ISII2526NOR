@@ -1,11 +1,14 @@
 ﻿@page "/plan/selectclassesforrental"
 
+
 @using AppForSEII2526.Web.API
+@using Microsoft.AspNetCore.Authorization
 @inject AppForGymAPIClient apiClient
 @inject ILogger<SelectClassesForPlan> logger
 @inject PlanStateContainer planState
 @inject NavigationManager navigation
 
+@attribute [Authorize]
 
 
 <h3>SelectClassesForPlan</h3>
@@ -15,14 +18,17 @@
         <p id="ErrorsShown">Errors: @errors</p>
     </div>
 
+    <div class="row alert alert-warning" role="alert" hidden="@hideWarnings">
+        <p id="WarningsShown">Warnings: @warnings</p>
+    </div>
+
     <div class="row">
         <div class="col-8">
             <div class="row">
-                <p>Here I will show the filters</p>
                 <div class="col">
                     <div class="input-group mb-3">
                         <span class="input-group-text" id="basic-addon1">Name</span>
-                        <input type="text" id="inputNam" @bind=className class="form-control" placeholder="Name" aria-label="Name" aria-describedby="basic-addon1">
+                        <input type="text" id="inputName" @bind=className class="form-control" placeholder="Name" aria-label="Name" aria-describedby="basic-addon1">
                     </div>
                 </div>
                 <div class="col">
@@ -51,7 +57,6 @@
                                     <th>Date</th>
                                     <th>Price</th>
                                     <th>Item Types</th>
-                                    <th>Goal</th>
                                     <th>Select</th>
                                 </tr>
                             </thead>
@@ -64,11 +69,7 @@
                                         <td>@cl.Price</td>
                                         <td>@string.Join(", ", cl.TypeItems)</td>
                                         <td>
-                                            <input type="text" id="ClassGoalInput_@cl.Name" @bind="@goals[cl.Id]"
-                                                style="min-width:150px" class="form-control" placeholder="Goal" aria-label="Goal" aria-describedby="basic-addon1" />
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-outline-secondary" id="classToInclude_@cl.Name" @onclick="@(() => AddClass(cl))">Add</button>
+                                            <button class="btn btn-outline-secondary" id="classToInclude_@cl.Id" @onclick="@(() => AddClass(cl))">Add</button>
                                         </td>
                                     </tr>
                                 }
@@ -83,14 +84,16 @@
             <div class="row">
                 <h3>Shopping Cart</h3>
             </div>
-            @foreach (ClassForCreatePlanDTO item in plan.Classes)
+            @foreach (ClassForPlanDTO item in planState.ClassesDetail)
             {
                 <div class="row">
-                    <button type="button" class="btn btn-light" id="removeMovie_@item.Id" @onclick="@(() => RemovePlanItem(item))"> Name - XX.XX€</button>
+                    <button type="button" class="btn btn-light" id="removeMovie_@item.Id" @onclick="@(() => RemovePlanItem(item))">
+                        @item.Name - @item.Date.DateTime.ToShortDateString() - @item.Price €  [Remove]
+                    </button>
                 </div>
             }
             <div class="row">
-                <button type="button" class="btn btn-primary" id="purchaseMovieButton" @onclick=@CreatePlan>Rent movies</button>
+                <button type="button" class="btn btn-primary" id="purchaseClassesButton" @onclick=@CreatePlan>Create plan</button>
             </div>
         </div>
 
@@ -101,10 +104,11 @@
 
     // Variables and properties of the UI component
 
-    private ICollection<ClassForPlanDTO> classes;
-    private IDictionary<int, string> goals = new Dictionary<int, string>();
+    private ICollection<ClassForPlanDTO> classes; // Classes fetched from API
     private bool hideErrors { get { return errors.Length == 0; } }
     private string errors = "";
+    private bool hideWarnings { get { return warnings.Length == 0; } }
+    private string warnings = "";
     private string? className { get; set; }
     private DateTime? _classDate;
     private DateTime? ClassDate
@@ -127,19 +131,23 @@
 
     private void AddClass(ClassForPlanDTO selectedClass) {
         // Construct a ClassForCreatePlanDTO
-        ClassForCreatePlanDTO classToAdd = new ClassForCreatePlanDTO
+        ClassForPlanDTO classToAdd = new ClassForPlanDTO
         {
             Id = selectedClass.Id,
-            Goal = goals[selectedClass.Id]
+            Date = selectedClass.Date,
+            Name = selectedClass.Name,
+            Price = selectedClass.Price,
+            TypeItems = selectedClass.TypeItems
         };
         // Add the class
-        planState.AddSelectedClassToPlan(classToAdd);
+        planState.AddSelectedClassToPlan(classToAdd, "");
         hiddenClassesSelectedList = false;
     }
 
-    private void RemovePlanItem(ClassForCreatePlanDTO selectedClass)
+    private void RemovePlanItem(ClassForPlanDTO selectedClass)
     {
-        //planState.RemoveSelectedClassFromPlan(selectedClass);
+        planState.RemoveSelectedClassFromPlan(selectedClass);
+
         if (plan.Classes.Count == 0) hiddenClassesSelectedList = true;
     }
 
@@ -151,18 +159,44 @@
 
     public async void SearchClasses()
     {
+        // Error management
+        if(ClassDate != null && ClassDate < DateTime.SpecifyKind(DateTime.Today, DateTimeKind.Utc))
+        {
+            errors = "The class date cannot be in the past";
+            StateHasChanged();
+            return;
+        }
+
+        DateTime now = DateTime.Now;
+        DateOnly today = DateOnly.FromDateTime(DateTime.Now);
+        DateOnly nextWeekMonday = today.DayOfWeek == DayOfWeek.Sunday // Remember: Sunday = 0, Monday = 1, ..., Saturday = 6
+            ? today.AddDays(1)
+            : today.AddDays(8 - (int)today.DayOfWeek);
+        DateOnly nextWeekSunday = nextWeekMonday.AddDays(6);
+
+        if (ClassDate != null && (DateOnly.FromDateTime(ClassDate.Value) < nextWeekMonday || DateOnly.FromDateTime(ClassDate.Value) > nextWeekSunday))
+        {
+            errors = "The class date must be within the next week (from Monday to Sunday)";
+            StateHasChanged();
+            return;
+        }
+
+
+        // API call 
         try
         {   
             // Call the API to get the classes
             classes = await apiClient.GetAvailableClassesForPlanAsync(className, ClassDate);
+            errors = "";
 
-            // Ensure goals dictionary is ready
-            goals = new Dictionary<int, string>();
-            foreach (var cl in classes)
+            // Warnings management
+            if(classes.Count == 0)
             {
-                // Avoid duplicate-key issues: use TryAdd (if using Dictionary) or check ContainsKey
-                if (!goals.ContainsKey(cl.Id))
-                    goals[cl.Id] = "";
+                warnings = "No classes found with the given filters";
+            }
+            else
+            {
+                warnings = "";
             }
         }
         catch (ApiException ex)
@@ -181,6 +215,7 @@
             : _classDate;
 
 
+        SearchClasses();
         return base.OnInitializedAsync();
     }
 
