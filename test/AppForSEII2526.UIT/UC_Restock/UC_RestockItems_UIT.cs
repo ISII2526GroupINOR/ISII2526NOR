@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AppForSEII2526.UIT.UC_Restock
 {
@@ -82,6 +83,39 @@ namespace AppForSEII2526.UIT.UC_Restock
             selectItemsForRestocking_PO.RemoveItemFromRestockingCArt(Id2);
 
             Assert.True(selectItemsForRestocking_PO.RestockNotAvailable());
+        }
+
+        [Fact]
+        [Trait("LevelTesting", "Functional Testing")]
+        public void UC14_AF4_UC14_7()
+        {
+            string title = "Repeated";
+            string address = "any";
+            string description = "Restock for me";
+            string date = "13/12/2025";
+            int quantity = 10;
+
+            InitialStepsForRestockItems();
+
+            selectItemsForRestocking_PO.AddItemToRestockingCart(itemName2);
+
+            selectItemsForRestocking_PO.PressRestock();
+
+            createRestock_PO.FillInRestockInfo(title, address, description, date);
+            createRestock_PO.FillRestockQuantity(Id2, quantity);
+            createRestock_PO.PressRestockItems();
+
+            InitialStepsForRestockItems();
+
+            selectItemsForRestocking_PO.AddItemToRestockingCart(itemName2);
+
+            selectItemsForRestocking_PO.PressRestock();
+
+            createRestock_PO.FillInRestockInfo(title, address, description, date);
+            createRestock_PO.FillRestockQuantity(Id2, quantity);
+            createRestock_PO.PressRestockItems();
+
+            Assert.True(createRestock_PO.CheckValidationError("Error! There´s already a restock with that title"));
         }
 
         [Theory]
