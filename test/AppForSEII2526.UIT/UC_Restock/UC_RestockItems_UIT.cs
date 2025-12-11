@@ -11,6 +11,7 @@ namespace AppForSEII2526.UIT.UC_Restock
     public class UC_RestockItems_UIT : UC_UIT
     {
         private SelectItemsForRestocking_PO selectItemsForRestocking_PO;
+        private CreateRestock_PO createRestock_PO;
         private const string itemName1 = "Resistance Band";
         private const string itemBrand1 = "Rogue Fitness";
         private const string itemStockQuantity1 = "8";
@@ -25,6 +26,7 @@ namespace AppForSEII2526.UIT.UC_Restock
         public UC_RestockItems_UIT(ITestOutputHelper output) : base(output)
         {
             selectItemsForRestocking_PO = new SelectItemsForRestocking_PO(_driver, _output);
+            createRestock_PO = new CreateRestock_PO(_driver, _output);
         }
 
         private void Precondition_perform_login()
