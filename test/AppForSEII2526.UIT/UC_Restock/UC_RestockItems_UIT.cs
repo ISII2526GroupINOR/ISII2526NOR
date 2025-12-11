@@ -89,7 +89,7 @@ namespace AppForSEII2526.UIT.UC_Restock
         [Trait("LevelTesting", "Functional Testing")]
         public void UC14_AF4_UC14_7()
         {
-            string title = "Repeated";
+            string title = "A title1";
             string address = "any";
             string description = "Restock for me";
             string date = "13/12/2025";
@@ -119,9 +119,9 @@ namespace AppForSEII2526.UIT.UC_Restock
         }
 
         [Theory]
-        [InlineData("A title1", "Any", "", "1/12/2025", 10, "Error! The expected date must start later than today")]
-        [InlineData("A title2", "Any", "Wrong description", "13/12/2025", 10, "Error! The description must start with: Restock for")]
-        [InlineData("A title3", "Any", "", "13/12/2025", 1, "Error! The total quantity for purchase")]
+        [InlineData("A title2", "Any", "", "1/12/2025", 10, "Error! The expected date must start later than today")]
+        [InlineData("A title3", "Any", "Wrong description", "13/12/2025", 10, "Error! The description must start with: Restock for")]
+        [InlineData("A title4", "Any", "", "13/12/2025", 1, "Error! The total quantity for purchase")]
         [Trait("LevelTesting", "Functional Testing")]
         public void UC14_AF4_UC14_8_9_10(string title, string address, string description,
             string date, int quantity, string errorMessage)
@@ -136,8 +136,6 @@ namespace AppForSEII2526.UIT.UC_Restock
             createRestock_PO.FillRestockQuantity(Id2, quantity);
 
             createRestock_PO.PressRestockItems();
-
-            Thread.Sleep(3000);
 
             Assert.True(createRestock_PO.CheckValidationError(errorMessage));
         }
