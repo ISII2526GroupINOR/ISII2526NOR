@@ -1,4 +1,5 @@
-﻿using AppForSEII2526.Web.API;
+﻿using System.Net.NetworkInformation;
+using AppForSEII2526.Web.API;
 
 namespace AppForSEII2526.Web
 {
@@ -7,7 +8,10 @@ namespace AppForSEII2526.Web
         public PurchaseForCreateDTO Purchase { get; private set; } = new PurchaseForCreateDTO()
         {
             Items = new List<ItemForPurchaseCreateDTO>()
+
         };
+
+        public List<PaymentMethodForPurchaseDTO>? PaymentMethods; //Attempt to use PaymentMethodForPurchaseDTO
 
         public decimal TotalPrice
         {
@@ -17,6 +21,7 @@ namespace AppForSEII2526.Web
         }
 
         public event Action? OnChange;
+
 
         private void NotifyStateChanged() => OnChange?.Invoke();
 
