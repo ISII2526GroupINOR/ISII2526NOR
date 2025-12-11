@@ -1,7 +1,14 @@
 ﻿@page "/plans/createplan"
 
-<h3>CreatePlan</h3>
+@using AppForSEII2526.Web.API
+
+@inject AppForGymAPIClient apiClient
+@inject ILogger<CreatePlan> logger
+@inject PlanStateContainer planState
+
+<h3>Create Plan</h3>
 
 @code {
+    private PlanForCreateDTO plan => planState.Plan
 
 }
