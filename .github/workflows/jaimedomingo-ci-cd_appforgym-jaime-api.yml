@@ -4,9 +4,9 @@
 name: Build and deploy ASP.Net Core app to Azure Web App - appforgym-jaime-for-api
 
 on:
-  push:
+  pull_request:
     branches:
-      - JaimeDomingo-CI-CD
+ #     - JaimeDomingo-CI-CD
       - development
  #   paths:
  #     - 'src/AppForSEII2526.API/**'
@@ -82,6 +82,7 @@ jobs:
           package: .
 
           
+
 
 
 
