@@ -30,10 +30,10 @@ namespace AppForSEII2526.API.Data
             var classesToUpdate = dbContext.Classes.Where(c => c.Id >= 1 && c.Id <= numberOfUpdatedClasses).ToList();
 
             // Set new dates manually
-            classesToUpdate[0].Date = TimeTable.Combine(TimeTable.nextWeekMonday, TimeTable.timeMorning);
-            classesToUpdate[1].Date = TimeTable.Combine(TimeTable.middleOfNextWeek, TimeTable.timeAfternoon);
-            classesToUpdate[2].Date = TimeTable.Combine(TimeTable.nextWeekSunday, TimeTable.timeEvening);
-            classesToUpdate[3].Date = TimeTable.Combine(TimeTable.followingWeekMonday, TimeTable.timeNight); // Should be unfiltered
+            classesToUpdate[0].Date = TimeTable.Combine(TimeTable.nextWeekMonday,       TimeTable.timeMorning);
+            classesToUpdate[1].Date = TimeTable.Combine(TimeTable.middleOfNextWeek,     TimeTable.timeAfternoon);
+            classesToUpdate[2].Date = TimeTable.Combine(TimeTable.nextWeekSunday,       TimeTable.timeEvening);
+            classesToUpdate[3].Date = TimeTable.Combine(TimeTable.followingWeekMonday,  TimeTable.timeNight); // Should be unfiltered
 
             // Save changes to the database
             dbContext.SaveChanges();
