@@ -12,6 +12,7 @@ namespace AppForSEII2526.UIT.UC_Restock
         By restockAddressBy = By.Name("restock.DeliveryAddress");
         By restockDescriptionBy = By.Name("restock.Description");
         By restockDateBy = By.Name("restock.ExpectedDate");
+        By tableOfItemsBy = By.Id("TableOfRestockItems");
         By errorBox = By.Id("ErrorShown");
         IWebElement restockTitle() => _driver.FindElement(restockTitleBy);
         IWebElement restockAddress() => _driver.FindElement(restockAddressBy);
@@ -49,10 +50,22 @@ namespace AppForSEII2526.UIT.UC_Restock
             _driver.FindElement(By.Id("Button_DialogOK")).Click();
         }
 
+        public bool CheckListOfItems(List<string[]> expectedItems)
+        {
+            return CheckBodyTable(expectedItems, tableOfItemsBy);
+        }
+
         public bool CheckValidationError(string errorMessage)
         {
             WaitForBeingVisible(errorBox);
             return _driver.FindElement(errorBox).Text.Contains(errorMessage);
+        }
+
+        public void GoBack()
+        {
+            WaitForBeingClickable(By.Id("ModifyItems"));
+
+            _driver.FindElement(By.Id("ModifyItems")).Click();
         }
     }
 }

@@ -141,5 +141,27 @@ namespace AppForSEII2526.UIT.UC_Restock
 
             Assert.True(createRestock_PO.CheckValidationError(errorMessage));
         }
+
+        [Fact]
+        [Trait("LevelTesting", "Functional Testing")]
+        public void UC14_AF5_UC14_11()
+        {
+            InitialStepsForRestockItems();
+
+            selectItemsForRestocking_PO.AddItemToRestockingCart(itemName2);
+            selectItemsForRestocking_PO.AddItemToRestockingCart("16 Kg Kettlebell");
+
+            selectItemsForRestocking_PO.PressRestock();
+
+            createRestock_PO.GoBack();
+
+            selectItemsForRestocking_PO.RemoveItemFromRestockingCArt(7);
+
+            selectItemsForRestocking_PO.PressRestock();
+
+            var expectedItems = new List<string[]> { new string[] { itemName2, itemBrand2, itemStockQuantity2, itemRestockPrice2 } };
+
+            Assert.True(createRestock_PO.CheckListOfItems(expectedItems));
+        }
     }
 }
