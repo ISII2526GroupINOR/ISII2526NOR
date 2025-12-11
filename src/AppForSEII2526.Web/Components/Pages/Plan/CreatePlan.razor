@@ -1,6 +1,8 @@
 ﻿@page "/plans/createplan"
 
 @using AppForSEII2526.Web.API
+@using AppForSEII2526.Web.Components.Shared
+
 
 @inject AppForGymAPIClient apiClient
 @inject ILogger<CreatePlan> logger
@@ -23,12 +25,34 @@
     </div>
 </EditForm>
 
+@*a modal popup dialog for checking if user wants to proceed with plan creation*@
+@if (DialogIsOpen)
+{
+    <Dialog Caption="Plan creation"
+            Message="Do you want to proceed to create a plan with the selected classes?"
+            OnClose="@OnDialogClose"
+            Type=Dialog.Category.SaveNot>
+    </Dialog>
+}
+
 @code {
+    // Variables
     private PlanForCreateDTO plan => planState.Plan;
+
+    private bool DialogIsOpen = false;
 
 
     private void OpenDialog()
     {
+        DialogIsOpen = true;
+    }
 
+    private async Task OnDialogClose(bool isOk)
+    {
+        DialogIsOpen = false;
+        if(isOk)
+        {
+            // Process the data introduced by the user if it is valid
+        }
     }
 }
