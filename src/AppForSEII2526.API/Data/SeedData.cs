@@ -8,7 +8,7 @@ namespace AppForSEII2526.API.Data
     {
         public static void Initialize(ApplicationDbContext dbContext, IServiceProvider serviceProvider, ILogger logger)
         {
-            // Update class dates - Assume that the database is already populated
+            // Update class dates - This assumes that the database is already populated (seeded)
             try
             {
                 UpdateClassDates(dbContext);

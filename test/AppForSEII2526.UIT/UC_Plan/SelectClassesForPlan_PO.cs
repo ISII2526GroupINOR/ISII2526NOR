@@ -16,7 +16,7 @@ namespace AppForSEII2526.UIT.UC_Plan
 
         public SelectClassesForPlan_PO(IWebDriver driver, ITestOutputHelper output) : base(driver, output)
         {
-            
+
         }
 
         public void SearchClasses(string className, DateOnly? classDate)
@@ -46,6 +46,41 @@ namespace AppForSEII2526.UIT.UC_Plan
         public bool CheckListOfClasses(List<string[]> expectedClasses)
         {
             return CheckBodyTable(expectedClasses, tableOfClassesBy);
+        }
+
+
+        public string GetErrorMessage()
+        {
+            By errorPanel = By.Id("errorsShown");
+
+            try
+            {
+                WaitForBeingVisible(errorPanel);
+                string actualMessage = _driver.FindElement(errorPanel).Text;
+
+                return actualMessage;
+            }
+            catch (WebDriverTimeoutException)
+            {
+                return "";
+            }
+        }
+
+        public string GetWarningMessage()
+        {
+            By warningPanel = By.Id("warningsShown");
+
+            try
+            {
+                WaitForBeingVisible(warningPanel);
+                string actualMessage = _driver.FindElement(warningPanel).Text;
+
+                return actualMessage;
+            }
+            catch (WebDriverTimeoutException)
+            {
+                return "";
+            }
         }
     }
 }

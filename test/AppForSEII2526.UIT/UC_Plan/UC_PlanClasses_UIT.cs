@@ -103,5 +103,39 @@ namespace AppForSEII2526.UIT.UC_Plan
 
             return testCases;
         }
+
+
+
+        [Fact]
+        [Trait("LevelTesting", "Functional Testing")]
+        public void UC1ES2P1()
+        {
+            // ARRANGE
+            InitialStepsForPlanClasses();
+            var expectedErrorMessage = "Errors: The class date must be within the next week (from Monday to Sunday)";
+
+            // ACT
+            selectClassesForPlan_PO.SearchClasses("", TimeTable.followingWeekMonday);
+
+            // ASSERT
+            Assert.Contains(expectedErrorMessage, selectClassesForPlan_PO.GetErrorMessage());
+        }
+
+
+
+        [Fact]
+        [Trait("LevelTesting", "Functional Testing")]
+        public void UC1ES4P1()
+        {
+            // ARRANGE
+            InitialStepsForPlanClasses();
+            var expectedWarningMessage = "Warnings: No classes were found with the given filters";
+
+            // ACT
+            selectClassesForPlan_PO.SearchClasses("NonExistentClassName", null);
+
+            // ASSERT
+            Assert.Contains(expectedWarningMessage, selectClassesForPlan_PO.GetWarningMessage());
+        }
     }
 }

@@ -17,11 +17,11 @@
 
 <div class="container-fluid">
     <div class="row alert alert-danger" role="alert" hidden="@hideErrors">
-        <p id="ErrorsShown">Errors: @errors</p>
+        <p id="errorsShown">Errors: @errors</p>
     </div>
 
     <div class="row alert alert-warning" role="alert" hidden="@hideWarnings">
-        <p id="WarningsShown">Warnings: @warnings</p>
+        <p id="warningsShown">Warnings: @warnings</p>
     </div>
 
     <div class="row">
@@ -194,7 +194,7 @@
             // Warnings management
             if(classes.Count == 0)
             {
-                warnings = "No classes found with the given filters";
+                warnings = "No classes were found with the given filters";
             }
             else
             {
