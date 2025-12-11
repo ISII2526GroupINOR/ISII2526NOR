@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,7 +36,7 @@ namespace AppForSEII2526.UIT.UC_Restock
 
             var actualExpectedDate = DateTime.Parse(_driver.FindElement(restockExpectedDateBy).Text);
 
-            result = result && ((actualExpectedDate - expectedDate) < new TimeSpan(0, 1, 0));
+            result = result && actualExpectedDate.Date == expectedDate.Date; // only comparing dates, no hours
 
             return result;
         }

@@ -13,6 +13,8 @@ namespace AppForSEII2526.UIT.UC_Restock
     {
         private SelectItemsForRestocking_PO selectItemsForRestocking_PO;
         private CreateRestock_PO createRestock_PO;
+        private DetailRestock_PO detailRestock_PO;
+
         private const string itemName1 = "Resistance Band";
         private const string itemBrand1 = "Rogue Fitness";
         private const string itemStockQuantity1 = "8";
@@ -24,10 +26,13 @@ namespace AppForSEII2526.UIT.UC_Restock
         private const string itemStockQuantity2 = "2";
         private const string itemRestockPrice2 = "40";
 
+        private static readonly string tomorrowDate = DateTime.Today.AddDays(1).ToString();
+
         public UC_RestockItems_UIT(ITestOutputHelper output) : base(output)
         {
             selectItemsForRestocking_PO = new SelectItemsForRestocking_PO(_driver, _output);
             createRestock_PO = new CreateRestock_PO(_driver, _output);
+            detailRestock_PO = new DetailRestock_PO(_driver, _output);
         }
 
         private void Precondition_perform_login()
@@ -160,6 +165,39 @@ namespace AppForSEII2526.UIT.UC_Restock
             var expectedItems = new List<string[]> { new string[] { itemName2, itemBrand2, itemStockQuantity2, itemRestockPrice2 } };
 
             Assert.True(createRestock_PO.CheckListOfItems(expectedItems));
+        }
+
+        [Fact]
+        [Trait("LevelTesting", "Functional Testing")]
+        public void UC14_BasicFlow_UC14_1()
+        {
+            string title = "My title";
+            string address = "any";
+            string description = "Restock for doing";
+            string name = "Jaime";
+            string surname = "Domingo";
+            int quantityToRestock = 10;
+            int itemPrice = quantityToRestock * int.Parse(itemRestockPrice2);
+            string totalPrice = itemPrice.ToString();
+
+                                                                                        // Total price of all units
+            List<string[]> expectedItems = new List<string[]> { new string[] { itemName2, itemBrand2, "400", "10" } };
+
+            InitialStepsForRestockItems();
+
+            selectItemsForRestocking_PO.AddItemToRestockingCart(itemName2);
+
+            selectItemsForRestocking_PO.PressRestock();
+
+            createRestock_PO.FillInRestockInfo(title, address, description, tomorrowDate);
+            createRestock_PO.FillRestockQuantity(Id2, quantityToRestock);
+
+            createRestock_PO.PressRestockItems();
+
+            Assert.True(detailRestock_PO.CheckRestockDetail(title, address, description,
+                DateTime.Parse(tomorrowDate), name, surname, totalPrice));
+
+            Assert.True(detailRestock_PO.CheckListOfItems(expectedItems));
         }
     }
 }
