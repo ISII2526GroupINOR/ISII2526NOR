@@ -11,7 +11,7 @@ namespace AppForSEII2526.UIT.UC_Plan
     {
         By inputName = By.Id("inputName");
         By inputDate = By.Id("inputDate");
-        By button = By.Id("searcClasses");
+        By button = By.Id("searchClasses");
         By tableOfClassesBy = By.Id("tableOfClasses");
 
         public SelectClassesForPlan_PO(IWebDriver driver, ITestOutputHelper output) : base(driver, output)

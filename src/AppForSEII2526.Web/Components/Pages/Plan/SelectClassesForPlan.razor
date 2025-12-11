@@ -3,6 +3,8 @@
 
 @using AppForSEII2526.Web.API
 @using Microsoft.AspNetCore.Authorization
+@using System.Globalization
+
 @inject AppForGymAPIClient apiClient
 @inject ILogger<SelectClassesForPlan> logger
 @inject PlanStateContainer planState
@@ -68,7 +70,7 @@
                                         <td>@cl.Name</td>
                                         <td>@cl.Date.DateTime.ToShortDateString()</td>
                                         <td>@cl.Date.DateTime.ToString("HH:mm")</td>
-                                        <td>@cl.Price</td>
+                                        <td>@(cl.Price.ToString("F2", CultureInfo.InvariantCulture))</td>
                                         <td>@string.Join(", ", cl.TypeItems)</td>
                                         <td>
                                             <button class="btn btn-outline-secondary" id="bt_add_class_@cl.Id" @onclick="@(() => AddClass(cl))">Add</button>
