@@ -62,5 +62,11 @@ namespace AppForSEII2526.UIT.UC_Restock
         {
             return _driver.FindElement(buttonRestockItems).Displayed == false;
         }
+
+        public void PressRestock()
+        {
+            WaitForBeingClickable(buttonRestockItems);
+            _driver.FindElement(buttonRestockItems).Click();
+        }
     }
 }

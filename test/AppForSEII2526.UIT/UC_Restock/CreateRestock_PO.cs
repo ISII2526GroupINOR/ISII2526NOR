@@ -12,6 +12,7 @@ namespace AppForSEII2526.UIT.UC_Restock
         By restockAddressBy = By.Name("restock.DeliveryAddress");
         By restockDescriptionBy = By.Name("restock.Description");
         By restockDateBy = By.Name("restock.ExpectedDate");
+        By errorBox = By.Id("ErrorShown");
         IWebElement restockTitle() => _driver.FindElement(restockTitleBy);
         IWebElement restockAddress() => _driver.FindElement(restockAddressBy);
         IWebElement restockDescription() => _driver.FindElement(restockDescriptionBy);
@@ -21,7 +22,7 @@ namespace AppForSEII2526.UIT.UC_Restock
         {
         }
 
-        public void FillInRestockInfo(string title,string address, string description, DateTime date)
+        public void FillInRestockInfo(string title,string address, string description, string date)
         {
             WaitForBeingVisible(restockTitleBy);
             restockTitle().SendKeys(title);
@@ -33,7 +34,7 @@ namespace AppForSEII2526.UIT.UC_Restock
             restockDescription().SendKeys(description);
 
             WaitForBeingVisible(restockDateBy);
-            restockDate().SendKeys(date.ToString());
+            restockDate().SendKeys(date);
         }
 
         public void FillRestockQuantity(int itemId, int quantity)
@@ -44,6 +45,14 @@ namespace AppForSEII2526.UIT.UC_Restock
         public void PressRestockItems()
         {
             _driver.FindElement(By.Id("submit")).Click();
+            WaitForBeingClickable(By.Id("Button_DialogOK"));
+            _driver.FindElement(By.Id("Button_DialogOK")).Click();
+        }
+
+        public bool CheckValidationError(string errorMessage)
+        {
+            WaitForBeingVisible(errorBox);
+            return _driver.FindElement(errorBox).Text.Contains(errorMessage);
         }
     }
 }
