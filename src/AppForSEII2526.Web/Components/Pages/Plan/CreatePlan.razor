@@ -8,7 +8,27 @@
 
 <h3>Create Plan</h3>
 
-@code {
-    private PlanForCreateDTO plan => planState.Plan
+@* plan is the object that will be edited thanks to the form *@
+<EditForm Model="plan" OnValidSubmit="OpenDialog">
+    <div class="row">
 
+        <div class="col-md">
+            <div class="form-floating">
+                @*this button will be used to ask the user if he want to proceed to rent the movies*@
+                <button class="btn btn-primary" type="submit" id="Submit">
+                    Create your plan
+                </button>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    private PlanForCreateDTO plan => planState.Plan;
+
+
+    private void OpenDialog()
+    {
+
+    }
 }
