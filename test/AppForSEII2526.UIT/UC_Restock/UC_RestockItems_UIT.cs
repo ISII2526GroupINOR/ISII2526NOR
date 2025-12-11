@@ -64,7 +64,7 @@ namespace AppForSEII2526.UIT.UC_Restock
         //[Fact(Skip = "first run dbo.Items.data.UpdateQuantityAvailable.sql, after run dbo.Items.data.RecoverQuantityAvailable")]
         [Fact]
         [Trait("LevelTesting", "Functional Testing")]
-        public void UC14_AF1_UC14_12_filtering()
+        public void UC14_AF1_UC14_12_no_items_to_restock()
         {
             InitialStepsForRestockItems();
             var expectedItems = new List<string[]> { };
