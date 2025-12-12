@@ -42,6 +42,23 @@
                 <label for="HealthIssues">Health Issues</label>
             </div>
         </div>
+    </div>
+
+    <div class="row g-2">
+        <div class="col-md">
+            <div class="form-floating">
+                @*a dropdown for selecting the payment method*@
+                <p>Payment method selector here</p>
+                @*
+                <InputSelect class="form-select" @bind-Value="@plan.PaymentMethod" id="PaymentMethod">
+                    <option value="@PaymentMethodType.CreditCard" default> CreditCard</option>
+                    <option value="@PaymentMethodType.PayPal"> PayPal</option>
+                    <option value="@PaymentMethodType.Cash"> Cash</option>
+                </InputSelect>
+                <label for="PaymentMethod">Payment Method</label>
+                *@
+            </div>
+        </div>
 
         <div class="col-md">
             <div class="form-floating">
