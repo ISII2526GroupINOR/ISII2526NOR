@@ -4,6 +4,7 @@
 @using AppForSEII2526.Web.Components.Shared
 
 
+@inject NavigationManager navigation
 @inject AppForGymAPIClient apiClient
 @inject ILogger<CreatePlan> logger
 @inject PlanStateContainer planState
@@ -70,6 +71,14 @@
         </div>
     </div>
 
+    <h4>Plan detail</h4>
+    <p>
+        <b>Total price:</b> @totalPrice.ToString("F2", System.Globalization.CultureInfo.InvariantCulture) €
+        <button class="btn btn-outline-primary" type="submit" @onclick="ModifyClassSelection" id="ModifyClasses">
+            Modify classes
+        </button>
+    </p>
+
     <div class="mh-100 table-responsive">
         <table class="table table-condensed table-hover" id="TableOfRentalItems">
             <thead>
@@ -118,8 +127,15 @@
     // Variables
     private PlanForCreateDTO plan => planState.Plan;
     private List<ClassForPlanDTO> classesDetail => planState.ClassesDetail;
+    private decimal totalPrice => planState.TotalPrice;
 
     private bool DialogIsOpen = false;
+
+
+    private void ModifyClassSelection()
+    {
+        navigation.NavigateTo("/plan/selectclassesforplan");
+    }
 
 
     private void OpenDialog()

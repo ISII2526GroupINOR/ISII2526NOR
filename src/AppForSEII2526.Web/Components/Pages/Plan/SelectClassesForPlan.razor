@@ -215,7 +215,10 @@
         ClassDate = (ClassDate == new DateTime(1, 1, 1)) ?
             DateTime.SpecifyKind(DateTime.Today, DateTimeKind.Utc)
             : _classDate;
-
+        
+        // If the state container already has selected classes, show them
+        // This applies when the user goes back to this page from the CreatePlan page
+        hiddenClassesSelectedList = planState.ClassesDetail.Count == 0;
 
         SearchClasses();
         return base.OnInitializedAsync();
