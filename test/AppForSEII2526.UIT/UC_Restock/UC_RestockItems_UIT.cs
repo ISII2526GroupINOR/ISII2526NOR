@@ -66,7 +66,7 @@ namespace AppForSEII2526.UIT.UC_Restock
             Assert.True(selectItemsForRestocking_PO.CheckListOfItems(expectedItems));
         }
 
-        //[Fact(Skip = "first run dbo.Items.data.UpdateQuantityAvailable.sql, after run dbo.Items.data.RecoverQuantityAvailable")]
+        //[Fact(Skip = "first run dbo.Items.data.UpdateQuantityAvailable.sql, after run dbo.Items.data.RecoverQuantityAvailable.sql")]
         [Fact]
         [Trait("LevelTesting", "Functional Testing")]
         public void UC14_AF1_UC14_12_no_items_to_restock()
@@ -182,6 +182,41 @@ namespace AppForSEII2526.UIT.UC_Restock
 
                                                                                         // Total price of all units
             List<string[]> expectedItems = new List<string[]> { new string[] { itemName2, itemBrand2, "400", "10" } };
+
+            InitialStepsForRestockItems();
+
+            selectItemsForRestocking_PO.AddItemToRestockingCart(itemName2);
+
+            selectItemsForRestocking_PO.PressRestock();
+
+            createRestock_PO.FillInRestockInfo(title, address, description, tomorrowDate);
+            createRestock_PO.FillRestockQuantity(Id2, quantityToRestock);
+
+            createRestock_PO.PressRestockItems();
+
+            Thread.Sleep(4000);
+
+            Assert.True(detailRestock_PO.CheckRestockDetail(title, address, description,
+                DateTime.Parse(tomorrowDate), name, surname, totalPrice));
+
+            Assert.True(detailRestock_PO.CheckListOfItems(expectedItems));
+        }
+
+        //[Fact(Skip = "first run dbo.Items.data.price0.sql, after run dbo.Items.data.priceRecover.sql")]
+        [Fact]
+        [Trait("LevelTesting", "Functional Testing")]
+        public void UC14_BasicFlow_UC14_2()
+        {
+            string title = "My title";
+            string address = "any";
+            string description = "Restock for doing";
+            string name = "Jaime";
+            string surname = "Domingo";
+            int quantityToRestock = 10;
+            string totalPrice = "";
+
+            // Total price of all units
+            List<string[]> expectedItems = new List<string[]> { new string[] { itemName2, itemBrand2, "0", "10" } };
 
             InitialStepsForRestockItems();
 

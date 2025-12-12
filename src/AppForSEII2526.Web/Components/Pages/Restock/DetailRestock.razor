@@ -15,16 +15,16 @@
 else
 {
     <table class="table table-borderless table-sm">
+        <tr>
+            <th>Name</th>
+            <td id="Name">@restock.Name</td>
+        </tr>
+        <tr>
+            <th>Surname</th>
+            <td id="Surname">@restock.Surname</td>
+        </tr>
         @if(restock.TotalPrice != null)
         {
-            <tr>
-                <th>Name</th>
-                <td id="Name">@restock.Name</td>
-            </tr>
-            <tr>
-                <th>Surname</th>
-                <td id="Surname">@restock.Surname</td>
-            </tr>
             <tr>
                 <th>Total Price</th>
                 <td id="TotalPrice">@restock.TotalPrice</td>

@@ -32,7 +32,8 @@ namespace AppForSEII2526.UIT.UC_Restock
             result = result && _driver.FindElement(restockTitleBy).Text.Contains(title);
             result = result && _driver.FindElement(restockAddressBy).Text.Contains(address);
             result = result && _driver.FindElement(restockDescriptionBy).Text.Contains(description);
-            result = result && _driver.FindElement(restockTotalPriceBy).Text.Contains(totalPrice);
+            if (totalPrice == "") result = result && !_driver.FindElements(restockTotalPriceBy).Any();
+            else result = result && _driver.FindElement(restockTotalPriceBy).Text.Contains(totalPrice);
 
             var actualExpectedDate = DateTime.Parse(_driver.FindElement(restockExpectedDateBy).Text);
 
