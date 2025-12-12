@@ -22,8 +22,13 @@
     <div class="row">
 
         <DataAnnotationsValidator />
-        <ValidationSummary />
+        <ValidationSummary class="row alert alert-danger" />
     </div>
+
+    <div class="row alert alert-danger" role="alert" hidden="@hideErrors">
+        <p id="ErrorsShown">Errors: @messageError</p>
+    </div>
+
     <div class="row g-3">
         <div class="col-md">
             <div class="form-floating mb-3">
@@ -131,12 +136,18 @@
 
 @code {
     // Variables
+    private string messageError = "";
+    private bool hideErrors { get { return messageError.Length == 0; } }
+
     private PlanForCreateDTO plan => planState.Plan;
     private List<ClassForPlanDTO> classesDetail => planState.ClassesDetail;
     private decimal totalPrice => planState.TotalPrice;
 
     private bool DialogIsOpen = false;
 
+
+
+    // Functions
 
     private void ModifyClassSelection()
     {
@@ -154,7 +165,27 @@
         DialogIsOpen = false;
         if(isOk)
         {
-            // Process the data introduced by the user if it is valid
+            if (plan.Classes.Count > 0)
+            {
+                try
+                {
+                    var planned = await apiClient.PostCreatePlanAsync(plan);
+                    planState.PlanCreationProcessed();
+                    navigation.NavigateTo($"/rental/detailrental/?RentalID={planned.Name}"); // We can use the name as identifier because it is unique in the DB.
+                }
+                catch (ApiException<ValidationProblemDetails> apiexceptionvalidation)
+                {
+
+                    if (apiexceptionvalidation.Result.Errors.Values != null)
+                    {
+                        messageError = "";
+                        foreach (var errors in apiexceptionvalidation.Result.Errors.Values)
+                            //https://learn.microsoft.com/en-us/dotnet/api/system.string.join?view=net-7.0
+                            messageError = string.Join("(*) ", messageError, string.Join(" (*) ", errors));
+                    }
+                }
+
+            }
         }
     }
 
@@ -185,9 +216,12 @@
             }
 
         }
-    }
+    }   
 
 
     [CascadingParameter]
     private Task<AuthenticationState>? authenticationState { get; set; }
+
+
+
 }
