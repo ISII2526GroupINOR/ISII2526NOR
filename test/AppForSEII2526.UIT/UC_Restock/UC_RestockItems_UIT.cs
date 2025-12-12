@@ -128,8 +128,9 @@ namespace AppForSEII2526.UIT.UC_Restock
         [InlineData("A title3", "Any", "Wrong description", "13/12/2025", 10, "Error! The description must start with: Restock for")]
         [InlineData("A title4", "Any", "", "13/12/2025", 1, "Error! The total quantity for purchase 2 plus the quantity to " +
             "restock 1 of item 20 Kg Kettlebell must be bigger than the quantity for restock 5.")]
+        [InlineData("A title4", "Any", "", "13/12/2025", 0, "You need to restock at least one item.")]
         [Trait("LevelTesting", "Functional Testing")]
-        public void UC14_AF4_UC14_8_9_10(string title, string address, string description,
+        public void UC14_AF4_UC14_8_9_10_13(string title, string address, string description,
             string date, int quantity, string errorMessage)
         {
             InitialStepsForRestockItems();
