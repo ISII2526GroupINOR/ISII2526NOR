@@ -14,6 +14,35 @@
 <EditForm Model="plan" OnValidSubmit="OpenDialog">
     <div class="row">
 
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+    </div>
+    <div class="row g-3">
+        <div class="col-md">
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="plan.Name" class="form-control" id="PName" />
+                <label for="Name">Name </label>
+            </div>
+        </div>
+        <div class="col-md">
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="plan.Description" class="form-control" id="PDescription" />
+                <label for="Description">Description </label>
+            </div>
+        </div>
+        <div class="col-md">
+            <div class="form-floating mb-3">
+                <InputNumber @bind-Value="plan.Weeks" class="form-control" id="PWeeks" />
+                <label for="Weeks">Number of weeks</label>
+            </div>
+        </div>
+        <div class="col-md">
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="plan.HealthIssues" class="form-control" id="PHealth" />
+                <label for="HealthIssues">Health Issues</label>
+            </div>
+        </div>
+
         <div class="col-md">
             <div class="form-floating">
                 @*this button will be used to ask the user if he want to proceed to rent the movies*@
