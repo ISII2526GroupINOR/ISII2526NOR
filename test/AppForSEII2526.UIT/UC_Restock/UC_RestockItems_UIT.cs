@@ -126,7 +126,8 @@ namespace AppForSEII2526.UIT.UC_Restock
         [Theory]
         [InlineData("A title2", "Any", "", "1/12/2025", 10, "Error! The expected date must start later than today")]
         [InlineData("A title3", "Any", "Wrong description", "13/12/2025", 10, "Error! The description must start with: Restock for")]
-        [InlineData("A title4", "Any", "", "13/12/2025", 1, "Error! The total quantity for purchase")]
+        [InlineData("A title4", "Any", "", "13/12/2025", 1, "Error! The total quantity for purchase 2 plus the quantity to " +
+            "restock 1 of item 20 Kg Kettlebell must be bigger than the quantity for restock 5.")]
         [Trait("LevelTesting", "Functional Testing")]
         public void UC14_AF4_UC14_8_9_10(string title, string address, string description,
             string date, int quantity, string errorMessage)
