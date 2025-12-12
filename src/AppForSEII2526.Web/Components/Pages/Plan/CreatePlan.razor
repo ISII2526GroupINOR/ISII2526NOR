@@ -5,6 +5,7 @@
 @using Microsoft.AspNetCore.Authorization
 @using System.Globalization
 @using System.Security.Claims
+@using System.Net
 
 
 @inject NavigationManager navigation
@@ -169,9 +170,26 @@
             {
                 try
                 {
-                    var planned = await apiClient.PostCreatePlanAsync(plan);
+                    PlanDetailDTO? planned = null;
+                    try
+                    {
+                        planned = await apiClient.PostCreatePlanAsync(plan);
+                    }
+                    catch (ApiException apiexception)
+                    {
+                        // Ignore exception for status code 201 (Created) if the Swagger specification is outdated
+                        if (apiexception.StatusCode == (int)HttpStatusCode.Created)
+                        {
+                            logger.LogWarning("Ignoring ApiException with status code 201 (Created) in CreatePlan OnDialogClose: {StatusCode} - {Content}", apiexception.StatusCode, apiexception.Message);
+                        }
+                        else
+                        {
+                            throw;
+                        }
+                    }
                     planState.PlanCreationProcessed();
-                    navigation.NavigateTo($"/rental/detailrental/?RentalID={planned.Name}"); // We can use the name as identifier because it is unique in the DB.
+                    string planName = planned?.Name ?? "UnknownPlan";
+                    navigation.NavigateTo($"/plan/detailplan/?PlanID={planName}"); // We can use the name as identifier because it is unique in the DB.
                 }
                 catch (ApiException<ValidationProblemDetails> apiexceptionvalidation)
                 {
@@ -186,8 +204,12 @@
                 }
                 catch (ApiException apiexception)
                 {
+                    
+
                     //we need to inform user that there was some other error while processing the request
                     messageError = "Error while processing your request, please try again later!";
+
+                    logger.LogError("ApiException in CreatePlan OnDialogClose: {StatusCode} - {Content}", apiexception.StatusCode, apiexception.Message);
 
                 }
 
@@ -222,6 +244,10 @@
             }
 
         }
+
+        // [TEMPORARY FIX] Set the payment method id of the plan to a fixed id (3) until the payment method management is implemented
+        // TODO: Remove this temporary fix when payment method management is implemented
+        plan.PaymentMethodId = 3;
     }   
 
 
