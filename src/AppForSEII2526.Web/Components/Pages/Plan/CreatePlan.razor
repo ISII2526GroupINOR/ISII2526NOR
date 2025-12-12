@@ -23,6 +23,39 @@
             </div>
         </div>
     </div>
+
+    <div class="mh-100 table-responsive">
+        <table class="table table-condensed table-hover" id="TableOfRentalItems">
+            <thead>
+                <tr>
+                    <!-- Based on: https://github.com/Ingenieria-del-Software-II-ESIIAB/SEII-AppfForMoviesForClasses/commit/185ee7dd1d27e26bac247ef1574b527e6f8b221a-->
+                    <th>Name</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Item Types</th>
+                    <th>Price</th>
+                    <th>Goal</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (ClassForCreatePlanDTO cl in plan.Classes)
+                {
+                    <tr id="MovieData_@cl.Id">
+                        <td>@classesDetail.FirstOrDefault(c => c.Id == cl.Id)?.Name</td>
+                        <td>@classesDetail.FirstOrDefault(c => c.Id == cl.Id)?.Date.DateTime.ToShortDateString()</td>
+                        <td>@classesDetail.FirstOrDefault(c => c.Id == cl.Id)?.Date.DateTime.ToString("HH:mm")</td>
+                        <td>
+                            @string.Join(", ", classesDetail.FirstOrDefault(c => c.Id == cl.Id)?.TypeItems ?? new List<string>())
+                        </td>
+                        <td>@classesDetail.FirstOrDefault(c => c.Id == cl.Id)?.Price.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)</td>
+                        <td>
+                            <input type="text" id="goal_@cl.Id" @bind=cl.Goal class="form-control" placeholder="Goal" aria-label="Goal" />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </EditForm>
 
 @*a modal popup dialog for checking if user wants to proceed with plan creation*@
@@ -38,6 +71,7 @@
 @code {
     // Variables
     private PlanForCreateDTO plan => planState.Plan;
+    private List<ClassForPlanDTO> classesDetail => planState.ClassesDetail;
 
     private bool DialogIsOpen = false;
 
