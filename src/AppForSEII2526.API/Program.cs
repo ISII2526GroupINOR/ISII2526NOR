@@ -1,6 +1,7 @@
 using Microsoft.Data.Sqlite;
 using System.Data.Common;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -90,7 +91,7 @@ using (var scope = app.Services.CreateScope()) {
 
 
         //it sees the database
-        //SeedData.Initialize(db, scope.ServiceProvider, logger);
+        SeedData.Initialize(db, scope.ServiceProvider, logger);
     }
     catch (Exception ex) {
         logger.LogError(ex, "An error occurred seeding the DB.");

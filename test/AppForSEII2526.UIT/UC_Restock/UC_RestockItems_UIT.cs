@@ -1,5 +1,5 @@
 ﻿using AppForSEII2526.UIT.Shared;
-using OpenQA.Selenium.DevTools.V140.Network;
+using OpenQA.Selenium.DevTools;
 using System;
 using System.Collections.Generic;
 using System.Linq;

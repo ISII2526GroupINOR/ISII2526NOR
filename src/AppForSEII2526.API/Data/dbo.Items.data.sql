@@ -6,10 +6,14 @@ INSERT INTO [dbo].[Brands] ([Id], [Name]) VALUES (4, N'Cybex')
 SET IDENTITY_INSERT [dbo].[Brands] OFF
 
 SET IDENTITY_INSERT [dbo].[TypeItems] ON
-INSERT INTO [dbo].[TypeItems] ([Id], [Name], [ClassId]) VALUES (1, N'Dumbbell', NULL)
+INSERT INTO [dbo].[TypeItems] ([Id], [Name], [ClassId]) VALUES (1, N'Dumbbell', 5)
 INSERT INTO [dbo].[TypeItems] ([Id], [Name], [ClassId]) VALUES (2, N'Band', 4)
 INSERT INTO [dbo].[TypeItems] ([Id], [Name], [ClassId]) VALUES (3, N'Machine', 3)
+INSERT INTO [dbo].[TypeItems] ([Id], [Name], [ClassId]) VALUES (4, N'Mat', 1)
+INSERT INTO [dbo].[TypeItems] ([Id], [Name], [ClassId]) VALUES (5, N'Gloves', 2)
+INSERT INTO [dbo].[TypeItems] ([Id], [Name], [ClassId]) VALUES (6, N'Punching Bag', 2)
 SET IDENTITY_INSERT [dbo].[TypeItems] OFF
+
 
 SET IDENTITY_INSERT [dbo].[Items] ON
 INSERT INTO [dbo].[Items] ([Id], [Name], [Description], [PurchasePrice], [QuantityAvailableForPurchase], [QuantityForRestock], [RestockPrice], [BrandId], [TypeItemId]) VALUES (1, N'10 Kg Dumbbell', N'A dumbbell', CAST(20.00 AS Decimal(5, 2)), 10, 4, CAST(15.00 AS Decimal(5, 2)), 1, 1)
