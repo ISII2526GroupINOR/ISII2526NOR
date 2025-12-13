@@ -2,6 +2,12 @@
 
 
 @using AppForSEII2526.Web.API
+@using Microsoft.AspNetCore.Authorization
+@using System.Security.Claims
+@inject AppForGymAPIClient apiClient
+@inject ILogger<DetailPlan> logger
+
+@attribute [Authorize]
 
 <h3>DetailPlan</h3>
 
@@ -11,13 +17,62 @@
 
     [Parameter]
     [SupplyParameterFromQuery] // Get the plan id from the query string, which corresponds to the plan name to show details for
-    public string PlanName { get; set; } = string.Empty; // We set a default value to avoid null issues
+    public int PlanId { get; set; }
 
-    private PlanDetailDTO plan;
-
+    private PlanDetailDTO? plan;
     private string error = "";
 
     [CascadingParameter]
     private Task<AuthenticationState> authenticationState { get; set; }
+
+
+
+
+    // METHODS
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        //we check wether the user is logged in
+        string userId = "";
+        if (authenticationState is not null)
+        {
+            var authState = await authenticationState;
+            var user = authState?.User;
+
+            //we retrieve the id of the user logged in
+            if (user is not null)
+            {
+                if (user.Identity is not null && user.Identity.IsAuthenticated && user.IsInRole("User"))
+                {
+
+                    // Obtain the user ID from the claims.
+                    var idClaim = user.FindFirst(ClaimTypes.NameIdentifier);
+                    logger.LogInformation("[DetailPlan][OnInitializedAsync][Claim] Authenticated user with ID claim: {UserId}", idClaim?.Value); // The claim id has been verified to equal the user id in the database during development.
+                    if (idClaim is null || string.IsNullOrWhiteSpace(idClaim.Value))
+                    {
+                        logger.LogError("[DetailPlan][OnInitializedAsync][Claim] Claim missing for authenticated user.", ClaimTypes.NameIdentifier);
+                        throw new InvalidOperationException("The authenticated user does not have a valid NameIdentifier claim.");
+                    }
+                    userId = idClaim.Value;
+                }
+            }
+        }
+        
+        try
+        {
+            plan = await apiClient.GetPlanDetailsAsync(PlanId);
+        }
+        catch (ApiException exception)
+        {
+            plan = null;
+        }
+        if ((plan == null) || (plan.User.Id != userId))
+        {
+            error = $"Error! You are not authorized to see this rental or there is not a rental with id={PlanId}";
+        }
+
+
+    }
 
 }
