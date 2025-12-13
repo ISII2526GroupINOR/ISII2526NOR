@@ -60,6 +60,9 @@ namespace AppForSEII2526.UIT.UC_Plan
 
 
 
+        /************************************************
+         *  TEST CASES FOR: SELECT CLASSES FOR PLAN     *
+         ************************************************/
 
         [Theory]
         [Trait("LevelTesting", "Functional Testing")]
@@ -137,5 +140,11 @@ namespace AppForSEII2526.UIT.UC_Plan
             // ASSERT
             Assert.Contains(expectedWarningMessage, selectClassesForPlan_PO.GetWarningMessage());
         }
+
+
+
+        /************************************************
+         *  TEST CASES FOR: CREATE PLAN                 *
+         ************************************************/
     }
 }
