@@ -130,7 +130,7 @@ namespace AppForSEII2526.UIT.UC_Plan
 
         [Fact]
         [Trait("LevelTesting", "Functional Testing")]
-        public void UC1ES2P1_no_classes()
+        public void UC1ES2P1_no_classes_available()
         {
             // ARRANGE
             InitialStepsForPlanClasses();
@@ -188,6 +188,28 @@ namespace AppForSEII2526.UIT.UC_Plan
             // ASSERT
             Assert.True(check1);
             Assert.True(check2);
+        }
+
+        [Fact]
+        [Trait("LevelTesting", "Functional Testing")]
+        public void UC1ES6P1_no_classes_selected()
+        {
+            /*
+             * Note:  Although this test case belongs to step 7 of the use case, it is included in the class selection part (step 4)
+             * because the user cannot access step 7 when the alternative flow associated with UC1ES6P1 is taken.
+             * 
+             * Note: This test case is intended to last around 2 or more seconds.
+             * The fact that the duration of the test case is longer than usual does not imply the test has failed.
+             */
+
+        // ARRANGE
+            InitialStepsForPlanClasses();
+
+            // ACT
+            selectClassesForPlan_PO.SearchClasses("", null);
+
+            // ASSERT
+            Assert.False(selectClassesForPlan_PO.IsCreatePlanButtonVisible());
         }
     }
 }

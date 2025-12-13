@@ -104,5 +104,24 @@ namespace AppForSEII2526.UIT.UC_Plan
             WaitForBeingClickable(removeButton);
             _driver.FindElement(removeButton).Click();
         }
+
+
+        
+        public bool IsCreatePlanButtonVisible()
+        {
+            try
+            {
+                // Only wait for 2 seconds to make the test faster, while taking into account big latencies in the response time of the web application
+                WaitForBeingVisibleVaryingTime(createPlanButton, 2);
+                return true;
+            }
+            catch (WebDriverTimeoutException)
+            {
+                return false;
+            }
+
+        }
     }
+  
+    
 }
