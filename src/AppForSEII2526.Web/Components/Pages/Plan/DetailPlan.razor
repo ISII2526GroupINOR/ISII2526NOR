@@ -7,4 +7,17 @@
 
 @code {
 
+    // ATTRIBUTES
+
+    [Parameter]
+    [SupplyParameterFromQuery] // Get the plan id from the query string, which corresponds to the plan name to show details for
+    public string PlanName { get; set; } = string.Empty; // We set a default value to avoid null issues
+
+    private PlanDetailDTO plan;
+
+    private string error = "";
+
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationState { get; set; }
+
 }
