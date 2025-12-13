@@ -197,8 +197,10 @@
                         }
                     }
                     planState.PlanCreationProcessed();
-                    string planName = planned?.Name ?? "UnknownPlan";
-                    navigation.NavigateTo($"/plan/detailplan/?PlanID={planName}"); // We can use the name as identifier because it is unique in the DB.
+
+                    int planId = planned != null ? planned.Id : 0;
+
+                    navigation.NavigateTo($"/plan/detailplan/?PlanID={planId}"); // We can use the name as identifier because it is unique in the DB.
                 }
                 catch (ApiException<ValidationProblemDetails> apiexceptionvalidation)
                 {

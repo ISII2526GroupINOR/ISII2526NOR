@@ -894,6 +894,10 @@
       "PlanDetailDTO": {
         "type": "object",
         "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
           "name": {
             "maxLength": 128,
             "minLength": 0,

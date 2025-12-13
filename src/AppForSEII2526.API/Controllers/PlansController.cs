@@ -40,6 +40,7 @@ namespace AppForSEII2526.API.Controllers
                 .Include(p => p.PlanItems)
                     .ThenInclude(pi => pi.Class)
                 .Select(p => new PlanDetailDTO(
+                    p.Id,
                     p.Name,
                     p.Description,
                     p.CreatedDate,
@@ -229,6 +230,7 @@ namespace AppForSEII2526.API.Controllers
                     .ThenInclude(pi => pi.Class)
                 .Select(p => new PlanDetailDTO
                     (
+                        p.Id,
                         p.Name,
                         p.Description,
                         p.CreatedDate,
