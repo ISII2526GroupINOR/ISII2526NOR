@@ -12,6 +12,7 @@ namespace AppForSEII2526.UIT.UC_Plan
     public class UC_PlanClasses_UIT : UC_UIT
     {
         private SelectClassesForPlan_PO selectClassesForPlan_PO;
+        private CreatePlan_PO createPlan_PO;
         // Class 1
         private const int classId1 = 1;
         private const string className1 = "Judo";
@@ -38,6 +39,7 @@ namespace AppForSEII2526.UIT.UC_Plan
         public UC_PlanClasses_UIT(ITestOutputHelper output) : base(output)
         {
             selectClassesForPlan_PO = new SelectClassesForPlan_PO(_driver, _output);
+            createPlan_PO = new CreatePlan_PO(_driver, _output);
         }
 
 
@@ -60,11 +62,14 @@ namespace AppForSEII2526.UIT.UC_Plan
 
 
 
+        /************************************************
+         *  TEST CASES FOR: SELECT CLASSES FOR PLAN     *
+         ************************************************/
 
         [Theory]
         [Trait("LevelTesting", "Functional Testing")]
         [MemberData(nameof(TestCasesFor_UC1ES1P1_and_UC1ES3P1_and_UC1ES3P2))]
-        public void UC1ES1P1_and_UC1ES3P1_and_UC1ES3P2(string classNameFilter, DateOnly? classDateFilter, List<string[]> expectedClasses)
+        public void UC1ES1P1_and_UC1ES3P1_and_UC1ES3P2_filters(string classNameFilter, DateOnly? classDateFilter, List<string[]> expectedClasses)
         {
             // ARRANGE
             InitialStepsForPlanClasses();
@@ -108,7 +113,7 @@ namespace AppForSEII2526.UIT.UC_Plan
 
         [Fact]
         [Trait("LevelTesting", "Functional Testing")]
-        public void UC1ES2P1()
+        public void UC1ES4P1_invalid_date()
         {
             // ARRANGE
             InitialStepsForPlanClasses();
@@ -125,7 +130,7 @@ namespace AppForSEII2526.UIT.UC_Plan
 
         [Fact]
         [Trait("LevelTesting", "Functional Testing")]
-        public void UC1ES4P1()
+        public void UC1ES2P1_no_classes_available()
         {
             // ARRANGE
             InitialStepsForPlanClasses();
@@ -136,6 +141,75 @@ namespace AppForSEII2526.UIT.UC_Plan
 
             // ASSERT
             Assert.Contains(expectedWarningMessage, selectClassesForPlan_PO.GetWarningMessage());
+        }
+
+
+
+        /************************************************
+         *  TEST CASES FOR: CREATE PLAN                 *
+         ************************************************/
+        [Fact]
+        [Trait("LevelTesting", "Functional Testing")]
+        public void UC1ES5P1_modify()
+        {
+            // ARRANGE
+            InitialStepsForPlanClasses();
+
+            var expectedclasses1 = new List<string[]>
+            {
+                new string[] { className1, classDate1.ToString("dd/MM/yyyy"), classTime1.ToString("HH:mm"), string.Join(", ", classTypeItems1), classPrice1.ToString("F2", CultureInfo.InvariantCulture) },
+                new string[] { className2, classDate2.ToString("dd/MM/yyyy"), classTime2.ToString("HH:mm"), string.Join(", ", classTypeItems2), classPrice2.ToString("F2", CultureInfo.InvariantCulture) },
+            };
+
+            var expectedclasses2 = new List<string[]>
+            {
+                new string[] { className2, classDate2.ToString("dd/MM/yyyy"), classTime2.ToString("HH:mm"), string.Join(", ", classTypeItems2), classPrice2.ToString("F2", CultureInfo.InvariantCulture) },
+            };
+
+            // ACT
+
+            // Select classes 1 and 2
+            selectClassesForPlan_PO.SearchClasses("", null);
+            selectClassesForPlan_PO.AddClassToSelected(className1);
+            selectClassesForPlan_PO.AddClassToSelected(className2);
+            // Go to create plan page
+            selectClassesForPlan_PO.PressCreatePlanButton();
+            // Get classes shown in create plan page
+            bool check1 = createPlan_PO.CheckListOfItems(expectedclasses1);
+            // Go back to select classes page
+            createPlan_PO.ModifyClasses();
+            // Remove class 2 from selected
+            selectClassesForPlan_PO.RemoveClassFromSelected(className1);
+            // Go to create plan page again
+            selectClassesForPlan_PO.PressCreatePlanButton();
+            // Get classes shown in create plan page
+            bool check2 = createPlan_PO.CheckListOfItems(expectedclasses2);
+
+            // ASSERT
+            Assert.True(check1);
+            Assert.True(check2);
+        }
+
+        [Fact]
+        [Trait("LevelTesting", "Functional Testing")]
+        public void UC1ES6P1_no_classes_selected()
+        {
+            /*
+             * Note:  Although this test case belongs to step 7 of the use case, it is included in the class selection part (step 4)
+             * because the user cannot access step 7 when the alternative flow associated with UC1ES6P1 is taken.
+             * 
+             * Note: This test case is intended to last around 2 or more seconds.
+             * The fact that the duration of the test case is longer than usual does not imply the test has failed.
+             */
+
+        // ARRANGE
+            InitialStepsForPlanClasses();
+
+            // ACT
+            selectClassesForPlan_PO.SearchClasses("", null);
+
+            // ASSERT
+            Assert.False(selectClassesForPlan_PO.IsCreatePlanButtonVisible());
         }
     }
 }

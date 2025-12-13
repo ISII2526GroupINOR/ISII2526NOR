@@ -73,7 +73,7 @@
                                         <td>@(cl.Price.ToString("F2", CultureInfo.InvariantCulture))</td>
                                         <td>@string.Join(", ", cl.TypeItems)</td>
                                         <td>
-                                            <button class="btn btn-outline-secondary" id="bt_add_class_@cl.Id" @onclick="@(() => AddClass(cl))">Add</button>
+                                            <button class="btn btn-outline-secondary" id="bt_add_class_@cl.Name" @onclick="@(() => AddClass(cl))">Add</button>
                                         </td>
                                     </tr>
                                 }
@@ -91,7 +91,7 @@
             @foreach (ClassForPlanDTO item in planState.ClassesDetail)
             {
                 <div class="row">
-                    <button type="button" class="btn btn-light" id="removeMovie_@item.Id" @onclick="@(() => RemovePlanItem(item))">
+                    <button type="button" class="btn btn-light" id="removeClass_@item.Name" @onclick="@(() => RemovePlanItem(item))">
                         @item.Name <br> @item.Date.DateTime.ToShortDateString() @item.Date.DateTime.ToString("HH:mm") <br> @item.Price € <br> [Remove]
                     </button>
                 </div>
@@ -215,7 +215,10 @@
         ClassDate = (ClassDate == new DateTime(1, 1, 1)) ?
             DateTime.SpecifyKind(DateTime.Today, DateTimeKind.Utc)
             : _classDate;
-
+        
+        // If the state container already has selected classes, show them
+        // This applies when the user goes back to this page from the CreatePlan page
+        hiddenClassesSelectedList = planState.ClassesDetail.Count == 0;
 
         SearchClasses();
         return base.OnInitializedAsync();

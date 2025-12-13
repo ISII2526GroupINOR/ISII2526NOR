@@ -7,14 +7,11 @@
     <UserSecretsId>aspnet-AppForSEII2526.Web-660902f3-55b0-42b4-a4c6-7893d47fb56a</UserSecretsId>
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Include="OpenAPIs\swagger.json" ClassName="AppForSEII2526APIClient" />
-  </ItemGroup>
+
 
   <ItemGroup>
-    <None Include="OpenAPIs\swagger1.json" ClassName="AppForGymAPIClient" />
-    <OpenApiReference Include="OpenAPIs\swagger2.json" Namespace="AppForSEII2526.Web.API" ClassName="AppForGymAPIClient">
-      <SourceUri>https://appforseii-api-ecehhueyekgvdgas.spaincentral-01.azurewebsites.net/swagger/v1/swagger.json</SourceUri>
+    <OpenApiReference Include="OpenAPIs\swagger3.json" ClassName="AppForGymAPIClient" Namespace="AppForSEII2526.Web.API">
+      <SourceUri>https://localhost:7067/swagger/v1/swagger.json</SourceUri>
     </OpenApiReference>
   </ItemGroup>
 

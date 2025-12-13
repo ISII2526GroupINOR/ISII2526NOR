@@ -72,6 +72,9 @@ namespace AppForSEII2526.Web
             {
                 Classes = new List<ClassForCreatePlanDTO>()
             };
+
+            // We clear also the detail classes
+            ClassesDetail.Clear();
         }
     }
 }

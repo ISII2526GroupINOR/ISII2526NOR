@@ -117,6 +117,12 @@ namespace AppForSEII2526.UIT.Shared {
 
         }
 
+        public void WaitForBeingVisibleVaryingTime(By IdElement, int seconds) {
+            //used whenever the webelement needs a delay for being clickable
+            var wait = new WebDriverWait(_driver, new TimeSpan(0, 0, seconds));
+            wait.Until(ExpectedConditions.ElementIsVisible(IdElement));
+        }
+
         public void WaitForBeingVisibleIgnoringExeptionTypes(By IdElement) {
             //used whenever the webelement needs a delay for being clickable
             var wait = new WebDriverWait(_driver, new TimeSpan(0, 10, 0));

@@ -13,6 +13,7 @@ namespace AppForSEII2526.UIT.UC_Plan
         By inputDate = By.Id("inputDate");
         By button = By.Id("searchClasses");
         By tableOfClassesBy = By.Id("tableOfClasses");
+        By createPlanButton = By.Id("purchaseClassesButton");
 
         public SelectClassesForPlan_PO(IWebDriver driver, ITestOutputHelper output) : base(driver, output)
         {
@@ -82,5 +83,45 @@ namespace AppForSEII2526.UIT.UC_Plan
                 return "";
             }
         }
+
+        public void PressCreatePlanButton()
+        {
+
+            WaitForBeingClickable(createPlanButton);
+            _driver.FindElement(createPlanButton).Click();
+        }
+
+        public void AddClassToSelected(string className)
+        {
+            By addButton = By.Id($"bt_add_class_{className}");
+            WaitForBeingClickable(addButton);
+            _driver.FindElement(addButton).Click();
+        }
+
+        public void RemoveClassFromSelected(string className)
+        {
+            By removeButton = By.Id($"removeClass_{className}");
+            WaitForBeingClickable(removeButton);
+            _driver.FindElement(removeButton).Click();
+        }
+
+
+        
+        public bool IsCreatePlanButtonVisible()
+        {
+            try
+            {
+                // Only wait for 2 seconds to make the test faster, while taking into account big latencies in the response time of the web application
+                WaitForBeingVisibleVaryingTime(createPlanButton, 2);
+                return true;
+            }
+            catch (WebDriverTimeoutException)
+            {
+                return false;
+            }
+
+        }
     }
+  
+    
 }
