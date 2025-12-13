@@ -42,5 +42,11 @@ namespace AppForSEII2526.UIT.UC_Plan
                 return "";
             }
         }
+
+        public void ModifyClasses()
+        {
+            WaitForBeingClickable(buttonModifyClasses);
+            _driver.FindElement(buttonModifyClasses).Click();
+        }
     }
 }
