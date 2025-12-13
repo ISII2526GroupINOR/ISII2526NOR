@@ -27,31 +27,31 @@
     </div>
 
     <div class="row alert alert-danger" role="alert" hidden="@hideErrors">
-        <p id="ErrorsShown">Errors: @messageError</p>
+        <p id="errorsShown">Errors: @messageError</p>
     </div>
 
     <div class="row g-3">
         <div class="col-md">
             <div class="form-floating mb-3">
-                <InputText @bind-Value="plan.Name" class="form-control" id="PName" />
+                <InputText @bind-Value="plan.Name" class="form-control" id="planName" />
                 <label for="Name">Name </label>
             </div>
         </div>
         <div class="col-md">
             <div class="form-floating mb-3">
-                <InputText @bind-Value="plan.Description" class="form-control" id="PDescription" />
+                <InputText @bind-Value="plan.Description" class="form-control" id="planDescription" />
                 <label for="Description">Description </label>
             </div>
         </div>
         <div class="col-md">
             <div class="form-floating mb-3">
-                <InputNumber @bind-Value="plan.Weeks" class="form-control" id="PWeeks" />
+                <InputNumber @bind-Value="plan.Weeks" class="form-control" id="planWeeks" />
                 <label for="Weeks">Number of weeks</label>
             </div>
         </div>
         <div class="col-md">
             <div class="form-floating mb-3">
-                <InputText @bind-Value="plan.HealthIssues" class="form-control" id="PHealth" />
+                <InputText @bind-Value="plan.HealthIssues" class="form-control" id="planHealth" />
                 <label for="HealthIssues">Health Issues</label>
             </div>
         </div>
@@ -86,13 +86,13 @@
     <h4>Plan detail</h4>
     <p>
         <b>Total price:</b> @totalPrice.ToString("F2", System.Globalization.CultureInfo.InvariantCulture) €
-        <button class="btn btn-outline-primary" type="submit" @onclick="ModifyClassSelection" id="ModifyClasses">
+        <button class="btn btn-outline-primary" type="submit" @onclick="ModifyClassSelection" id="buttonModifyClasses">
             Modify classes
         </button>
     </p>
 
     <div class="mh-100 table-responsive">
-        <table class="table table-condensed table-hover" id="TableOfRentalItems">
+        <table class="table table-condensed table-hover" id="tableOfPlanClasses">
             <thead>
                 <tr>
                     <!-- Based on: https://github.com/Ingenieria-del-Software-II-ESIIAB/SEII-AppfForMoviesForClasses/commit/185ee7dd1d27e26bac247ef1574b527e6f8b221a-->
@@ -107,7 +107,7 @@
             <tbody>
                 @foreach (ClassForCreatePlanDTO cl in plan.Classes)
                 {
-                    <tr id="MovieData_@cl.Id">
+                    <tr id="classData_@cl.Id">
                         <td>@classesDetail.FirstOrDefault(c => c.Id == cl.Id)?.Name</td>
                         <td>@classesDetail.FirstOrDefault(c => c.Id == cl.Id)?.Date.DateTime.ToShortDateString()</td>
                         <td>@classesDetail.FirstOrDefault(c => c.Id == cl.Id)?.Date.DateTime.ToString("HH:mm")</td>
