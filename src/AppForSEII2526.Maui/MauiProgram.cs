@@ -33,6 +33,7 @@ namespace AppForSEII2526.Maui {
             builder.Services.AddSingleton<FontServices>();
             builder.Services.AddSingleton<ProfileImageServices>();
             builder.Services.AddScoped<ThemeService>();
+            builder.Services.AddSingleton<AssistantServices>();
             return builder.Build();
         }
     }

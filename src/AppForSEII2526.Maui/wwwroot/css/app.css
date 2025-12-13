@@ -161,10 +161,68 @@ font-open-sans {
     align-items: center;
 }
 
+
+
+.assistant-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+}
+
+/* Caja del modal */
+.assistant-modal {
+    position: fixed;
+    bottom: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 85%;
+    max-width: 400px;
+    padding: 20px;
+    background: white;
+    border-radius: 16px;
+    z-index: 1001;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* Textarea */
+.assistant-textarea {
+    width: 100%;
+    height: 120px;
+    border-radius: 12px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    resize: none;
+}
+
+/* Botones */
+.assistant-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+.btn-send {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 10px;
+    background-color: #4CAF50;
+    color: white;
+}
+
+.btn-cancel {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 10px;
+    background-color: #ccc;
+    color: black;
+}
+
 .assistant-fab {
     position: fixed; /* fijo respecto a la ventana WebView */
     right: 20px;
-    bottom: 24px;
+    bottom: 94px;
     width: 64px;
     height: 64px;
     border-radius: 32px;
@@ -182,6 +240,9 @@ font-open-sans {
     width: 78px;
     height: 78px;
 }
+
+
+
 
 /* Default From Bootstrap */
 

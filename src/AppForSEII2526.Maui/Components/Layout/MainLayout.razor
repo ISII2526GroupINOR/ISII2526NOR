@@ -3,7 +3,7 @@
 @inject FontServices FontServices
 @inject ThemeService ThemeService
 @inject IJSRuntime JS
-
+@inject AssistantServices AssistantServices
 
 <div class="page font-container @FontServices.CurrentFontClass">
     <div class="sidebar">
@@ -19,26 +19,28 @@
             @Body
         </article>
 
-        <button class="assistant-fab">
+        <button class="assistant-fab" @onclick="CallAssistant">
             <img src="Images/assistantIcon.png" alt="Assistant" />
         </button>
 
         @if (showDialog)
         {
-            <div class="assistant-modal-backdrop" @onclick="CloseDialog">
+            <div class="assistant-modal-backdrop" @onclick="CallAssistant">
             </div>
 
             <div class="assistant-modal">
-                <h4>Asistente</h4>
+                <h4>Dumclops</h4>
 
                 <textarea class="assistant-textarea"
                           @bind="userMessage"
                           placeholder="Escribe tu mensaje...">
                 </textarea>
 
+                <p>@response</p>
+
                 <div class="assistant-buttons">
                     <button class="btn-send" @onclick="SendMessage">Enviar</button>
-                    <button class="btn-cancel" @onclick="CloseDialog">Cancelar</button>
+                    <button class="btn-cancel" @onclick="CallAssistant">Cancelar</button>
                 </div>
             </div>
         }
@@ -46,11 +48,20 @@
 </div>
 
 @code {
+    [Inject] NavigationManager nav { get; set; }
     private bool showDialog = false;
     private string userMessage = null;
+    private string link;
+    private string response = "What´s up bro? Are you looking for something?";
     private void CallAssistant()
     {
-        
+        showDialog = !showDialog;
+    }
+
+    private void SendMessage()
+    {
+        Thread.Sleep(2000);
+        response = AssistantServices.AssistantMainResponse(userMessage, nav.Uri, out link, "admin");
     }
 
     protected override void OnInitialized()
