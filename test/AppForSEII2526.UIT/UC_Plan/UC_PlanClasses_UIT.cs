@@ -69,7 +69,7 @@ namespace AppForSEII2526.UIT.UC_Plan
         [Theory]
         [Trait("LevelTesting", "Functional Testing")]
         [MemberData(nameof(TestCasesFor_UC1ES1P1_and_UC1ES3P1_and_UC1ES3P2))]
-        public void UC1ES1P1_and_UC1ES3P1_and_UC1ES3P2(string classNameFilter, DateOnly? classDateFilter, List<string[]> expectedClasses)
+        public void UC1ES1P1_and_UC1ES3P1_and_UC1ES3P2_filters(string classNameFilter, DateOnly? classDateFilter, List<string[]> expectedClasses)
         {
             // ARRANGE
             InitialStepsForPlanClasses();
@@ -113,7 +113,7 @@ namespace AppForSEII2526.UIT.UC_Plan
 
         [Fact]
         [Trait("LevelTesting", "Functional Testing")]
-        public void UC1ES2P1()
+        public void UC1ES4P1_invalid_date()
         {
             // ARRANGE
             InitialStepsForPlanClasses();
@@ -130,7 +130,7 @@ namespace AppForSEII2526.UIT.UC_Plan
 
         [Fact]
         [Trait("LevelTesting", "Functional Testing")]
-        public void UC1ES4P1()
+        public void UC1ES2P1_no_classes()
         {
             // ARRANGE
             InitialStepsForPlanClasses();
@@ -150,7 +150,7 @@ namespace AppForSEII2526.UIT.UC_Plan
          ************************************************/
         [Fact]
         [Trait("LevelTesting", "Functional Testing")]
-        public void UC1ES5P1()
+        public void UC1ES5P1_modify()
         {
             // ARRANGE
             InitialStepsForPlanClasses();
