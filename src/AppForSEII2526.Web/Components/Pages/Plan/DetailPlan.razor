@@ -18,7 +18,36 @@
 }
 else
 {
-
+    <table class="table table-borderless table-sm">
+        <tr>
+            <th>Name and Surname</th>
+            <td id="nameSurname">@plan.User.Name @plan.User.Surname</td>
+        </tr>
+        <tr>
+            <th>Creation date</th>
+            <td id="createdDate">@plan.CreatedDate.DateTime.ToShortDateString()</td>
+        </tr>
+        <tr>
+            <th>Total price</th>
+            <td id="totalPrice">@plan.TotalPrice.ToString("F2", System.Globalization.CultureInfo.InvariantCulture) €</td>
+        </tr>
+        <tr>
+            <th>Plan name</th>
+            <td id="planName">@plan.Name</td>
+        </tr>
+        <tr>
+            <th>Plan description</th>
+            <td id="totalPrice">@plan.Description</td>
+        </tr>
+        <tr>
+            <th>Plan Weeks</th>
+            <td id="weeks">@plan.Weeks</td>
+        </tr>
+        <tr>
+            <th>Health issues</th>
+            <td id="rentalPeriod">@plan.HealthIssues</td>
+        </tr>
+    </table>
 
 }
 
