@@ -25,7 +25,7 @@
     @* <div class="row g-3">
         <div class="col-md">
             <div class="form-floating mb-3">
-                <InputText @bind-Value="rental.NameCustomer" class="form-control" id="Name" />
+                <InputText @bind-Value="user." class="form-control" id="Name" />
                 <label for="Name">Name </label>
             </div>
         </div>
@@ -112,6 +112,7 @@
 }
 
 @code {
+    private string UserNameCustomer = "";
     private string messageError = "";
     private bool hideErrors { get { return messageError.Length == 0; } }
     //rentalbutton will be disabled if there are not movies in the renting cart
@@ -185,17 +186,18 @@
         {
             var authState = await authenticationState;
             var user = authState?.User;
+            
 
-            // if (user is not null)
-            // {
-            //     if (user.Identity is not null && user.Identity.IsAuthenticated)
-            //     {
-            //         rental.UserNameCustomer = user.Identity.Name;
-            //     }
-            // }
-            // rental.NameCustomer = rental.NameCustomer == null ? "" : rental.NameCustomer;
-            // rental.SurnameCustomer = rental.SurnameCustomer == null ? "" : rental.SurnameCustomer;
-            // rental.DeliveryAddress = rental.DeliveryAddress == null ? "" : rental.DeliveryAddress;
+            if (user is not null)
+            {
+               if (user.Identity is not null && user.Identity.IsAuthenticated)
+               {
+                   UserNameCustomer = user.Identity.Name;
+               }
+            }
+            // NameCustomer = rental.NameCustomer == null ? "" : rental.NameCustomer;
+            // SurnameCustomer = rental.SurnameCustomer == null ? "" : rental.SurnameCustomer;
+            // DeliveryAddress = rental.DeliveryAddress == null ? "" : rental.DeliveryAddress;
 
         }
     }

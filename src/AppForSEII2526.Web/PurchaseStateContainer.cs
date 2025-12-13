@@ -11,7 +11,7 @@ namespace AppForSEII2526.Web
 
         };
 
-        public List<PaymentMethodForPurchaseDTO>? PaymentMethods; //Attempt to use PaymentMethodForPurchaseDTO
+        //public List<PaymentMethodForPurchaseDTO>? PaymentMethods; //Attempt to use PaymentMethodForPurchaseDTO
 
         public decimal TotalPrice
         {
