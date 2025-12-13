@@ -73,7 +73,7 @@
                                         <td>@(cl.Price.ToString("F2", CultureInfo.InvariantCulture))</td>
                                         <td>@string.Join(", ", cl.TypeItems)</td>
                                         <td>
-                                            <button class="btn btn-outline-secondary" id="bt_add_class_@cl.Id" @onclick="@(() => AddClass(cl))">Add</button>
+                                            <button class="btn btn-outline-secondary" id="bt_add_class_@cl.Name" @onclick="@(() => AddClass(cl))">Add</button>
                                         </td>
                                     </tr>
                                 }
@@ -91,7 +91,7 @@
             @foreach (ClassForPlanDTO item in planState.ClassesDetail)
             {
                 <div class="row">
-                    <button type="button" class="btn btn-light" id="removeMovie_@item.Id" @onclick="@(() => RemovePlanItem(item))">
+                    <button type="button" class="btn btn-light" id="removeClass_@item.Name" @onclick="@(() => RemovePlanItem(item))">
                         @item.Name <br> @item.Date.DateTime.ToShortDateString() @item.Date.DateTime.ToString("HH:mm") <br> @item.Price € <br> [Remove]
                     </button>
                 </div>
