@@ -168,6 +168,15 @@
         {
             if (plan.Classes.Count > 0)
             {
+                // Process the goals to make them null if they are empty strings. This avoids triggering an error by the sprint 2 exam implementation of the API.
+                foreach (var cl in plan.Classes)
+                {
+                    if (string.IsNullOrWhiteSpace(cl.Goal))
+                    {
+                        cl.Goal = null;
+                    }
+                }
+
                 try
                 {
                     PlanDetailDTO? planned = null;
