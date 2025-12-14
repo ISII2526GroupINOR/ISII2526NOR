@@ -7,5 +7,10 @@
         [Required]
         public required DateTime ExpirationDate { get; set; }
 
+
+        public override string ToString()
+        {
+            return $"Number: {CreditCardNumber} Exp. Date: {ExpirationDate}";
+        }
     }
 }

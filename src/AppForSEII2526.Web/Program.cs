@@ -53,6 +53,7 @@ builder.Services.AddScoped<RestockStateContainer>();
 builder.Services.AddScoped<PurchaseStateContainer>();
 
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
