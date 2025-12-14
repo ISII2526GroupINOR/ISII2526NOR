@@ -13,6 +13,7 @@ namespace AppForSEII2526.UIT.UC_Plan
     {
         private SelectClassesForPlan_PO selectClassesForPlan_PO;
         private CreatePlan_PO createPlan_PO;
+        private DetailPlan_PO detailPlan_PO;
         // Class 1
         private const int classId1 = 1;
         private const string className1 = "Judo";
@@ -40,6 +41,7 @@ namespace AppForSEII2526.UIT.UC_Plan
         {
             selectClassesForPlan_PO = new SelectClassesForPlan_PO(_driver, _output);
             createPlan_PO = new CreatePlan_PO(_driver, _output);
+            detailPlan_PO = new DetailPlan_PO(_driver, _output);
         }
 
 
@@ -61,6 +63,49 @@ namespace AppForSEII2526.UIT.UC_Plan
         }
 
 
+        /************************************************
+         *  TEST CASES FOR: NON-ALTERNATIVE FLOW        *
+         ************************************************/
+
+        [Fact]
+        [Trait("LevelTesting", "Functional Testing")]
+        public void UC1ES1P1_normal_flow()
+        {
+            // ARRANGE
+            InitialStepsForPlanClasses();
+            string expectedPlanName = "UIT-PlanName";
+            string? expectedPlanDescription = "UIT-PlanDescription";
+            int expectedPlanWeeks = 1;
+            string? expectedHealthIssues = "UIT-HealthIssues";
+
+            var expectedClasses = new List<string[]>
+            {
+                new string[] { className1, string.Join(", ", classTypeItems1), classPrice1.ToString("F2", CultureInfo.InvariantCulture), classDate1.ToString("dd/MM/yyyy"), classTime1.ToString("HH:mm"), "" },
+                new string[] { className2, string.Join(", ", classTypeItems2), classPrice2.ToString("F2", CultureInfo.InvariantCulture), classDate2.ToString("dd/MM/yyyy"), classTime2.ToString("HH:mm"), "" },
+            };
+            // ACT
+
+            // Select classes 1 and 2
+            selectClassesForPlan_PO.SearchClasses("", null);
+            selectClassesForPlan_PO.AddClassToSelected(className1);
+            selectClassesForPlan_PO.AddClassToSelected(className2);
+            selectClassesForPlan_PO.PressCreatePlanButton();
+
+            // Fill plan information
+            createPlan_PO.setPlanName(expectedPlanName);
+            createPlan_PO.setPlanDescription(expectedPlanDescription);
+            createPlan_PO.setPlanWeeks(expectedPlanWeeks);
+            createPlan_PO.setPlanHealthIssues(expectedHealthIssues);
+            createPlan_PO.SubmitPlan();
+            createPlan_PO.ConfirmPlanSubmission();
+
+
+            // ASSERT
+
+            // Check that the plan details are correct
+            Assert.True(detailPlan_PO.CheckPlanDetail("user2Name user2Surname", TimeTable.today.ToShortDateString(), expectedPlanName, expectedPlanDescription, expectedPlanWeeks.ToString(), expectedHealthIssues));
+        }
+
 
         /************************************************
          *  TEST CASES FOR: SELECT CLASSES FOR PLAN     *
@@ -69,7 +114,7 @@ namespace AppForSEII2526.UIT.UC_Plan
         [Theory]
         [Trait("LevelTesting", "Functional Testing")]
         [MemberData(nameof(TestCasesFor_UC1ES1P1_and_UC1ES3P1_and_UC1ES3P2))]
-        public void UC1ES1P1_and_UC1ES3P1_and_UC1ES3P2_filters(string classNameFilter, DateOnly? classDateFilter, List<string[]> expectedClasses)
+        public void UC1ES3P1_and_UC1ES3P2_filters(string classNameFilter, DateOnly? classDateFilter, List<string[]> expectedClasses)
         {
             // ARRANGE
             InitialStepsForPlanClasses();
@@ -202,7 +247,7 @@ namespace AppForSEII2526.UIT.UC_Plan
              * The fact that the duration of the test case is longer than usual does not imply the test has failed.
              */
 
-        // ARRANGE
+            // ARRANGE
             InitialStepsForPlanClasses();
 
             // ACT
@@ -210,6 +255,65 @@ namespace AppForSEII2526.UIT.UC_Plan
 
             // ASSERT
             Assert.False(selectClassesForPlan_PO.IsCreatePlanButtonVisible());
+        }
+
+        /************************************************
+        *  TEST CASES FOR: PLAN DETAIL                  *
+        ************************************************/
+
+        [Theory]
+        [Trait("LevelTesting", "Functional Testing")]
+        [MemberData(nameof(TestCasesFor_UC1ES7P1_to_UC1ES7P3))]
+        public void UC1ES7P1_to_UC1ES7P3_missing_mandatory_plan_information(string? planName, string? planDescription, int? planWeeks, string? healthIssues, By panelToTest, string expectedErrorMessage)
+        {
+            // ARRANGE
+            InitialStepsForPlanClasses();
+
+            // ACT
+
+            // Select classes 1 and 2
+            selectClassesForPlan_PO.SearchClasses("", null);
+            selectClassesForPlan_PO.AddClassToSelected(className1);
+            selectClassesForPlan_PO.AddClassToSelected(className2);
+            selectClassesForPlan_PO.PressCreatePlanButton();
+            // Fill plan information with the fields provided in the test case
+            if (planName != null)
+            {
+                createPlan_PO.setPlanName(planName);
+            }
+            if (planDescription != null)
+            {
+                createPlan_PO.setPlanDescription(planDescription);
+            }
+            if (planWeeks != null)
+            {
+                createPlan_PO.setPlanWeeks((int)planWeeks);
+            }
+            if (healthIssues != null)
+            {
+                createPlan_PO.setPlanHealthIssues(healthIssues);
+            }
+            // Submit the plan creation form
+            createPlan_PO.SubmitPlan();
+
+            // ASSERT
+
+            // Get the errors
+            string actualErrors = createPlan_PO.GetValidations(panelToTest);
+            Assert.Contains(expectedErrorMessage, actualErrors);
+        }
+
+        public static IEnumerable<object[]> TestCasesFor_UC1ES7P1_to_UC1ES7P3()
+        {
+            // Prepare test cases
+            var testCases = new List<object[]>
+            {
+                new object[] { null, "UIT_description", 1, "UIT_healthIssues", By.Id("validationName"),  "The Name field is required." },
+                new object[] {"UIT_plan", "UIT_description", null, "UIT_healthIssues", By.Id("validationWeeks"), "The field Weeks must be between 1 and 52." }
+                // TODO: Implement the test case for UC1ES7P3 for the payment method.
+
+            };
+            return testCases;
         }
     }
 }

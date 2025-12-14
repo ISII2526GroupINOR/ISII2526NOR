@@ -816,6 +816,10 @@
           "date": {
             "type": "string",
             "format": "date-time"
+          },
+          "goal": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -980,6 +984,10 @@
       "PlanDetailDTO": {
         "type": "object",
         "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
           "name": {
             "maxLength": 128,
             "minLength": 0,
