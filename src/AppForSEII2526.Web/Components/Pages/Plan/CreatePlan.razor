@@ -1,0 +1,259 @@
+﻿@page "/plans/createplan"
+
+@using AppForSEII2526.Web.API
+@using AppForSEII2526.Web.Components.Shared
+@using Microsoft.AspNetCore.Authorization
+@using System.Globalization
+@using System.Security.Claims
+@using System.Net
+
+
+@inject NavigationManager navigation
+@inject AppForGymAPIClient apiClient
+@inject ILogger<CreatePlan> logger
+@inject PlanStateContainer planState
+
+@attribute [Authorize]
+
+
+<h3>Create Plan</h3>
+
+@* plan is the object that will be edited thanks to the form *@
+<EditForm Model="plan" OnValidSubmit="OpenDialog">
+    <div class="row">
+
+        <DataAnnotationsValidator />
+        <ValidationSummary class="row alert alert-danger" />
+    </div>
+
+    <div class="row alert alert-danger" role="alert" hidden="@hideErrors">
+        <p id="errorsShown">Errors: @messageError</p>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-md">
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="plan.Name" class="form-control" id="planName" />
+                <label for="Name">Name </label>
+            </div>
+        </div>
+        <div class="col-md">
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="plan.Description" class="form-control" id="planDescription" />
+                <label for="Description">Description </label>
+            </div>
+        </div>
+        <div class="col-md">
+            <div class="form-floating mb-3">
+                <InputNumber @bind-Value="plan.Weeks" class="form-control" id="planWeeks" />
+                <label for="Weeks">Number of weeks</label>
+            </div>
+        </div>
+        <div class="col-md">
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="plan.HealthIssues" class="form-control" id="planHealth" />
+                <label for="HealthIssues">Health Issues</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-2">
+        <div class="col-md">
+            <div class="form-floating">
+                @*a dropdown for selecting the payment method*@
+                <p>Payment method selector here</p>
+                @*
+                <InputSelect class="form-select" @bind-Value="@plan.PaymentMethod" id="PaymentMethod">
+                    <option value="@PaymentMethodType.CreditCard" default> CreditCard</option>
+                    <option value="@PaymentMethodType.PayPal"> PayPal</option>
+                    <option value="@PaymentMethodType.Cash"> Cash</option>
+                </InputSelect>
+                <label for="PaymentMethod">Payment Method</label>
+                *@
+            </div>
+        </div>
+
+        <div class="col-md">
+            <div class="form-floating">
+                @*this button will be used to ask the user if he want to proceed to rent the movies*@
+                <button class="btn btn-primary" type="submit" id="Submit">
+                    Create your plan
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <h4>Plan detail</h4>
+    <p>
+        <b>Total price:</b> @totalPrice.ToString("F2", System.Globalization.CultureInfo.InvariantCulture) €
+        <button class="btn btn-outline-primary" type="submit" @onclick="ModifyClassSelection" id="buttonModifyClasses">
+            Modify classes
+        </button>
+    </p>
+
+    <div class="mh-100 table-responsive">
+        <table class="table table-condensed table-hover" id="tableOfPlanClasses">
+            <thead>
+                <tr>
+                    <!-- Based on: https://github.com/Ingenieria-del-Software-II-ESIIAB/SEII-AppfForMoviesForClasses/commit/185ee7dd1d27e26bac247ef1574b527e6f8b221a-->
+                    <th>Name</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Item Types</th>
+                    <th>Price</th>
+                    <th>Goal</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (ClassForCreatePlanDTO cl in plan.Classes)
+                {
+                    <tr id="classData_@cl.Id">
+                        <td>@classesDetail.FirstOrDefault(c => c.Id == cl.Id)?.Name</td>
+                        <td>@classesDetail.FirstOrDefault(c => c.Id == cl.Id)?.Date.DateTime.ToShortDateString()</td>
+                        <td>@classesDetail.FirstOrDefault(c => c.Id == cl.Id)?.Date.DateTime.ToString("HH:mm")</td>
+                        <td>
+                            @string.Join(", ", classesDetail.FirstOrDefault(c => c.Id == cl.Id)?.TypeItems ?? new List<string>())
+                        </td>
+                        <td>@classesDetail.FirstOrDefault(c => c.Id == cl.Id)?.Price.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)</td>
+                        <td>
+                            <input type="text" id="goal_@cl.Id" @bind=cl.Goal class="form-control" placeholder="Goal" aria-label="Goal" />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</EditForm>
+
+@*a modal popup dialog for checking if user wants to proceed with plan creation*@
+@if (DialogIsOpen)
+{
+    <Dialog Caption="Plan creation"
+            Message="Do you want to proceed to create a plan with the selected classes?"
+            OnClose="@OnDialogClose"
+            Type=Dialog.Category.SaveNot>
+    </Dialog>
+}
+
+@code {
+    // Variables
+    private string messageError = "";
+    private bool hideErrors { get { return messageError.Length == 0; } }
+
+    private PlanForCreateDTO plan => planState.Plan;
+    private List<ClassForPlanDTO> classesDetail => planState.ClassesDetail;
+    private decimal totalPrice => planState.TotalPrice;
+
+    private bool DialogIsOpen = false;
+
+
+
+    // Functions
+
+    private void ModifyClassSelection()
+    {
+        navigation.NavigateTo("/plan/selectclassesforplan");
+    }
+
+
+    private void OpenDialog()
+    {
+        DialogIsOpen = true;
+    }
+
+    private async Task OnDialogClose(bool isOk)
+    {
+        DialogIsOpen = false;
+        if(isOk)
+        {
+            if (plan.Classes.Count > 0)
+            {
+                try
+                {
+                    PlanDetailDTO? planned = null;
+                    try
+                    {
+                        planned = await apiClient.PostCreatePlanAsync(plan);
+                    }
+                    catch (ApiException apiexception)
+                    {
+                        // Ignore exception for status code 201 (Created) if the Swagger specification is outdated
+                        if (apiexception.StatusCode == (int)HttpStatusCode.Created)
+                        {
+                            logger.LogWarning("Ignoring ApiException with status code 201 (Created) in CreatePlan OnDialogClose: {StatusCode} - {Content}", apiexception.StatusCode, apiexception.Message);
+                        }
+                        else
+                        {
+                            throw;
+                        }
+                    }
+                    planState.PlanCreationProcessed();
+                    string planName = planned?.Name ?? "UnknownPlan";
+                    navigation.NavigateTo($"/plan/detailplan/?PlanID={planName}"); // We can use the name as identifier because it is unique in the DB.
+                }
+                catch (ApiException<ValidationProblemDetails> apiexceptionvalidation)
+                {
+
+                    if (apiexceptionvalidation.Result.Errors.Values != null)
+                    {
+                        messageError = "";
+                        foreach (var errors in apiexceptionvalidation.Result.Errors.Values)
+                            //https://learn.microsoft.com/en-us/dotnet/api/system.string.join?view=net-7.0
+                            messageError = string.Join("(*) ", messageError, string.Join(" (*) ", errors));
+                    }
+                }
+                catch (ApiException apiexception)
+                {
+                    
+
+                    //we need to inform user that there was some other error while processing the request
+                    messageError = "Error while processing your request, please try again later!";
+
+                    logger.LogError("ApiException in CreatePlan OnDialogClose: {StatusCode} - {Content}", apiexception.StatusCode, apiexception.Message);
+
+                }
+
+            }
+        }
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        if (authenticationState is not null)
+        {
+            var authState = await authenticationState;
+            var user = authState?.User;
+
+            if (user is not null)
+            {
+                if (user.Identity is not null && user.Identity.IsAuthenticated)
+                {
+                    // Obtain the user ID from the claims.
+                    var idClaim = user.FindFirst(ClaimTypes.NameIdentifier);
+                    logger.LogInformation("[CreatePlan][OnInitializedAsync][Claim] Authenticated user with ID claim: {UserId}", idClaim?.Value); // The claim id has been verified to equal the user id in the database during development.
+                    if (idClaim is null || string.IsNullOrWhiteSpace(idClaim.Value))
+                    {
+                        logger.LogError("Claim missing for authenticated user.", ClaimTypes.NameIdentifier);
+                        throw new InvalidOperationException("The authenticated user does not have a valid NameIdentifier claim.");
+                    }
+
+                    plan.UserId = idClaim.Value;
+                }
+            }
+
+        }
+
+        // [TEMPORARY FIX] Set the payment method id of the plan to a fixed id (3) until the payment method management is implemented
+        // TODO: Remove this temporary fix when payment method management is implemented
+        plan.PaymentMethodId = 3;
+    }   
+
+
+    [CascadingParameter]
+    private Task<AuthenticationState>? authenticationState { get; set; }
+
+
+
+}
