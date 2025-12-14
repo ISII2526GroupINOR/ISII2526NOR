@@ -85,6 +85,13 @@ namespace AppForSEII2526.UIT.UC_Plan
             _driver.FindElement(buttonSubmit).Click();
         }
 
+        public void ConfirmPlanSubmission()
+        {
+
+            WaitForBeingClickable(By.Id("Button_DialogOK"));
+            _driver.FindElement(By.Id("Button_DialogOK")).Click();
+        }
+
         public string GetErrors()
         {
             WaitForBeingVisible(errorPanel);
