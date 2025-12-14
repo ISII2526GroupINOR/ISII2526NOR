@@ -41,6 +41,12 @@
                 <label for="Country">Country</label>
             </div>
         </div>
+        <div class="col-md">
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="purchase.Description" class="form-control" id="Description" />
+                <label for="Description">Description</label>
+            </div>
+        </div>
     </div> 
     <div class="row g-2">
         <div class="col-md">
@@ -78,7 +84,7 @@
     <p>
         <b>Total price:</b> @TotalCost €
         <button class="btn btn-outline-primary" type="submit" @onclick="ModifyPurchaseItems" id="ModifyItems">
-            Modify movies
+            Modify items
         </button>
     </p>
 
@@ -91,7 +97,6 @@
                     <th>Description</th>
                     <th>Price</th>
                     <th>Quantity Available</th>
-                    <th>Purchase</th>
                 </tr>
             </thead>
             <tbody>
@@ -102,7 +107,9 @@
                         <td>@item.Brand</td>
                         <td>@item.Description</td>
                         <td>@item.PurchasePrice€</td>
-                        <td>@item.Quantity</td>
+                        <td>
+                            <InputNumber @bind-Value="item.Quantity" class="form-control" />
+                        </td>
                        
                     </tr>
                 }
@@ -160,7 +167,7 @@
     }
     private void ModifyPurchaseItems()
     {
-        navigation.NavigateTo("/rental/selectitemsforpurchase");
+        navigation.NavigateTo("/purchase/selectitemsforpurchase");
     }
     private PurchaseForCreateDTO purchase => purchaseState.Purchase;
 
