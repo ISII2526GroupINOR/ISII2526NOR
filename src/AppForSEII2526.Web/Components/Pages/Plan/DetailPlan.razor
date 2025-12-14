@@ -28,10 +28,6 @@ else
             <td id="createdDate">@plan.CreatedDate.DateTime.ToShortDateString()</td>
         </tr>
         <tr>
-            <th>Total price</th>
-            <td id="totalPrice">@plan.TotalPrice.ToString("F2", System.Globalization.CultureInfo.InvariantCulture) €</td>
-        </tr>
-        <tr>
             <th>Plan name</th>
             <td id="planName">@plan.Name</td>
         </tr>
@@ -48,6 +44,43 @@ else
             <td id="rentalPeriod">@plan.HealthIssues</td>
         </tr>
     </table>
+
+
+    <h4>Enrolled Classes</h4>
+
+    <table class="table" id="enrolledClasses">
+        <thead>
+            <tr>
+                <!--(name, type, price, date, time and goals)-->
+                <th scope="col">Name</th>
+                <th scope="col">ItemTypes</th>
+                <th scope="col">Price</th>
+                <th scope="col">Date</th>
+                <th scope="col">Time</th>
+                <th scope="col">Goal</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (ClassForPlanDTO cl in plan.Classes)
+            {
+                <tr id="planItem_@cl.Id">
+                    <td>@cl.Name</td>
+                    <td>@string.Join(", ", plan.Classes.FirstOrDefault(c => c.Id == cl.Id)?.TypeItems ?? new List<string>())</td>
+                    <td>@cl.Price.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)</td>
+                    <td>@cl.Date.DateTime.ToShortDateString()</td>
+                    <td>@cl.Date.DateTime.ToString("HH:mm")</td>
+                    <td>@cl.Goal</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            @*colspan is used to state that TWO columns are collapsed*@
+            <th scope="row" colspan="2" class="text-end">Total Price</th>
+            <td id="totalPrice">@plan.TotalPrice €</td>
+        </tfoot>
+
+    </table>
+
 
 }
 
