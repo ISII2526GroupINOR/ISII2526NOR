@@ -23,7 +23,7 @@
     <div class="row">
 
         <DataAnnotationsValidator />
-        <ValidationSummary class="row alert alert-danger" />
+        <!-- We use individual validation messages instead of a validation summary-->
     </div>
 
     <div class="row alert alert-danger" role="alert" hidden="@hideErrors">
@@ -35,6 +35,7 @@
             <div class="form-floating mb-3">
                 <InputText @bind-Value="plan.Name" class="form-control" id="planName" />
                 <label for="Name">Name </label>
+                <ValidationMessage For="@(() => plan.Name)" id="validationName" class="text-danger" />
             </div>
         </div>
         <div class="col-md">
@@ -47,6 +48,7 @@
             <div class="form-floating mb-3">
                 <InputNumber @bind-Value="plan.Weeks" class="form-control" id="planWeeks" />
                 <label for="Weeks">Number of weeks</label>
+                <ValidationMessage For="@(() => plan.Weeks)" id="validationWeeks" class="text-danger" />
             </div>
         </div>
         <div class="col-md">
