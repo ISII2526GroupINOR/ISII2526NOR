@@ -23,7 +23,7 @@
     <div class="row">
 
         <DataAnnotationsValidator />
-        <ValidationSummary class="row alert alert-danger" />
+        <!-- We use individual validation messages instead of a validation summary -->
     </div>
 
     <div class="row alert alert-danger" role="alert" hidden="@hideErrors">
@@ -35,6 +35,7 @@
             <div class="form-floating mb-3">
                 <InputText @bind-Value="plan.Name" class="form-control" id="planName" />
                 <label for="Name">Name </label>
+                <ValidationMessage For="@(() => plan.Name)" id="validationName" class="text-danger" />
             </div>
         </div>
         <div class="col-md">
@@ -47,6 +48,7 @@
             <div class="form-floating mb-3">
                 <InputNumber @bind-Value="plan.Weeks" class="form-control" id="planWeeks" />
                 <label for="Weeks">Number of weeks</label>
+                <ValidationMessage For="@(() => plan.Weeks)" id="validationWeeks" class="text-danger" />
             </div>
         </div>
         <div class="col-md">
@@ -168,6 +170,15 @@
         {
             if (plan.Classes.Count > 0)
             {
+                // Process the goals to make them null if they are empty strings. This avoids triggering an error by the sprint 2 exam implementation of the API.
+                foreach (var cl in plan.Classes)
+                {
+                    if (string.IsNullOrWhiteSpace(cl.Goal))
+                    {
+                        cl.Goal = null;
+                    }
+                }
+
                 try
                 {
                     PlanDetailDTO? planned = null;
@@ -188,8 +199,10 @@
                         }
                     }
                     planState.PlanCreationProcessed();
-                    string planName = planned?.Name ?? "UnknownPlan";
-                    navigation.NavigateTo($"/plan/detailplan/?PlanID={planName}"); // We can use the name as identifier because it is unique in the DB.
+
+                    int planId = planned != null ? planned.Id : 0;
+
+                    navigation.NavigateTo($"/plan/detailplan/?PlanID={planId}"); // We can use the name as identifier because it is unique in the DB.
                 }
                 catch (ApiException<ValidationProblemDetails> apiexceptionvalidation)
                 {

@@ -14,6 +14,13 @@ namespace AppForSEII2526.API.DTOs.ClassDTOs
             Date = date;
         }
 
+        // Created along with the Goal property to let the Web client see the goal for each class in the plan when calling the API method GetPlanDetail
+        public ClassForPlanDTO(int id, string name, decimal price, IList<string> typeItems, DateTime date, string? goal)
+            : this(id, name, price, typeItems, date)
+        {
+            Goal = goal;
+        }
+
         public int Id { get; set; }
 
         
@@ -28,6 +35,8 @@ namespace AppForSEII2526.API.DTOs.ClassDTOs
 
         [DataType(DataType.DateTime)]
         public DateTime Date { get; set; }
+
+        public string? Goal { get; set; } // Used to let the Web client to see the goal for each class in the plan when calling the API method GetPlanDetail
 
         public override bool Equals(object? obj)
         {
