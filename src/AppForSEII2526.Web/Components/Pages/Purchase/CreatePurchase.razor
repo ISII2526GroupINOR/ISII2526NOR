@@ -43,17 +43,27 @@
         </div>
     </div> *@
     <div class="row g-2">
-        @* <div class="col-md">
+        <div class="col-md">
             <div class="form-floating">
-                @*a dropdown for selecting the payment method
-                <InputSelect class="form-select" @bind-Value="@purchase.Payment_methodId" id="PaymentMethod">
-                    <option value="@PaymentMethodType.CreditCard" default> CreditCard</option>
-                    <option value="@PaymentMethodType.PayPal"> PayPal</option>
-                    <option value="@PaymentMethodType.Cash"> Cash</option>
-                </InputSelect>
+                @*a dropdown for selecting the payment method*@
+                @if(paymentMethods != null)
+                {
+                    <InputSelect class="form-select" @bind-Value="@purchase.Payment_methodId" id="PaymentMethod">
+                    @foreach (var paymentMethod in paymentMethods)
+                    {
+
+                        <option value="@paymentMethod.Id" default> @paymentMethod.Type : @paymentMethod.Description</option>
+                    }
+                    
+                    </InputSelect>
+                }
+                else
+                {
+                    <p>Loading payment methods...</p>
+                }
                 <label for="PaymentMethod">Payment Method</label>
             </div>
-        </div> *@
+        </div>
         <div class="col-md">
             <div class="form-floating">
                 @*this button will be used to ask the user if he want to proceed to rent the movies*@
@@ -119,9 +129,26 @@
     private bool purchaseButtonDisabled { get { return (purchase.Items == null || purchase.Items.Count == 0); } }
     private bool DialogIsOpen;
 
-    
+    private ICollection<PaymentMethodForPurchaseDTO>? paymentMethods;
 
-    
+
+    private async void getPaymentMethods()
+    {
+        try
+        {
+            paymentMethods = await apiclient.GetPaymentMethodsAsync(UserNameCustomer);
+
+
+        }
+        catch (ApiException ex)
+        {
+            logger.LogError($"{DateTime.Now} Error: {ex}");
+            messageError = "Error while connecting to the system";
+        }
+        StateHasChanged();
+    }
+
+
 
     private decimal TotalCost
     {
@@ -186,15 +213,17 @@
         {
             var authState = await authenticationState;
             var user = authState?.User;
-            
+
 
             if (user is not null)
             {
-               if (user.Identity is not null && user.Identity.IsAuthenticated)
-               {
-                   UserNameCustomer = user.Identity.Name;
-               }
+                if (user.Identity is not null && user.Identity.IsAuthenticated)
+                {
+                    UserNameCustomer = user.Identity.Name;
+                }
             }
+
+            getPaymentMethods();
             // NameCustomer = rental.NameCustomer == null ? "" : rental.NameCustomer;
             // SurnameCustomer = rental.SurnameCustomer == null ? "" : rental.SurnameCustomer;
             // DeliveryAddress = rental.DeliveryAddress == null ? "" : rental.DeliveryAddress;
