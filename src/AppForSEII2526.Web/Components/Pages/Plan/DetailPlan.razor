@@ -1,0 +1,151 @@
+﻿@page "/plan/detailplan"
+
+
+@using AppForSEII2526.Web.API
+@using Microsoft.AspNetCore.Authorization
+@using System.Security.Claims
+@inject AppForGymAPIClient apiClient
+@inject ILogger<DetailPlan> logger
+
+@attribute [Authorize]
+
+<h3>DetailPlan</h3>
+
+
+@if (plan == null)
+{
+    <p>@error</p>
+}
+else
+{
+    <table class="table table-borderless table-sm">
+        <tr>
+            <th>Name and Surname</th>
+            <td id="nameSurname">@plan.User.Name @plan.User.Surname</td>
+        </tr>
+        <tr>
+            <th>Creation date</th>
+            <td id="createdDate">@plan.CreatedDate.DateTime.ToShortDateString()</td>
+        </tr>
+        <tr>
+            <th>Plan name</th>
+            <td id="planName">@plan.Name</td>
+        </tr>
+        <tr>
+            <th>Plan description</th>
+            <td id="planDescription">@plan.Description</td>
+        </tr>
+        <tr>
+            <th>Plan Weeks</th>
+            <td id="weeks">@plan.Weeks</td>
+        </tr>
+        <tr>
+            <th>Health issues</th>
+            <td id="healthIssues">@plan.HealthIssues</td>
+        </tr>
+    </table>
+
+
+    <h4>Enrolled Classes</h4>
+
+    <table class="table" id="enrolledClasses">
+        <thead>
+            <tr>
+                <!--(name, type, price, date, time and goals)-->
+                <th scope="col">Name</th>
+                <th scope="col">ItemTypes</th>
+                <th scope="col">Price</th>
+                <th scope="col">Date</th>
+                <th scope="col">Time</th>
+                <th scope="col">Goal</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (ClassForPlanDTO cl in plan.Classes)
+            {
+                <tr id="planItem_@cl.Id">
+                    <td>@cl.Name</td>
+                    <td>@string.Join(", ", plan.Classes.FirstOrDefault(c => c.Id == cl.Id)?.TypeItems ?? new List<string>())</td>
+                    <td>@cl.Price.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)</td>
+                    <td>@cl.Date.DateTime.ToShortDateString()</td>
+                    <td>@cl.Date.DateTime.ToString("HH:mm")</td>
+                    <td>@cl.Goal</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            @*colspan is used to state that TWO columns are collapsed*@
+            <th scope="row" colspan="2" class="text-end">Total Price</th>
+            <td id="totalPrice">@plan.TotalPrice €</td>
+        </tfoot>
+
+    </table>
+
+
+}
+
+@code {
+
+    // ATTRIBUTES
+
+    [Parameter]
+    [SupplyParameterFromQuery] // Get the plan id from the query string, which corresponds to the plan name to show details for
+    public int PlanId { get; set; }
+
+    private PlanDetailDTO? plan;
+    private string error = "";
+
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationState { get; set; }
+
+
+
+
+    // METHODS
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        //we check wether the user is logged in
+        string userId = "";
+        if (authenticationState is not null)
+        {
+            var authState = await authenticationState;
+            var user = authState?.User;
+
+            //we retrieve the id of the user logged in
+            if (user is not null)
+            {
+                if (user.Identity is not null && user.Identity.IsAuthenticated && user.IsInRole("User"))
+                {
+
+                    // Obtain the user ID from the claims.
+                    var idClaim = user.FindFirst(ClaimTypes.NameIdentifier);
+                    logger.LogInformation("[DetailPlan][OnInitializedAsync][Claim] Authenticated user with ID claim: {UserId}", idClaim?.Value); // The claim id has been verified to equal the user id in the database during development.
+                    if (idClaim is null || string.IsNullOrWhiteSpace(idClaim.Value))
+                    {
+                        logger.LogError("[DetailPlan][OnInitializedAsync][Claim] Claim missing for authenticated user.", ClaimTypes.NameIdentifier);
+                        throw new InvalidOperationException("The authenticated user does not have a valid NameIdentifier claim.");
+                    }
+                    userId = idClaim.Value;
+                }
+            }
+        }
+        
+        try
+        {
+            plan = await apiClient.GetPlanDetailsAsync(PlanId);
+        }
+        catch (ApiException exception)
+        {
+            plan = null;
+        }
+        if ((plan == null) || (plan.User.Id != userId))
+        {
+            error = $"Error! You are not authorized to see this rental or there is not a rental with id={PlanId}";
+        }
+
+
+    }
+
+}

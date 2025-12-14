@@ -40,6 +40,7 @@ namespace AppForSEII2526.API.Controllers
                 .Include(p => p.PlanItems)
                     .ThenInclude(pi => pi.Class)
                 .Select(p => new PlanDetailDTO(
+                    p.Id,
                     p.Name,
                     p.Description,
                     p.CreatedDate,
@@ -55,7 +56,8 @@ namespace AppForSEII2526.API.Controllers
                         pi.Class.Name,
                         pi.Class.Price,
                         pi.Class.TypeItems.Select(ti => ti.Name).ToList(),
-                        pi.Class.Date
+                        pi.Class.Date,
+                        pi.Goal
                     )).ToList()
                 )).FirstOrDefaultAsync();
 
@@ -229,6 +231,7 @@ namespace AppForSEII2526.API.Controllers
                     .ThenInclude(pi => pi.Class)
                 .Select(p => new PlanDetailDTO
                     (
+                        p.Id,
                         p.Name,
                         p.Description,
                         p.CreatedDate,
