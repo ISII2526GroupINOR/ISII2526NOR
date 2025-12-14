@@ -56,7 +56,8 @@ namespace AppForSEII2526.API.Controllers
                         pi.Class.Name,
                         pi.Class.Price,
                         pi.Class.TypeItems.Select(ti => ti.Name).ToList(),
-                        pi.Class.Date
+                        pi.Class.Date,
+                        pi.Goal
                     )).ToList()
                 )).FirstOrDefaultAsync();
 

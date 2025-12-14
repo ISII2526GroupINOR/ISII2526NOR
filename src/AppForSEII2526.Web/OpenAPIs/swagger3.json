@@ -748,6 +748,10 @@
           "date": {
             "type": "string",
             "format": "date-time"
+          },
+          "goal": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
