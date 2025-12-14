@@ -12,6 +12,18 @@ namespace AppForSEII2526.Web
 
         public List<ClassForPlanDTO> ClassesDetail { get; private set; } = new List<ClassForPlanDTO>(); // Has id and all info of each selected class
 
+        public decimal TotalPrice
+        {
+            get
+            {
+                decimal total = 0;
+                foreach (var classForPlan in ClassesDetail)
+                {
+                    total += (decimal)classForPlan.Price;
+                }
+                return total;
+            }
+        }
 
 
 
@@ -60,6 +72,9 @@ namespace AppForSEII2526.Web
             {
                 Classes = new List<ClassForCreatePlanDTO>()
             };
+
+            // We clear also the detail classes
+            ClassesDetail.Clear();
         }
     }
 }

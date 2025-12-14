@@ -1,8 +1,10 @@
-﻿@page "/plan/selectclassesforrental"
+﻿@page "/plan/selectclassesforplan"
 
 
 @using AppForSEII2526.Web.API
 @using Microsoft.AspNetCore.Authorization
+@using System.Globalization
+
 @inject AppForGymAPIClient apiClient
 @inject ILogger<SelectClassesForPlan> logger
 @inject PlanStateContainer planState
@@ -15,11 +17,11 @@
 
 <div class="container-fluid">
     <div class="row alert alert-danger" role="alert" hidden="@hideErrors">
-        <p id="ErrorsShown">Errors: @errors</p>
+        <p id="errorsShown">Errors: @errors</p>
     </div>
 
     <div class="row alert alert-warning" role="alert" hidden="@hideWarnings">
-        <p id="WarningsShown">Warnings: @warnings</p>
+        <p id="warningsShown">Warnings: @warnings</p>
     </div>
 
     <div class="row">
@@ -39,7 +41,7 @@
                 </div>
 
 
-                <button type="button" class="btn btn-primary" @onclick=@SearchClasses id="searcClasses">Search classes</button>
+                <button type="button" class="btn btn-primary" @onclick=@SearchClasses id="searchClasses">Search classes</button>
             </div>
             <div class="row">
                 @if (classes == null)
@@ -50,11 +52,12 @@
                 {
                     <p>Number of classes: @classes.Count</p>
                     <div class="mh-100 table-responsive">
-                        <table class="table table-condensed table-hover" id="TableOfClasses">
+                        <table class="table table-condensed table-hover" id="tableOfClasses">
                             <thead>
                                 <tr>
                                     <th>Name</th>
                                     <th>Date</th>
+                                    <th>Time</th>
                                     <th>Price</th>
                                     <th>Item Types</th>
                                     <th>Select</th>
@@ -66,10 +69,11 @@
                                     <tr id="ClassData_@cl.Name">
                                         <td>@cl.Name</td>
                                         <td>@cl.Date.DateTime.ToShortDateString()</td>
-                                        <td>@cl.Price</td>
+                                        <td>@cl.Date.DateTime.ToString("HH:mm")</td>
+                                        <td>@(cl.Price.ToString("F2", CultureInfo.InvariantCulture))</td>
                                         <td>@string.Join(", ", cl.TypeItems)</td>
                                         <td>
-                                            <button class="btn btn-outline-secondary" id="classToInclude_@cl.Id" @onclick="@(() => AddClass(cl))">Add</button>
+                                            <button class="btn btn-outline-secondary" id="bt_add_class_@cl.Name" @onclick="@(() => AddClass(cl))">Add</button>
                                         </td>
                                     </tr>
                                 }
@@ -87,11 +91,14 @@
             @foreach (ClassForPlanDTO item in planState.ClassesDetail)
             {
                 <div class="row">
-                    <button type="button" class="btn btn-light" id="removeMovie_@item.Id" @onclick="@(() => RemovePlanItem(item))">
-                        @item.Name - @item.Date.DateTime.ToShortDateString() - @item.Price €  [Remove]
+                    <button type="button" class="btn btn-light" id="removeClass_@item.Name" @onclick="@(() => RemovePlanItem(item))">
+                        @item.Name <br> @item.Date.DateTime.ToShortDateString() @item.Date.DateTime.ToString("HH:mm") <br> @item.Price € <br> [Remove]
                     </button>
                 </div>
             }
+            <div class="row" id="totalPrice">
+                <h4>Total Price: @planState.TotalPrice €</h4>
+            </div>
             <div class="row">
                 <button type="button" class="btn btn-primary" id="purchaseClassesButton" @onclick=@CreatePlan>Create plan</button>
             </div>
@@ -160,12 +167,6 @@
     public async void SearchClasses()
     {
         // Error management
-        if(ClassDate != null && ClassDate < DateTime.SpecifyKind(DateTime.Today, DateTimeKind.Utc))
-        {
-            errors = "The class date cannot be in the past";
-            StateHasChanged();
-            return;
-        }
 
         DateTime now = DateTime.Now;
         DateOnly today = DateOnly.FromDateTime(DateTime.Now);
@@ -176,6 +177,7 @@
 
         if (ClassDate != null && (DateOnly.FromDateTime(ClassDate.Value) < nextWeekMonday || DateOnly.FromDateTime(ClassDate.Value) > nextWeekSunday))
         {
+            // Also takes into account if the specified date is in the past, because in that case it won't be in the next week (hopefully)
             errors = "The class date must be within the next week (from Monday to Sunday)";
             StateHasChanged();
             return;
@@ -192,7 +194,7 @@
             // Warnings management
             if(classes.Count == 0)
             {
-                warnings = "No classes found with the given filters";
+                warnings = "No classes were found with the given filters";
             }
             else
             {
@@ -213,7 +215,10 @@
         ClassDate = (ClassDate == new DateTime(1, 1, 1)) ?
             DateTime.SpecifyKind(DateTime.Today, DateTimeKind.Utc)
             : _classDate;
-
+        
+        // If the state container already has selected classes, show them
+        // This applies when the user goes back to this page from the CreatePlan page
+        hiddenClassesSelectedList = planState.ClassesDetail.Count == 0;
 
         SearchClasses();
         return base.OnInitializedAsync();
