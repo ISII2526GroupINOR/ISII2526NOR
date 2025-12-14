@@ -90,5 +90,11 @@ namespace AppForSEII2526.UIT.UC_Plan
             WaitForBeingVisible(errorPanel);
             return _driver.FindElement(errorPanel).Text;
         }
+
+        public string GetValidations(By validationPanel)
+        {
+            WaitForBeingVisible(validationPanel);
+            return _driver.FindElement(validationPanel).Text;
+        }
     }
 }

@@ -202,7 +202,7 @@ namespace AppForSEII2526.UIT.UC_Plan
              * The fact that the duration of the test case is longer than usual does not imply the test has failed.
              */
 
-        // ARRANGE
+            // ARRANGE
             InitialStepsForPlanClasses();
 
             // ACT
@@ -210,6 +210,65 @@ namespace AppForSEII2526.UIT.UC_Plan
 
             // ASSERT
             Assert.False(selectClassesForPlan_PO.IsCreatePlanButtonVisible());
+        }
+
+        /************************************************
+        *  TEST CASES FOR: PLAN DETAIL                  *
+        ************************************************/
+
+        [Theory]
+        [Trait("LevelTesting", "Functional Testing")]
+        [MemberData(nameof(TestCasesFor_UC1ES7P1_to_UC1ES7P3))]
+        public void UC1ES7P1_to_UC1ES7P3_missing_mandatory_plan_information(string? planName, string? planDescription, int? planWeeks, string? healthIssues, By panelToTest, string expectedErrorMessage)
+        {
+            // ARRANGE
+            InitialStepsForPlanClasses();
+
+            // ACT
+
+            // Select classes 1 and 2
+            selectClassesForPlan_PO.SearchClasses("", null);
+            selectClassesForPlan_PO.AddClassToSelected(className1);
+            selectClassesForPlan_PO.AddClassToSelected(className2);
+            selectClassesForPlan_PO.PressCreatePlanButton();
+            // Fill plan information with the fields provided in the test case
+            if (planName != null)
+            {
+                createPlan_PO.setPlanName(planName);
+            }
+            if (planDescription != null)
+            {
+                createPlan_PO.setPlanDescription(planDescription);
+            }
+            if (planWeeks != null)
+            {
+                createPlan_PO.setPlanWeeks((int)planWeeks);
+            }
+            if (healthIssues != null)
+            {
+                createPlan_PO.setPlanHealthIssues(healthIssues);
+            }
+            // Submit the plan creation form
+            createPlan_PO.SubmitPlan();
+
+            // ASSERT
+
+            // Get the errors
+            string actualErrors = createPlan_PO.GetValidations(panelToTest);
+            Assert.Contains(expectedErrorMessage, actualErrors);
+        }
+
+        public static IEnumerable<object[]> TestCasesFor_UC1ES7P1_to_UC1ES7P3()
+        {
+            // Prepare test cases
+            var testCases = new List<object[]>
+            {
+                new object[] { null, "UIT_description", 1, "UIT_healthIssues", By.Id("validationName"),  "The Name field is required." },
+                new object[] {"UIT_plan", "UIT_description", null, "UIT_healthIssues", By.Id("validationWeeks"), "The field Weeks must be between 1 and 52." }
+                // TODO: Implement the test case for UC1ES7P3 for the payment method.
+
+            };
+            return testCases;
         }
     }
 }
