@@ -22,6 +22,15 @@ namespace AppForSEII2526.API.DTOs.PlanDTOs
             Classes = classes;
         }
 
+        // Created along with the Id property to allow the Web client to identify the plan and call the API method GetPlanDetail
+        public PlanDetailDTO(int id, string name, string? description, DateTime createdDate, string? healthIssues, decimal totalPrice, int weeks, ApplicationUserForPlanDetailDTO? user, IList<ClassForPlanDTO> classes)
+            : this(name, description, createdDate, healthIssues, totalPrice, weeks, user, classes)
+        {
+            Id = id;
+        }
+
+        public int Id { get; set; } // Used to allow the Web client to identify the plan and call the API method GetPlanDetail
+
         [StringLength(128, ErrorMessage = "Plan name cannot be longer than 128 characters.")]
         [RegularExpression(@"^[a-zA-Z0-9\s\-]+$", ErrorMessage = "Plan name can only contain letters, numbers, spaces, and hyphens.")]
         public string Name { get; set; }

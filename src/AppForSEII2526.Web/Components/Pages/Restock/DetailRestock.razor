@@ -1,0 +1,122 @@
+﻿@page "/restock/detailrestock"
+
+@using AppForSEII2526.Web.API
+@using Microsoft.AspNetCore.Authorization
+@inject AppForGymAPIClient apiclient
+
+<h3>Detail Restock</h3>
+
+@attribute [Authorize]
+
+@if(restock == null)
+{
+    <p>@error</p>
+}
+else
+{
+    <table class="table table-borderless table-sm">
+        <tr>
+            <th>Name</th>
+            <td id="Name">@restock.Name</td>
+        </tr>
+        <tr>
+            <th>Surname</th>
+            <td id="Surname">@restock.Surname</td>
+        </tr>
+        @if(restock.TotalPrice != null)
+        {
+            <tr>
+                <th>Total Price</th>
+                <td id="TotalPrice">@restock.TotalPrice</td>
+            </tr>
+        }
+        <tr>
+            <th>Title</th>
+            <td id="Title">@restock.Title</td>
+        </tr>
+        <tr>
+            <th>Delivery Address</th>
+            <td id="DeliveryAddress">@restock.DeliveryAddress</td>
+        </tr>
+        @if(restock.Description != null)
+        {
+            <tr>
+                <th>Description</th>
+                <td id="Description">@restock.Description</td>
+            </tr>
+        }
+        @if (restock.ExpectedDate != null)
+        {
+            <tr>
+                <th>Expected Date</th>
+                <td id="ExpectedDate">@restock.ExpectedDate.ToString("dd/MM/yyyy hh:mm:ss")</td>
+            </tr>
+        }
+    </table>
+
+    <h4>Restocked Items</h4>
+
+    <table class="table" id="RestockedItems">
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Brand</th>
+                <th scope="col">Total Item Price</th>
+                <th scope="col">Quantity To Restock</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (ItemForRestockingDTO item in restock.RestockItems)
+            {
+                <tr id="RestockItem_@item.Name">
+                    <td>@item.Name</td>
+                    <td>@item.Brand</td>
+                    <td>@item.RestockPrice</td>
+                    <td>@item.QuantityToRestock</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public int RestockId { get; set; }
+    private RestockDetailDTO restock;
+    private string error = "";
+
+    [CascadingParameter]
+    private Task<AuthenticationState>? authenticationState { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        string username = "";
+        if(authenticationState is not null)
+        {
+            var authState = await authenticationState;
+            var user = authState.User;
+
+            if(user is not null)
+            {
+                if(user.Identity is not null && user.Identity.IsAuthenticated && user.IsInRole("User"))
+                {
+                    username = user.Identity.Name;
+                }
+            }
+        }
+
+        try
+        {
+            restock = await apiclient.GetRestockAsync(RestockId);
+        } catch (ApiException e)
+        {
+            restock = null;
+        }
+
+        if(restock == null)
+        {
+            error = $"Error! There is not a restock with id={RestockId}";
+        }
+    }
+}

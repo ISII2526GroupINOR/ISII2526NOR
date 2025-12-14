@@ -1,0 +1,236 @@
+﻿@page "/plan/selectclassesforplan"
+
+
+@using AppForSEII2526.Web.API
+@using Microsoft.AspNetCore.Authorization
+@using System.Globalization
+
+@inject AppForGymAPIClient apiClient
+@inject ILogger<SelectClassesForPlan> logger
+@inject PlanStateContainer planState
+@inject NavigationManager navigation
+
+@attribute [Authorize]
+
+
+<h3>SelectClassesForPlan</h3>
+
+<div class="container-fluid">
+    <div class="row alert alert-danger" role="alert" hidden="@hideErrors">
+        <p id="errorsShown">Errors: @errors</p>
+    </div>
+
+    <div class="row alert alert-warning" role="alert" hidden="@hideWarnings">
+        <p id="warningsShown">Warnings: @warnings</p>
+    </div>
+
+    <div class="row">
+        <div class="col-8">
+            <div class="row">
+                <div class="col">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">Name</span>
+                        <input type="text" id="inputName" @bind=className class="form-control" placeholder="Name" aria-label="Name" aria-describedby="basic-addon1">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Date</span>
+                        <InputDate @bind-Value="@ClassDate" id="inputDate" />
+                    </div>
+                </div>
+
+
+                <button type="button" class="btn btn-primary" @onclick=@SearchClasses id="searchClasses">Search classes</button>
+            </div>
+            <div class="row">
+                @if (classes == null)
+                {
+                    <p>Loading classes...</p>
+                }
+                else
+                {
+                    <p>Number of classes: @classes.Count</p>
+                    <div class="mh-100 table-responsive">
+                        <table class="table table-condensed table-hover" id="tableOfClasses">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Price</th>
+                                    <th>Item Types</th>
+                                    <th>Select</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var cl in classes)
+                                {
+                                    <tr id="ClassData_@cl.Name">
+                                        <td>@cl.Name</td>
+                                        <td>@cl.Date.DateTime.ToShortDateString()</td>
+                                        <td>@cl.Date.DateTime.ToString("HH:mm")</td>
+                                        <td>@(cl.Price.ToString("F2", CultureInfo.InvariantCulture))</td>
+                                        <td>@string.Join(", ", cl.TypeItems)</td>
+                                        <td>
+                                            <button class="btn btn-outline-secondary" id="bt_add_class_@cl.Name" @onclick="@(() => AddClass(cl))">Add</button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+
+            </div>
+        </div>
+        <div class="col-2" hidden="@hiddenClassesSelectedList">
+            <div class="row">
+                <h3>Shopping Cart</h3>
+            </div>
+            @foreach (ClassForPlanDTO item in planState.ClassesDetail)
+            {
+                <div class="row">
+                    <button type="button" class="btn btn-light" id="removeClass_@item.Name" @onclick="@(() => RemovePlanItem(item))">
+                        @item.Name <br> @item.Date.DateTime.ToShortDateString() @item.Date.DateTime.ToString("HH:mm") <br> @item.Price € <br> [Remove]
+                    </button>
+                </div>
+            }
+            <div class="row" id="totalPrice">
+                <h4>Total Price: @planState.TotalPrice €</h4>
+            </div>
+            <div class="row">
+                <button type="button" class="btn btn-primary" id="purchaseClassesButton" @onclick=@CreatePlan>Create plan</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@code {
+
+    // Variables and properties of the UI component
+
+    private ICollection<ClassForPlanDTO> classes; // Classes fetched from API
+    private bool hideErrors { get { return errors.Length == 0; } }
+    private string errors = "";
+    private bool hideWarnings { get { return warnings.Length == 0; } }
+    private string warnings = "";
+    private string? className { get; set; }
+    private DateTime? _classDate;
+    private DateTime? ClassDate
+    {
+        get { return _classDate; }
+        set
+        {
+            if(_classDate != value)
+            {
+                _classDate = value;
+            }
+        }
+    }
+
+    private PlanForCreateDTO plan => planState.Plan;
+
+    // Class selection logic
+
+    private bool hiddenClassesSelectedList = true;
+
+    private void AddClass(ClassForPlanDTO selectedClass) {
+        // Construct a ClassForCreatePlanDTO
+        ClassForPlanDTO classToAdd = new ClassForPlanDTO
+        {
+            Id = selectedClass.Id,
+            Date = selectedClass.Date,
+            Name = selectedClass.Name,
+            Price = selectedClass.Price,
+            TypeItems = selectedClass.TypeItems
+        };
+        // Add the class
+        planState.AddSelectedClassToPlan(classToAdd, "");
+        hiddenClassesSelectedList = false;
+    }
+
+    private void RemovePlanItem(ClassForPlanDTO selectedClass)
+    {
+        planState.RemoveSelectedClassFromPlan(selectedClass);
+
+        if (plan.Classes.Count == 0) hiddenClassesSelectedList = true;
+    }
+
+
+
+
+
+    // Method to search classes based on filters
+
+    public async void SearchClasses()
+    {
+        // Error management
+
+        DateTime now = DateTime.Now;
+        DateOnly today = DateOnly.FromDateTime(DateTime.Now);
+        DateOnly nextWeekMonday = today.DayOfWeek == DayOfWeek.Sunday // Remember: Sunday = 0, Monday = 1, ..., Saturday = 6
+            ? today.AddDays(1)
+            : today.AddDays(8 - (int)today.DayOfWeek);
+        DateOnly nextWeekSunday = nextWeekMonday.AddDays(6);
+
+        if (ClassDate != null && (DateOnly.FromDateTime(ClassDate.Value) < nextWeekMonday || DateOnly.FromDateTime(ClassDate.Value) > nextWeekSunday))
+        {
+            // Also takes into account if the specified date is in the past, because in that case it won't be in the next week (hopefully)
+            errors = "The class date must be within the next week (from Monday to Sunday)";
+            StateHasChanged();
+            return;
+        }
+
+
+        // API call 
+        try
+        {   
+            // Call the API to get the classes
+            classes = await apiClient.GetAvailableClassesForPlanAsync(className, ClassDate);
+            errors = "";
+
+            // Warnings management
+            if(classes.Count == 0)
+            {
+                warnings = "No classes were found with the given filters";
+            }
+            else
+            {
+                warnings = "";
+            }
+        }
+        catch (ApiException ex)
+        {
+            logger.LogError($"{DateTime.Now} Error: {ex}");
+            errors = "Error while connecting to the system";
+        }
+        StateHasChanged();
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+        // The type of classDate is DateTimeOffset. A conversion is required
+        ClassDate = (ClassDate == new DateTime(1, 1, 1)) ?
+            DateTime.SpecifyKind(DateTime.Today, DateTimeKind.Utc)
+            : _classDate;
+        
+        // If the state container already has selected classes, show them
+        // This applies when the user goes back to this page from the CreatePlan page
+        hiddenClassesSelectedList = planState.ClassesDetail.Count == 0;
+
+        SearchClasses();
+        return base.OnInitializedAsync();
+    }
+
+    private void CreatePlan()
+    {
+        navigation.NavigateTo("/plans/createplan");
+    }
+
+
+
+    // For Blazor Bootstrap help, see https://docs.blazorbootstrap.com/forms/text-input
+    // For distributing components, see https://github.com/Ingenieria-del-Software-II-ESIIAB/SEII-AppfForMoviesForClasses/commit/4f79a6ddb14aa83ed16f8cd9b189d393e382f345
+}

@@ -1,0 +1,1 @@
+﻿Update [dbo].[Items] set [RestockPrice] = 0 where Id = 9

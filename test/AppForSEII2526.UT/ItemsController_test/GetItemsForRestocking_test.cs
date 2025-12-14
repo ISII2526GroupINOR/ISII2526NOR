@@ -63,8 +63,8 @@ namespace AppForSEII2526.UT.ItemsController_test
 
         public static IEnumerable<object[]> TestCasesFor_GetItemsForRestock_OK()
         {
-            var itemsDTOs = new List<ItemForRestockingDTO> { new ItemForRestockingDTO(1, "Dumbbell", "Brand1", "Description", 0, 25, 10, 8),
-                new ItemForRestockingDTO(2, "Press machine", "Brand2", "Description2", 0, 200, 10, 9)};
+            var itemsDTOs = new List<ItemForRestockingDTO> { new ItemForRestockingDTO(1, "Dumbbell", "Brand1", "Description", 0, 25, 10, 8, 0),
+                new ItemForRestockingDTO(2, "Press machine", "Brand2", "Description2", 0, 200, 10, 9, 0)};
             var itemDTOsTC1 = new List<ItemForRestockingDTO> { itemsDTOs[0], itemsDTOs[1] };
             var itemDTOsTC2 = new List<ItemForRestockingDTO> { itemsDTOs[0] };
             var itemDTOsTC3 = new List<ItemForRestockingDTO> { itemsDTOs[0] };

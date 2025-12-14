@@ -35,7 +35,8 @@ namespace AppForSEII2526.API.Controllers
                 .Select(r => new RestockDetailDTO(r.Id, r.Title, r.DeliveryAddress, r.Description,
                 r.ExpectedDate, r.TotalPrice, r.RestockItems
                     .Select(ri => new ItemForRestockingDTO(ri.Item.Id, ri.Item.Name, ri.Item.Brand.Name, 
-                    ri.Item.Description, ri.RestockPrice, ri.Item.QuantityForRestock)).ToList<ItemForRestockingDTO>())
+                    ri.Item.Description, ri.Item.PurchasePrice, ri.RestockPrice, ri.Item.QuantityForRestock, ri.Item.QuantityAvailableForPurchase, ri.Quantity)).ToList<ItemForRestockingDTO>(), 
+                    r.RestockResponsible.Name, r.RestockResponsible.Surname)
                 ).FirstOrDefaultAsync();
             if (restock == null)
             {
@@ -60,6 +61,9 @@ namespace AppForSEII2526.API.Controllers
 
             if (restockForCreateDTO.ExpectedDate <= DateTime.Now)
                 ModelState.AddModelError("RestockDateFrom", "Error! The expected date must start later than today.");
+
+            if (restockForCreateDTO.Description != null && !restockForCreateDTO.Description.StartsWith("Restock for"))
+                ModelState.AddModelError("RestockDescription", "Error! The description must start with: Restock for");
 
             if (restockForCreateDTO.RestockItems.Count == 0)
                 ModelState.AddModelError("RestockItem", "Error! At least one item must be selected for restock.");
@@ -123,7 +127,7 @@ namespace AppForSEII2526.API.Controllers
                     }
                     var itemToRestock = await _context.Items.FindAsync(ritem.Id);
                     restock.RestockItems.Add(new RestockItem(ritem.RestockQuantity, item.RestockPrice * ritem.RestockQuantity, restock, itemToRestock));
-                    ItemRestockDTO.Add(new ItemForRestockingDTO(ritem.Id, item.Name, item.Brand.Name, item.Description,item.RestockPrice * ritem.RestockQuantity, ritem.RestockQuantity, item.QuantityAvailableForPurchase));
+                    ItemRestockDTO.Add(new ItemForRestockingDTO(ritem.Id, item.Name, item.Brand.Name, item.Description, 0, item.RestockPrice * ritem.RestockQuantity, item.QuantityForRestock, item.QuantityAvailableForPurchase, ritem.RestockQuantity));
                 }
             }
 
@@ -147,7 +151,7 @@ namespace AppForSEII2526.API.Controllers
 
             var restockDetail = new RestockDetailDTO(restock.Id, restock.Title, restock.DeliveryAddress, 
                 restock.Description, restock.ExpectedDate, restock.TotalPrice, 
-                ItemRestockDTO);
+                ItemRestockDTO, user.Name, user.Surname);
 
             return CreatedAtAction("GetRestock", new {id = restock.Id}, restockDetail);
         }

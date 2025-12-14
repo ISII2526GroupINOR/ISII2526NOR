@@ -40,6 +40,7 @@ namespace AppForSEII2526.API.Controllers
                 .Include(p => p.PlanItems)
                     .ThenInclude(pi => pi.Class)
                 .Select(p => new PlanDetailDTO(
+                    p.Id,
                     p.Name,
                     p.Description,
                     p.CreatedDate,
@@ -55,7 +56,8 @@ namespace AppForSEII2526.API.Controllers
                         pi.Class.Name,
                         pi.Class.Price,
                         pi.Class.TypeItems.Select(ti => ti.Name).ToList(),
-                        pi.Class.Date
+                        pi.Class.Date,
+                        pi.Goal
                     )).ToList()
                 )).FirstOrDefaultAsync();
 
@@ -71,6 +73,7 @@ namespace AppForSEII2526.API.Controllers
         [HttpPost]
         [Route("[action]")]
         [ProducesResponseType(typeof(PlanDetailDTO), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(PlanDetailDTO), (int)HttpStatusCode.Created)]
         [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.Conflict)]
 
@@ -120,6 +123,12 @@ namespace AppForSEII2526.API.Controllers
                 //{
                 //    classForCreate.goal = "Have fun!";
                 //}
+
+                // EXAM: Check goal as defined in issue #128
+                if(classForCreate.goal != null && !(classForCreate.goal.StartsWith("I would like to") ))
+                {
+                    ModelState.AddModelError("Goal", "Error!, You must start the description of your goals with I would like to");
+                }
 
                 // Check for duplicate classes in the plan
                 if (planForCreate.classes.Count(c => c.Id == classForCreate.Id) > 1)
@@ -222,6 +231,7 @@ namespace AppForSEII2526.API.Controllers
                     .ThenInclude(pi => pi.Class)
                 .Select(p => new PlanDetailDTO
                     (
+                        p.Id,
                         p.Name,
                         p.Description,
                         p.CreatedDate,
