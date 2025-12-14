@@ -22,26 +22,26 @@
     <div class="row alert alert-danger" role="alert" hidden="@hideErrors">
         <p id="ErrorsShown">Errors: @messageError</p>
     </div>
-    @* <div class="row g-3">
+   <div class="row g-3">
         <div class="col-md">
             <div class="form-floating mb-3">
-                <InputText @bind-Value="user." class="form-control" id="Name" />
-                <label for="Name">Name </label>
+                <InputText @bind-Value="purchase.Street" class="form-control" id="Street" />
+                <label for="Street">Street </label>
             </div>
         </div>
         <div class="col-md">
             <div class="form-floating mb-3">
-                <InputText @bind-Value="rental.SurnameCustomer" class="form-control" id="Surname" />
-                <label for="Name">Name </label>
+                <InputText @bind-Value="purchase.City" class="form-control" id="City" />
+                <label for="City">City </label>
             </div>
         </div>
         <div class="col-md">
             <div class="form-floating mb-3">
-                <InputText @bind-Value="rental.DeliveryAddress" class="form-control" id="DeliveryAddress" />
-                <label for="DeliveryAddress">Delivery Address</label>
+                <InputText @bind-Value="purchase.Country" class="form-control" id="Country" />
+                <label for="Country">Country</label>
             </div>
         </div>
-    </div> *@
+    </div> 
     <div class="row g-2">
         <div class="col-md">
             <div class="form-floating">
