@@ -24,5 +24,7 @@
         public List<Purchase>? Purchases { get; set; }
         public ApplicationUser? User { get; set; }
 
+
+
     }
 }

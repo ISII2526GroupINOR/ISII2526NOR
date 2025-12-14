@@ -4,5 +4,12 @@
     {
         [Required]
         public required long TelephoneNumber { get; set; }
+
+        public override string ToString()
+        {
+            return $"Telephone: {TelephoneNumber}";
+        }
     }
+
+
 }
