@@ -347,16 +347,18 @@ namespace AppForSEII2526.UIT.UC_Plan
             // --- ACT ---
 
             // Select classes 1 and 2
-            selectClassesForPlan_PO.SearchClasses("g", null);
+            selectClassesForPlan_PO.SearchClasses("", null);
+            selectClassesForPlan_PO.AddClassToSelected(className2); // Add first class            
+
+            selectClassesForPlan_PO.SearchClasses("g", null); // filter by type
 
             // --- INTERMEDIATE ASSERT ---
-            Assert.True(selectClassesForPlan_PO.CheckListOfClasses(expectedFilteredClasses));
+            Assert.True(selectClassesForPlan_PO.CheckListOfClasses(expectedFilteredClasses)); // This asertions tests the filter
 
             // --- ACT AGAIN ---
 
             //select classes
-            selectClassesForPlan_PO.AddClassToSelected(className2);
-            selectClassesForPlan_PO.AddClassToSelected(className3);
+            selectClassesForPlan_PO.AddClassToSelected(className3); // Add second class
 
             selectClassesForPlan_PO.PressCreatePlanButton();
 
@@ -379,6 +381,7 @@ namespace AppForSEII2526.UIT.UC_Plan
 
             // Check that the plan details are correct
             Assert.True(detailPlan_PO.CheckPlanDetail("user2Name user2Surname", TimeTable.today.ToShortDateString(), expectedPlanName, expectedPlanDescription, expectedPlanWeeks.ToString(), expectedHealthIssues));
+            // This assertion tests the class modification and filtering behavior indirectly
         }
     }
 }
