@@ -19,9 +19,12 @@
             @Body
         </article>
 
-        <button class="assistant-fab" @onclick="CallAssistant">
-            <img src="Images/assistantIcon.png" alt="Assistant" />
-        </button>
+        @if (!showDialog)
+        {
+            <button class="assistant-fab" @onclick="CallAssistant">
+                <img src="Images/assistantIcon.png" alt="Assistant" />
+            </button>
+        }
 
         @if (showDialog)
         {
@@ -39,8 +42,8 @@
                 <p>@response</p>
 
                 <div class="assistant-buttons">
-                    <button class="btn-send" @onclick="SendMessage">Enviar</button>
-                    <button class="btn-cancel" @onclick="CallAssistant">Cancelar</button>
+                    <button class="btn-send" @onclick="SendMessage">Send</button>
+                    <button class="btn-cancel" @onclick="CallAssistant">Cancel</button>
                 </div>
             </div>
         }
