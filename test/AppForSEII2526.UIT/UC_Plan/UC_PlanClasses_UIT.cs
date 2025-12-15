@@ -341,7 +341,7 @@ namespace AppForSEII2526.UIT.UC_Plan
 
             var expectedClassesDetail = new List<string[]>
             {
-                new string[] { className3, string.Join(", ", classTypeItems1), classPrice3.ToString("F2", CultureInfo.InvariantCulture), classDate3.ToString("dd/MM/yyyy"), classTime3.ToString("HH:mm"), "" }
+                new string[] { className3, string.Join(", ", classTypeItems3), classPrice3.ToString("F2", CultureInfo.InvariantCulture), classDate3.ToString("dd/MM/yyyy"), classTime3.ToString("HH:mm")}
             };
 
             // --- ACT ---
@@ -381,6 +381,9 @@ namespace AppForSEII2526.UIT.UC_Plan
 
             // Check that the plan details are correct
             Assert.True(detailPlan_PO.CheckPlanDetail("user2Name user2Surname", TimeTable.today.ToShortDateString(), expectedPlanName, expectedPlanDescription, expectedPlanWeeks.ToString(), expectedHealthIssues));
+
+            // Check that the classes are correct
+            Assert.True(detailPlan_PO.CheckListOfItems(expectedClassesDetail));
             // This assertion tests the class modification and filtering behavior indirectly
         }
     }
