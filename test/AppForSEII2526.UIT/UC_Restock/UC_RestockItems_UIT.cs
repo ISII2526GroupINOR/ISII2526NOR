@@ -97,7 +97,7 @@ namespace AppForSEII2526.UIT.UC_Restock
             string title = "A title1";
             string address = "any";
             string description = "Restock for me";
-            string date = "13/12/2025";
+            string date = "13/12/2028";
             int quantity = 10;
 
             InitialStepsForRestockItems();
@@ -126,9 +126,9 @@ namespace AppForSEII2526.UIT.UC_Restock
         [Theory]
         [InlineData("A title2", "Any", "", "1/12/2025", 10, "Error! The expected date must start later than today")]
         [InlineData("A title3", "Any", "Wrong description", "13/12/2025", 10, "Error! The description must start with: Restock for")]
-        [InlineData("A title4", "Any", "", "13/12/2025", 1, "Error! The total quantity for purchase 2 plus the quantity to " +
+        [InlineData("A title4", "Any", "", "13/12/2028", 1, "Error! The total quantity for purchase 2 plus the quantity to " +
             "restock 1 of item 20 Kg Kettlebell must be bigger than the quantity for restock 5.")]
-        [InlineData("A title4", "Any", "", "13/12/2025", 0, "You need to restock at least one item.")]
+        [InlineData("A title4", "Any", "", "13/12/2028", 0, "You need to restock at least one item.")]
         [Trait("LevelTesting", "Functional Testing")]
         public void UC14_AF4_UC14_8_9_10_13(string title, string address, string description,
             string date, int quantity, string errorMessage)
@@ -224,6 +224,43 @@ namespace AppForSEII2526.UIT.UC_Restock
 
             selectItemsForRestocking_PO.AddItemToRestockingCart(itemName2);
 
+            selectItemsForRestocking_PO.PressRestock();
+
+            createRestock_PO.FillInRestockInfo(title, address, description, tomorrowDate);
+            createRestock_PO.FillRestockQuantity(Id2, quantityToRestock);
+
+            createRestock_PO.PressRestockItems();
+
+            Assert.True(detailRestock_PO.CheckRestockDetail(title, address, description,
+                DateTime.Parse(tomorrowDate), name, surname, totalPrice));
+
+            Assert.True(detailRestock_PO.CheckListOfItems(expectedItems));
+        }
+
+        [Fact]
+        [Trait("LevelTesting", "Functional Testing")]
+        public void UC14_BasicFlow_AF2_AF5()
+        {
+            string title = "My title for new restock for exam";
+            string address = "any";
+            string description = "Restock for doing";
+            string name = "Jaime";
+            string surname = "Domingo";
+            int quantityToRestock = 10;
+            string totalPrice = "400";
+
+            // Total price of all units
+            List<string[]> expectedItems = new List<string[]> { new string[] { itemName2, itemBrand2, "400", "10" } };
+
+            InitialStepsForRestockItems();
+
+            selectItemsForRestocking_PO.AddItemToRestockingCart("20 Kg Dumbbell");
+
+            selectItemsForRestocking_PO.SearchItems(itemName2, "", "");
+
+            selectItemsForRestocking_PO.AddItemToRestockingCart(itemName2);
+
+            selectItemsForRestocking_PO.RemoveItemFromRestockingCArt(8);
             selectItemsForRestocking_PO.PressRestock();
 
             createRestock_PO.FillInRestockInfo(title, address, description, tomorrowDate);
