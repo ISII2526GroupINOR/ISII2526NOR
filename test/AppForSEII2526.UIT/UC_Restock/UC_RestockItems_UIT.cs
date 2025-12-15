@@ -254,8 +254,9 @@ namespace AppForSEII2526.UIT.UC_Restock
 
             InitialStepsForRestockItems();
 
-            selectItemsForRestocking_PO.SearchItems("", "", "5");
             selectItemsForRestocking_PO.AddItemToRestockingCart("20 Kg Dumbbell");
+
+            selectItemsForRestocking_PO.SearchItems("", "", "5");
 
             selectItemsForRestocking_PO.AddItemToRestockingCart(itemName2);
 
