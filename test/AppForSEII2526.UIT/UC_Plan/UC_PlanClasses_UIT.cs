@@ -325,7 +325,7 @@ namespace AppForSEII2526.UIT.UC_Plan
         [Trait("LevelTesting", "Functional Testing")]
         public void UC1ES9P1_exam()
         {
-            // ARRANGE
+            // --- ARRANGE ---
             InitialStepsForPlanClasses();
             string expectedPlanName = "UIT-ExamPlanName";
             string? expectedPlanDescription = "UIT-ExamPlanDescription";
@@ -344,15 +344,15 @@ namespace AppForSEII2526.UIT.UC_Plan
                 new string[] { className3, string.Join(", ", classTypeItems1), classPrice3.ToString("F2", CultureInfo.InvariantCulture), classDate3.ToString("dd/MM/yyyy"), classTime3.ToString("HH:mm"), "" }
             };
 
-            // ACT
+            // --- ACT ---
 
             // Select classes 1 and 2
             selectClassesForPlan_PO.SearchClasses("g", null);
 
-            // INTERMEDIATE ASSERT
+            // --- INTERMEDIATE ASSERT ---
             Assert.True(selectClassesForPlan_PO.CheckListOfClasses(expectedFilteredClasses));
 
-            //ACT AGAIN
+            // --- ACT AGAIN ---
 
             //select classes
             selectClassesForPlan_PO.AddClassToSelected(className2);
@@ -360,7 +360,7 @@ namespace AppForSEII2526.UIT.UC_Plan
 
             selectClassesForPlan_PO.PressCreatePlanButton();
 
-            //Modify selection
+            // Modify selection
             
             createPlan_PO.ModifyClasses(); // Go back to select classes page
             selectClassesForPlan_PO.RemoveClassFromSelected(className2); // Remove class 2 from selected
@@ -375,7 +375,7 @@ namespace AppForSEII2526.UIT.UC_Plan
             createPlan_PO.ConfirmPlanSubmission();
 
 
-            // ASSERT
+            // --- ASSERT ---
 
             // Check that the plan details are correct
             Assert.True(detailPlan_PO.CheckPlanDetail("user2Name user2Surname", TimeTable.today.ToShortDateString(), expectedPlanName, expectedPlanDescription, expectedPlanWeeks.ToString(), expectedHealthIssues));
