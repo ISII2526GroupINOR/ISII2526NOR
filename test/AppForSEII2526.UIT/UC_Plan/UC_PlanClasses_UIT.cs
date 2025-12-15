@@ -350,23 +350,18 @@ namespace AppForSEII2526.UIT.UC_Plan
             selectClassesForPlan_PO.SearchClasses("", null);
             selectClassesForPlan_PO.AddClassToSelected(className2); // Add first class            
 
-            selectClassesForPlan_PO.SearchClasses("g", null); // filter by type
+            selectClassesForPlan_PO.SearchClasses("g", null); // filter by name
 
             // --- INTERMEDIATE ASSERT ---
             Assert.True(selectClassesForPlan_PO.CheckListOfClasses(expectedFilteredClasses)); // This asertions tests the filter
 
             // --- ACT AGAIN ---
 
-            //select classes
             selectClassesForPlan_PO.AddClassToSelected(className3); // Add second class
+            selectClassesForPlan_PO.RemoveClassFromSelected(className2); // Remove first selected class
 
             selectClassesForPlan_PO.PressCreatePlanButton();
 
-            // Modify selection
-            
-            createPlan_PO.ModifyClasses(); // Go back to select classes page
-            selectClassesForPlan_PO.RemoveClassFromSelected(className2); // Remove class 2 from selected
-            selectClassesForPlan_PO.PressCreatePlanButton(); // Go to create plan page again
 
             // Fill plan information
             createPlan_PO.setPlanName(expectedPlanName);
