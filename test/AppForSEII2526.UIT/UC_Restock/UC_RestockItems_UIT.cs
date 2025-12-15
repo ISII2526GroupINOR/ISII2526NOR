@@ -241,7 +241,7 @@ namespace AppForSEII2526.UIT.UC_Restock
         [Trait("LevelTesting", "Functional Testing")]
         public void UC14_BasicFlow_AF2_AF5()
         {
-            string title = "My title for new restock";
+            string title = "My title for new restock for exam";
             string address = "any";
             string description = "Restock for doing";
             string name = "Jaime";
