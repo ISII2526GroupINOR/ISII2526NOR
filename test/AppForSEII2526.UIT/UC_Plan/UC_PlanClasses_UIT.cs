@@ -315,5 +315,71 @@ namespace AppForSEII2526.UIT.UC_Plan
             };
             return testCases;
         }
+
+
+        /************************************************
+         *  TEST CASES FOR: EXAM                        *
+         ************************************************/
+
+        [Fact]
+        [Trait("LevelTesting", "Functional Testing")]
+        public void UC1ES9P1_exam()
+        {
+            // --- ARRANGE ---
+            InitialStepsForPlanClasses();
+            string expectedPlanName = "UIT-ExamPlanName";
+            string? expectedPlanDescription = "UIT-ExamPlanDescription";
+            int expectedPlanWeeks = 1;
+            string? expectedHealthIssues = "UIT-HealthIssues";
+
+
+            var expectedFilteredClasses = new List<string[]>
+            {
+                new string[] { className2, classDate2.ToString("dd/MM/yyyy"), classTime2.ToString("HH:mm"), classPrice2.ToString("F2", CultureInfo.InvariantCulture), string.Join(", ", classTypeItems2), "Add" },
+                new string[] { className3, classDate3.ToString("dd/MM/yyyy"), classTime3.ToString("HH:mm"), classPrice3.ToString("F2", CultureInfo.InvariantCulture), string.Join(", ", classTypeItems3), "Add" }
+            };
+
+            var expectedClassesDetail = new List<string[]>
+            {
+                new string[] { className3, string.Join(", ", classTypeItems3), classPrice3.ToString("F2", CultureInfo.InvariantCulture), classDate3.ToString("dd/MM/yyyy"), classTime3.ToString("HH:mm")}
+            };
+
+            // --- ACT ---
+
+            // Select classes 1 and 2
+            selectClassesForPlan_PO.SearchClasses("", null);
+            selectClassesForPlan_PO.AddClassToSelected(className2); // Add first class            
+
+            selectClassesForPlan_PO.SearchClasses("g", null); // filter by name
+
+            // --- INTERMEDIATE ASSERT ---
+            Assert.True(selectClassesForPlan_PO.CheckListOfClasses(expectedFilteredClasses)); // This asertions tests the filter
+
+            // --- ACT AGAIN ---
+
+            selectClassesForPlan_PO.AddClassToSelected(className3); // Add second class
+            selectClassesForPlan_PO.RemoveClassFromSelected(className2); // Remove first selected class
+
+            selectClassesForPlan_PO.PressCreatePlanButton();
+
+
+            // Fill plan information
+            createPlan_PO.setPlanName(expectedPlanName);
+            createPlan_PO.setPlanDescription(expectedPlanDescription);
+            createPlan_PO.setPlanWeeks(expectedPlanWeeks);
+            createPlan_PO.setPlanHealthIssues(expectedHealthIssues);
+            createPlan_PO.SubmitPlan();
+            createPlan_PO.ConfirmPlanSubmission();
+
+
+            // --- ASSERT ---
+
+            // Check that the plan details are correct
+            Assert.True(detailPlan_PO.CheckPlanDetail("user2Name user2Surname", TimeTable.today.ToShortDateString(), expectedPlanName, expectedPlanDescription, expectedPlanWeeks.ToString(), expectedHealthIssues));
+
+            // Check that the classes are correct
+            Assert.True(detailPlan_PO.CheckListOfItems(expectedClassesDetail));
+            // This assertion tests the class modification and filtering behavior indirectly
+        }
     }
 }
