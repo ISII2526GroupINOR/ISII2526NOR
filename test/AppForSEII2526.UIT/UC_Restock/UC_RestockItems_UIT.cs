@@ -15,7 +15,6 @@ namespace AppForSEII2526.UIT.UC_Restock
         private CreateRestock_PO createRestock_PO;
         private DetailRestock_PO detailRestock_PO;
 
-        private const int Id1 = 3;
         private const string itemName1 = "Resistance Band";
         private const string itemBrand1 = "Rogue Fitness";
         private const string itemStockQuantity1 = "8";
@@ -248,20 +247,19 @@ namespace AppForSEII2526.UIT.UC_Restock
             string name = "Jaime";
             string surname = "Domingo";
             int quantityToRestock = 10;
-            string totalPrice = "";
+            string totalPrice = "400";
 
             // Total price of all units
-            List<string[]> expectedItems = new List<string[]> { new string[] { itemName2, itemBrand2, "0", "10" } };
+            List<string[]> expectedItems = new List<string[]> { new string[] { itemName2, itemBrand2, "400", "10" } };
 
             InitialStepsForRestockItems();
 
-            selectItemsForRestocking_PO.SearchItems("Band", "", "");
-            selectItemsForRestocking_PO.AddItemToRestockingCart(itemName1);
+            selectItemsForRestocking_PO.SearchItems("", "", "5");
+            selectItemsForRestocking_PO.AddItemToRestockingCart("20 Kg Dumbbell");
 
-            selectItemsForRestocking_PO.SearchItems("", "", "");
             selectItemsForRestocking_PO.AddItemToRestockingCart(itemName2);
 
-            selectItemsForRestocking_PO.RemoveItemFromRestockingCArt(Id1);
+            selectItemsForRestocking_PO.RemoveItemFromRestockingCArt(8);
             selectItemsForRestocking_PO.PressRestock();
 
             createRestock_PO.FillInRestockInfo(title, address, description, tomorrowDate);
