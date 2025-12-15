@@ -15,6 +15,7 @@ namespace AppForSEII2526.UIT.UC_Restock
         private CreateRestock_PO createRestock_PO;
         private DetailRestock_PO detailRestock_PO;
 
+        private const int Id1 = 3;
         private const string itemName1 = "Resistance Band";
         private const string itemBrand1 = "Rogue Fitness";
         private const string itemStockQuantity1 = "8";
@@ -224,6 +225,43 @@ namespace AppForSEII2526.UIT.UC_Restock
 
             selectItemsForRestocking_PO.AddItemToRestockingCart(itemName2);
 
+            selectItemsForRestocking_PO.PressRestock();
+
+            createRestock_PO.FillInRestockInfo(title, address, description, tomorrowDate);
+            createRestock_PO.FillRestockQuantity(Id2, quantityToRestock);
+
+            createRestock_PO.PressRestockItems();
+
+            Assert.True(detailRestock_PO.CheckRestockDetail(title, address, description,
+                DateTime.Parse(tomorrowDate), name, surname, totalPrice));
+
+            Assert.True(detailRestock_PO.CheckListOfItems(expectedItems));
+        }
+
+        [Fact]
+        [Trait("LevelTesting", "Functional Testing")]
+        public void UC14_BasicFlow_AF2_AF5()
+        {
+            string title = "My title for new restock";
+            string address = "any";
+            string description = "Restock for doing";
+            string name = "Jaime";
+            string surname = "Domingo";
+            int quantityToRestock = 10;
+            string totalPrice = "";
+
+            // Total price of all units
+            List<string[]> expectedItems = new List<string[]> { new string[] { itemName2, itemBrand2, "0", "10" } };
+
+            InitialStepsForRestockItems();
+
+            selectItemsForRestocking_PO.SearchItems("Band", "", "");
+            selectItemsForRestocking_PO.AddItemToRestockingCart(itemName1);
+
+            selectItemsForRestocking_PO.SearchItems("", "", "");
+            selectItemsForRestocking_PO.AddItemToRestockingCart(itemName2);
+
+            selectItemsForRestocking_PO.RemoveItemFromRestockingCArt(Id1);
             selectItemsForRestocking_PO.PressRestock();
 
             createRestock_PO.FillInRestockInfo(title, address, description, tomorrowDate);
