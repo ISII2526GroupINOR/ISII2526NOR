@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Assistant_Greet" xml:space="preserve">
+    <value>元気か？何か探してるの？</value>
+  </data>
+  <data name="Assistant_Move_Message" xml:space="preserve">
+    <value>よろしければ、ここをクリックしてそこへ移動してください。</value>
+  </data>
   <data name="Cancel" xml:space="preserve">
     <value>キャンセル</value>
   </data>

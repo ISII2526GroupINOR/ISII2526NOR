@@ -4,6 +4,7 @@
 @inject ThemeService ThemeService
 @inject IJSRuntime JS
 @inject AssistantServices AssistantServices
+@using Resources.Languages
 
 <div class="page font-container @FontServices.CurrentFontClass">
     <div class="sidebar">
@@ -40,6 +41,10 @@
                 </textarea>
 
                 <p>@response</p>
+                @if (link != "")
+                {
+                    <a href="" @onclick="MoveAssistant">@AppResources.Assistant_Move_Message</a>
+                }
 
                 <div class="assistant-buttons">
                     <button class="btn-send" @onclick="SendMessage">Send</button>
@@ -54,16 +59,17 @@
     [Inject] NavigationManager nav { get; set; }
     private bool showDialog = false;
     private string userMessage = null;
-    private string link;
-    private string response = "What´s up bro? Are you looking for something?";
+    private string link = "";
+    private string response = AppResources.Assistant_Greet;
     private void CallAssistant()
     {
         showDialog = !showDialog;
+        StateHasChanged();
     }
 
     private void SendMessage()
     {
-        Thread.Sleep(2000);
+        Thread.Sleep(700);
         response = AssistantServices.AssistantMainResponse(userMessage, nav.Uri, out link, "admin");
     }
 
@@ -115,6 +121,15 @@
             {
                 System.Diagnostics.Debug.WriteLine($"Inicialización de ThemeService: {ex}");
             }
+        }
+    }
+
+    public void MoveAssistant()
+    {
+        if(link != "")
+        {
+            nav.NavigateTo(link);
+            CallAssistant();
         }
     }
 }

@@ -35,10 +35,11 @@ namespace AppForSEII2526.Maui.Services
 
         private string AssistEnglish(string input, string context, out string? dest, string role)
         {
-            input = input.ToLower();
             string message = "I don´t know what you want bro.";
-            dest = null;
-            // Non contextual messages
+            dest = "";
+            if (message == null || message == "") return message;
+            input = input.ToLower();
+
             if (Regex.IsMatch(input, @"(language|idiom)"))
             {
                 if (context == "/adminconfiguration")
@@ -49,8 +50,8 @@ namespace AppForSEII2526.Maui.Services
                 {
                     message = "Don´t understand anything, huh? Just go to configuration, in your profile" +
                         ", there you can change the language.";
-                    if(role == "admin") dest = "/adminprofile";
-                    if (role == "user") dest = "/userprofile";
+                    if(role == "admin") dest = "/adminconfiguration";
+                    else if (role == "user") dest = "/userprofile";
                 }
             }
             return message;
@@ -60,7 +61,7 @@ namespace AppForSEII2526.Maui.Services
         private string AssistSpanish(string input, string context, out string? dest, string role)
         {
             string message = "No se que quieres bro.";
-            dest = null;
+            dest = "";
 
             return message;
         }

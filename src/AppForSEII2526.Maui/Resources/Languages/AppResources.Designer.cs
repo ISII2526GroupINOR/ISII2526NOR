@@ -61,6 +61,24 @@ namespace AppForSEII2526.Maui.Resources.Languages {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a ¿Que pasa bro? ¿Necesitas algo?.
+        /// </summary>
+        internal static string Assistant_Greet {
+            get {
+                return ResourceManager.GetString("Assistant_Greet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Si quieres pulsa aquí y te llevo directamente ahí..
+        /// </summary>
+        internal static string Assistant_Move_Message {
+            get {
+                return ResourceManager.GetString("Assistant_Move_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Cancelar.
         /// </summary>
         internal static string Cancel {
