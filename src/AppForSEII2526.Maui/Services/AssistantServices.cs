@@ -10,6 +10,22 @@ namespace AppForSEII2526.Maui.Services
     public class AssistantServices
     {   //dest parameter for future implemantation of links to the desired page if required
         public event Action? OnAssistantCalled;
+        public string AssistantInit()
+        {
+            var language = Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName;
+            switch (language)
+            {
+                case "en":
+                    return "Hi, are you comfortable with the interface? Maybe some help with navigation?";
+                    break;
+                case "es":
+                    return "¿Hola, necesitas ayuda con la interfaz? ¿O quizá para navegar?";
+                    break;
+                default:
+                    return "Hi, are you comfortable with the interface? Maybe some help with navigation?";
+                    break;
+            }
+        }
         public string AssistantMainResponse(string message, string context, out string? dest, string role)
         {
             var language = Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName;
