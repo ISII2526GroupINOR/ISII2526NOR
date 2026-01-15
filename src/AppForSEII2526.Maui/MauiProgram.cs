@@ -13,8 +13,10 @@ namespace AppForSEII2526.Maui {
 
             builder.Services.AddMauiBlazorWebView();
 
+
+
 #if DEBUG
-    		builder.Services.AddBlazorWebViewDeveloperTools();
+            builder.Services.AddBlazorWebViewDeveloperTools();
     		builder.Logging.AddDebug();
 
             builder.ConfigureFonts(fonts =>

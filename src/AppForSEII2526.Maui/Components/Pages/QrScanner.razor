@@ -1,0 +1,71 @@
+﻿@page "/qr"
+@inject IJSRuntime JS
+@implements IAsyncDisposable
+
+<h3>QR Scanner</h3>
+
+@if (isRendered)
+{
+    <div id="qr-reader" style="width:300px;"></div>
+
+    <div style="margin-top:10px">
+        <button @onclick="StopScan">Stop</button>
+    </div>
+}
+
+<p>@result</p>
+
+@code {
+    private bool isRendered;
+    private string result;
+    private DotNetObjectReference<QrScanner> objRef;
+
+    protected override void OnInitialized()
+    {
+        objRef = DotNetObjectReference.Create(this);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            isRendered = true;
+            StateHasChanged();
+
+            // Wait one render cycle so the DIV exists
+            await Task.Delay(100);
+
+            await JS.InvokeVoidAsync(
+                "qrScanner.start",
+                "qr-reader",
+                objRef
+            );
+        }
+    }
+
+    [JSInvokable]
+    public async Task OnQrScanned(string code)
+    {
+        result = $"Scanned: {code}";
+        await StopScan();
+        StateHasChanged();
+    }
+
+    private async Task StopScan()
+    {
+        try
+        {
+            await JS.InvokeVoidAsync("qrScanner.stop");
+        }
+        catch
+        {
+            // Ignore if already stopped
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await StopScan();
+        objRef?.Dispose();
+    }
+}
