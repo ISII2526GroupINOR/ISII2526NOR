@@ -35,6 +35,10 @@ namespace AppForSEII2526.Maui {
             builder.Services.AddSingleton<FontServices>();
             builder.Services.AddSingleton<ProfileImageServices>();
             builder.Services.AddScoped<ThemeService>();
+
+            // Registrar el contenedor de estado para inyección
+            builder.Services.AddSingleton<POSStateContainer>();
+
             return builder.Build();
         }
     }

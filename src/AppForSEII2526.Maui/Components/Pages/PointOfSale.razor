@@ -1,44 +1,84 @@
-﻿@page "/qr"
-@inject IJSRuntime JS
-@implements IAsyncDisposable
+﻿@page "/pos"
+
 @using AppForSEII2526.Maui.Services
 
+<!-- PAGE -->
+ 
+<h3 class="d-flex justify-content-center align-items-center w-auto">Point Of Sale</h3>
 
-<div class="d-flex justify-content-center align-items-center">
-    <div class="center selection-widget">
-        <div class="title-widget">
-
-
-            <!--  Top toolbar -->
-            <div class="d-flex align-content-center justify-content-between align-items-center mb-2 w-50">
-                <div>
-                </div>
-                SCAN QR
-                <div>
-                    <button class="btn btn-outline-secondary "
-                            @onclick="GoBack">
-                        <i class="bi bi-arrow-left"></i>
-                        Back
-                    </button>
-                </div>
-            </div>
+<!--  Top toolbar -->
+<div class="d-flex align-items-center justify-content-between w-75 mx-auto" ">
+    <div>
+        <button class="btn btn-primary flex-fill" @onclick="GoScanner">
+            <i class="bi bi-qr-code-scan"></i>
+            Scan
+        </button>
+    </div>
 
 
-            
-            
-            
-            
-        </div>
-        @if (isRendered)
-        {
-            <div id="qr-reader"
-                 class="d-flex justify-content-center align-items-center"
-                 style="width:75%; max-width:1000px; margin:0 auto;">
-            </div>
-        }
+    <div>
+        <button class="btn btn-outline-danger flex-fill" @onclick="POSState.Clear">
+            <i class="bi bi-trash"></i>
+            Clear
+        </button>
+    </div>
+    <div>
+        <button class="btn btn-primary flex-fill">
+            <i class="bi bi-check-circle"></i>
+            Complete Purchase
+        </button>
     </div>
 </div>
+<br />
 
+<!-- Items table -->
+<div class="container-fluid">
+    <div class="container-fluid selection-widget w-auto">
+        <div class="title-widget">Items</div>
+
+        <div class="table-responsive w-auto">
+            <table class="table table-hover w-100" style="table-layout: fixed;">
+                <thead>
+                    <tr>
+                        <th class="w-100">Name</th>
+                        <th class="w-100">Description</th>
+                        <th class="w-100 text-end">Amount</th>
+                        <th class="w-100 text-end">Price</th>
+                        <th class="w-100 text-end"></th>
+                        <th class="w-100 text-end"></th>
+                        
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (POSItem it in POSState.Items)
+                    {
+                        <tr>
+                            <td>@it.Name</td>
+                            <td>@it.Description</td>
+                            <td class="text-end">@it.Count</td>
+                            <td class="text-end">@((it.UnitPrice * it.Count).ToString("C"))</td>
+                            <!-- Minus -->
+                            <td class="text-center">
+                                <button class="btn btn-sm btn-outline-secondary"
+                                        @onclick="() => POSState.AddItem(it.Name, -1)">
+                                    <i class="bi bi-dash"></i>
+                                </button>
+                            </td>
+                            <!-- Plus -->
+                            <td class="text-center">
+                                <button class="btn btn-sm btn-outline-primary"
+                                        @onclick="() => POSState.AddItem(it.Name, 1)">
+                                    <i class="bi bi-plus"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
 
 <!-- MENU -->
@@ -74,6 +114,7 @@
 </div>
 
 
+
 <!-- CODE -->
 @code {
     [Microsoft.AspNetCore.Components.Inject]
@@ -81,81 +122,30 @@
 
 
     [Inject] NavigationManager Nav { get; set; }
-    async void GoProfile() {
-        await StopScan();
+    void GoProfile()
+    {
+        OnPageExit();
         Nav.NavigateTo("/adminprofile");
     }
-    async void GoHome() {
-        await StopScan();
+    void GoHome()
+    {
+        OnPageExit();
         Nav.NavigateTo("/adminhome");
     }
-    async void GoBack()
+    void GoScanner()
     {
-        Nav.NavigateTo("/pos");
+        OnPageExit();
+        Nav.NavigateTo("/qr");
     }
 
-    async void Exit() {
-        await StopScan();
+    void Exit()
+    {
+        OnPageExit();
         Nav.NavigateTo("/");
     }
 
-
-
-    private bool isRendered;
-    private string result;
-    private DotNetObjectReference<QrScanner> objRef;
-
-    protected override void OnInitialized()
+    void OnPageExit()
     {
-        objRef = DotNetObjectReference.Create(this);
+        
     }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            isRendered = true;
-            StateHasChanged();
-
-            // Wait one render cycle so the DIV exists
-            await Task.Delay(100);
-
-            await JS.InvokeVoidAsync(
-                "qrScanner.start",
-                "qr-reader",
-                objRef
-            );
-        }
-    }
-
-    [JSInvokable]
-    public async Task OnQrScanned(string code)
-    {
-        result = $"Scanned: {code}";
-        bool ret = POSState.AddItemByCode(code);
-        StateHasChanged();
-        if(ret)
-        {
-            GoBack();
-        }
-    }
-
-    private async Task StopScan()
-    {
-        try
-        {
-            await JS.InvokeVoidAsync("qrScanner.stop");
-        }
-        catch
-        {
-            // Ignore if already stopped
-        }
-    }
-
-    public async ValueTask DisposeAsync()
-    {
-        await StopScan();
-        objRef?.Dispose();
-    }
-
 }

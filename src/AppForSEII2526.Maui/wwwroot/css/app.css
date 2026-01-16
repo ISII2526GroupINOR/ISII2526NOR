@@ -108,7 +108,7 @@ font-open-sans {
     background: var(--accent-surface);
     color: var(--color-text);
     width: 90%;
-    max-width: 350px;
+    max-width: 900px;
     min-width: 250px;
     margin: auto;
     text-align: center;
